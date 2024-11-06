@@ -357,6 +357,34 @@ He (yh3683), Qianxuan Huang (qh2285)</h4>
 </div>
 
 
+<pre class="r"><code>library(readr)
+manhattan_data &lt;- read_csv(&quot;Manhattan_Restaurant_Inspection_Results.csv&quot;)</code></pre>
+<pre><code>## Rows: 94616 Columns: 27
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (17): DBA, BORO, BUILDING, STREET, CUISINE DESCRIPTION, INSPECTION DATE,...
+## dbl  (9): CAMIS, ZIPCODE, PHONE, SCORE, Latitude, Longitude, Community Board...
+## lgl  (1): Location Point1
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>head(manhattan_data)</code></pre>
+<pre><code>## # A tibble: 6 × 27
+##      CAMIS DBA        BORO  BUILDING STREET ZIPCODE  PHONE `CUISINE DESCRIPTION`
+##      &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;                
+## 1 50140436 JUST SALAD Manh… 2853     BROAD…   10025 7.32e9 &lt;NA&gt;                 
+## 2 50158081 THE MANNER Manh… 58       THOMP…   10012 9.17e9 &lt;NA&gt;                 
+## 3 50152703 MIDNIGHT … Manh… 106      EAST …   10003 3.48e9 &lt;NA&gt;                 
+## 4 50160975 BLUE BLOS… Manh… 108      WEST …   10018 6.47e9 &lt;NA&gt;                 
+## 5 50161087 &lt;NA&gt;       Manh… 961      COLUM…   10025 9.29e9 &lt;NA&gt;                 
+## 6 50158231 OSAKA RES… Manh… 1165     2 AVE…   10065 9.18e9 &lt;NA&gt;                 
+## # ℹ 19 more variables: `INSPECTION DATE` &lt;chr&gt;, ACTION &lt;chr&gt;,
+## #   `VIOLATION CODE` &lt;chr&gt;, `VIOLATION DESCRIPTION` &lt;chr&gt;,
+## #   `CRITICAL FLAG` &lt;chr&gt;, SCORE &lt;dbl&gt;, GRADE &lt;chr&gt;, `GRADE DATE` &lt;chr&gt;,
+## #   `RECORD DATE` &lt;chr&gt;, `INSPECTION TYPE` &lt;chr&gt;, Latitude &lt;dbl&gt;,
+## #   Longitude &lt;dbl&gt;, `Community Board` &lt;dbl&gt;, `Council District` &lt;chr&gt;,
+## #   `Census Tract` &lt;chr&gt;, BIN &lt;dbl&gt;, BBL &lt;dbl&gt;, NTA &lt;chr&gt;,
+## #   `Location Point1` &lt;lgl&gt;</code></pre>
 <p>The motivation for this project: the motivation for this project is
 to explore public health within the context of dining in Manhattan by
 using the New York City Department of Health and Mental Hygiene (DOHMH)
@@ -391,6 +419,15 @@ color-coded scatter plot to present different grades (A, B, C, Z, P, and
 N) of restaurants across different neighborhoods, a box plot to show the
 score distribution across various cuisine, and a bar chart to illustrate
 the number of high-scoring restaurants in different neighborhoods.</p>
+<p>Coding challenges: combining a scatter plot of data with a map,
+coding a website to provide restaurants/addresses/phone numbers/scores
+based on users’ filters of address/cuisines/etc.</p>
+<p>The planned timeline: On Nov 5th, we will confirm our topic, analysis
+direction, plots, and dataset. From Nov 11th to 15th, we will meet with
+our TA and start data cleaning. Between Nov 18th and 22nd, we will
+create plots and begin building the website. From Nov 25th to 29th, we
+will finalize the website and collaborate on the report. The final
+submission is due on December 7th.</p>
 
 
 

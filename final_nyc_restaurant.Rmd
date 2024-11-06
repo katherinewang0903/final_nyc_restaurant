@@ -2,11 +2,9 @@
 title: "Dining Safety in Manhattan: Analyzing NYC Restaurant Hygiene Ratings"
 author: Katherine Wang (dw3093), Ruicong Du (rd3096), Yining He (yh3683), Qianxuan Huang (qh2285)
 ---
-```{r, include=FALSE}
+```{r}
 library(readr)
-
 manhattan_data <- read_csv("Manhattan_Restaurant_Inspection_Results.csv")
-
 head(manhattan_data)
 ```
 The motivation for this project: the motivation for this project is to explore public health within the context of dining in Manhattan by using the New York City Department of Health and Mental Hygiene (DOHMH) Restaurant Inspection Results dataset. This dataset provides detailed information on health inspections, including key columns such as BORO (borough), INSPECTION DATE, VIOLATION DESCRIPTION, SCORE, and GRADE. These details allow us to analyze specific food safety practices and trends within Manhattan's diverse dining environment. By examining this data, we aim to identify common violations, trends in inspection scores, and areas where safety standards may need improvement. Our focus on Manhattan aims to help diners identify their preferred types of cuisine while providing a list of the highest-rated and most hygienic restaurants, ensuring both safety and quality in their dining experiences.
@@ -16,3 +14,7 @@ The intended final products: The intended final deliverables include a comprehen
 The anticipated data sources: https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j/about_data. The planned analyses: compare scores/grades of restaurants among different zip codes/cuisines in Manhattan. 
 
 Visualizations:We will provide reader-friendly plots, such as a color-coded scatter plot to present different grades (A, B, C, Z, P, and N) of restaurants across different neighborhoods, a box plot to show the score distribution across various cuisine, and a bar chart to illustrate the number of high-scoring restaurants in different neighborhoods.
+
+Coding challenges: combining a scatter plot of data with a map, coding a website to provide restaurants/addresses/phone numbers/scores based on users’ filters of address/cuisines/etc. 
+
+The planned timeline: On Nov 5th, we will confirm our topic, analysis direction, plots, and dataset. From Nov 11th to 15th, we will meet with our TA and start data cleaning. Between Nov 18th and 22nd, we will create plots and begin building the website. From Nov 25th to 29th, we will finalize the website and collaborate on the report. The final submission is due on December 7th.
