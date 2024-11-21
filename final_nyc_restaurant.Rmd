@@ -11,7 +11,7 @@ The motivation for this project is to explore public health within the context o
 
 The intended final deliverable include a comprehensive website that presents detailed insights into the hygiene conditions of restaurants in Manhattan, New York. The platform will feature a visual map displaying hygiene scores and historical records of critical violations for each establishment. Furthermore, an advanced recommendation page will be developed, allowing users to discover restaurants that match their preferences based on cuisine type, location, and hygiene rating. This initiative aims not only to provide valuable information to the public but also to promote establishments with high hygiene standards, thereby encouraging restaurant owners and staff to prioritize food safety and maintain exceptional sanitation practices.
 
-The anticipated data sources: https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j/about_data. The planned analyses: compare scores/grades of restaurants among different zip codes/cuisines in Manhattan. 
+Anticipated data sources: https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j/about_data. The planned analyses: compare scores/grades of restaurants among different zip codes/cuisines in Manhattan. 
 
 Visualizations:We will provide reader-friendly plots, such as a color-coded scatter plot to present different grades (A, B, C, Z, P, and N) of restaurants across different neighborhoods, a box plot to show the score distribution across various cuisine, and a bar chart to illustrate the number of high-scoring restaurants in different neighborhoods.
 
