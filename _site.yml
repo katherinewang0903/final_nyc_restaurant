@@ -9,7 +9,7 @@ navbar:
     - text: "Demographics"
       href: demographics.html
     - text: "Data Source"
-      href: .html
+      href: Data-Source.html
     - icon: fa-envelope fa-lg
       href: mailto:rd3096@cumc.columbia.edu
     - icon: fa-github fa-lg
