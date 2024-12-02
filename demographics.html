@@ -381,14 +381,9 @@ library(readr)</code></pre>
 <p>This section provides an overview of the types of restaurants in
 Manhattan, their distribution, and the scoring scales used in health
 inspections.</p>
-</div>
-<div id="types-of-restaurants" class="section level2">
-<h2>Types of Restaurants</h2>
-<div id="we-will-explore-the-restaurants-distribution-across-mahattan"
-class="section level3">
-<h3>We will explore the restaurants distribution across Mahattan</h3>
-<pre class="r"><code>manhattan_data = read_csv(&quot;Manhattan_Restaurant_Inspection_Results.csv&quot;, na = c(&quot;NA&quot;, &quot;&quot;, &quot;.&quot;))
+<pre class="r"><code># First, we will import the data and remove rows with missing restaurant name, cuisine type, grade, or score, then create a new variable called region
 
+manhattan_data = read_csv(&quot;Manhattan_Restaurant_Inspection_Results.csv&quot;, na = c(&quot;NA&quot;, &quot;&quot;, &quot;.&quot;))
 str (manhattan_data)
 ## spc_tbl_ [94,616 × 27] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
 ##  $ CAMIS                : num [1:94616] 50140436 50158081 50152703 50160975 50161087 ...
@@ -448,7 +443,28 @@ str (manhattan_data)
 ##   ..   NTA = col_character(),
 ##   ..   `Location Point1` = col_logical()
 ##   .. )
-##  - attr(*, &quot;problems&quot;)=&lt;externalptr&gt;</code></pre>
+##  - attr(*, &quot;problems&quot;)=&lt;externalptr&gt;
+
+cleaned_data = manhattan_data %&gt;%
+  janitor::clean_names() %&gt;%  
+  filter(
+    !is.na(dba),                         
+    !is.na(cuisine_description),       
+    !is.na(grade),                       
+    !is.na(score),                       
+    !is.na(zipcode)
+  ) %&gt;% mutate(region = case_when(
+    zipcode &gt;= 10000 &amp; zipcode &lt;= 10025 ~ &quot;Downtown&quot;,
+    zipcode &gt;= 10026 &amp; zipcode &lt;= 10040 ~ &quot;Midtown&quot;,
+    zipcode &gt;= 10041 &amp; zipcode &lt;= 10282 ~ &quot;Uptown&quot;,
+    TRUE ~ &quot;Other&quot; # For ZIP codes like 11371, 12345, etc.
+  ))</code></pre>
+</div>
+<div id="types-of-restaurants" class="section level2">
+<h2>Types of Restaurants</h2>
+<div id="lets-explore-the-restaurants-distribution-across-mahattan"
+class="section level3">
+<h3>Let’s explore the restaurants distribution across Mahattan</h3>
 </div>
 </div>
 
