@@ -466,6 +466,19 @@ cleaned_data = manhattan_data %&gt;%
 class="section level3">
 <h3>Let’s explore the restaurants distribution across Mahattan</h3>
 </div>
+<div id="what-are-the-top-10-cuisine-types-in-manhattan"
+class="section level3">
+<h3>What are the top 10 cuisine types in Manhattan?</h3>
+<pre class="r"><code># we will Filter for the top 10 cuisine types
+top_10_cuisines = cleaned_data %&gt;%
+  count(cuisine_description, sort = TRUE) %&gt;%
+  slice_max(n, n = 10) %&gt;%
+  pull(cuisine_description)
+
+filtered_data = cleaned_data %&gt;%
+  filter(cuisine_description %in% top_10_cuisines)
+</code></pre>
+</div>
 </div>
 
 

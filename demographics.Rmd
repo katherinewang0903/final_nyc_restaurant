@@ -55,6 +55,18 @@ cleaned_data = manhattan_data %>%
 ```{r}
 
 ```
+### What are the top 10 cuisine types in Manhattan?
+```{r}
+# we will Filter for the top 10 cuisine types
+top_10_cuisines = cleaned_data %>%
+  count(cuisine_description, sort = TRUE) %>%
+  slice_max(n, n = 10) %>%
+  pull(cuisine_description)
 
+filtered_data = cleaned_data %>%
+  filter(cuisine_description %in% top_10_cuisines)
+
+
+```
 
 
