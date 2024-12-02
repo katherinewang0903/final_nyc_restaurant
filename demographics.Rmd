@@ -51,11 +51,11 @@ cleaned_data = manhattan_data %>%
 
 ## Types of Restaurants
 
-### Let's explore the restaurants distribution across Mahattan
+#### Let's explore the restaurants distribution across Mahattan
 ```{r}
 
 ```
-### What are the top 10 cuisine types in Manhattan?
+#### What are the top 10 cuisine types in Manhattan?
 ```{r}
 # we will Filter for the top 10 cuisine types
 top_10_cuisines = cleaned_data %>%
@@ -84,5 +84,7 @@ cuisine_plot = filtered_data %>%
 
 cuisine_plot
 ```
+The American cuisine dominates the dining scene, reflecting its widespread appeal and availability. Popular cuisines such as Chinese, Italian, and Japanese highlight Manhattan's global culinary diversity, catering to a broad range of tastes. 
 
+We find out that coffee and tea establishments are notably abundant, suggesting a strong demand for quick-service options among the busy urban population. Meanwhile, niche categories like bakery products, sandwiches, and French cuisine add variety to the dining landscape. Our EDAplot underscores the rich and diverse food culture that defines Manhattan.
 
