@@ -115,7 +115,7 @@ restaurant_map
 
 The map highlights the `high concentration of restaurants in Midtown and Downtown` Manhattan, reflecting the dense commercial and residential areas in these neighborhoods. In contrast, `fewer restaurants are observed in Uptown` Manhattan, where the population density and commercial activity are relatively lower.
 
-By hovering over a point, detailed information about a specific restaurant is displayed, including its unique identifier (CAMIS), name (DBA), cuisine type, and hygiene grade. Our feature aims to provide an additional layer of interactivity, allowing users to explore the data in depth.
+By hovering over a point, detailed information about a specific restaurant is displayed, including its `unique identifier (CAMIS), name (DBA), cuisine type, and hygiene grade`. Our feature aims to provide an additional layer of interactivity, allowing users to explore the data in depth.
 
 #### What are the top 10 cuisine types in Manhattan?
 ```{r}
