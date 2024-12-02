@@ -9,11 +9,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Restaurant group" />
 
-<meta name="date" content="2024-12-02" />
 
-<title>demographics</title>
+<title>Demographics of Mahattan Restaurants</title>
 
 <script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -374,15 +372,16 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">demographics</h1>
-<h4 class="author">Restaurant group</h4>
-<h4 class="date">2024-12-02</h4>
+<h1 class="title toc-ignore">Demographics of Mahattan Restaurants</h1>
 
 </div>
 
 
-<div id="demographics-of-manhattan-restaurants" class="section level2">
-<h2>Demographics of Manhattan Restaurants</h2>
+<div
+id="exploring-the-culinary-landscape-of-manhattan-a-demographic-analysis-of-restaurant-types-and-hygiene-grades"
+class="section level3">
+<h3>Exploring the Culinary Landscape of Manhattan: A Demographic
+Analysis of Restaurant Types and Hygiene Grades</h3>
 <pre class="r"><code>library(tidyverse)
 library(plotly)
 library(ggplot2)
@@ -470,8 +469,8 @@ cleaned_data = manhattan_data %&gt;%
     TRUE ~ &quot;Other&quot; # For ZIP codes like 11371, 12345, etc.
   ))</code></pre>
 </div>
-<div id="types-of-restaurants" class="section level2">
-<h2>Types of Restaurants</h2>
+<div id="types-of-restaurants" class="section level3">
+<h3>Types of Restaurants</h3>
 <div id="lets-explore-the-restaurants-distribution-across-mahattan"
 class="section level4">
 <h4>Let’s explore the restaurants distribution across Mahattan</h4>
@@ -486,7 +485,8 @@ top_10_cuisines = cleaned_data %&gt;%
   pull(cuisine_description)
 
 filtered_data = cleaned_data %&gt;%
-  filter(cuisine_description %in% top_10_cuisines)
+  filter(cuisine_description %in% top_10_cuisines) %&gt;% 
+  distinct(camis, dba,cuisine_description)
 
 # Create an EDA histogram using plotly
 cuisine_plot = filtered_data %&gt;% 
@@ -505,16 +505,16 @@ cuisine_plot = filtered_data %&gt;%
   )
 
 cuisine_plot</code></pre>
-<div class="plotly html-widget html-fill-item" id="htmlwidget-069724721a5ec51335de" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-069724721a5ec51335de">{"x":{"visdat":{"15673e775582":["function () ","plotlyVisDat"]},"cur_data":"15673e775582","attrs":{"15673e775582":{"x":{},"y":{},"color":{},"colors":"viridis","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Top 10 Cuisine Types in Manhattan","xaxis":{"domain":[0,1],"automargin":true,"title":"Cuisine Type","type":"category","categoryorder":"array","categoryarray":["Sandwiches","French","Mexican","Bakery Products/Desserts","Pizza","Japanese","Italian","Chinese","Coffee/Tea","American"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Count N"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["Sandwiches"],"y":[949],"type":"bar","name":"Sandwiches","marker":{"color":"rgba(68,1,84,1)","line":{"color":"rgba(68,1,84,1)"}},"textfont":{"color":"rgba(68,1,84,1)"},"error_y":{"color":"rgba(68,1,84,1)"},"error_x":{"color":"rgba(68,1,84,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["French"],"y":[1041],"type":"bar","name":"French","marker":{"color":"rgba(72,40,120,1)","line":{"color":"rgba(72,40,120,1)"}},"textfont":{"color":"rgba(72,40,120,1)"},"error_y":{"color":"rgba(72,40,120,1)"},"error_x":{"color":"rgba(72,40,120,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["Mexican"],"y":[1239],"type":"bar","name":"Mexican","marker":{"color":"rgba(62,74,137,1)","line":{"color":"rgba(62,74,137,1)"}},"textfont":{"color":"rgba(62,74,137,1)"},"error_y":{"color":"rgba(62,74,137,1)"},"error_x":{"color":"rgba(62,74,137,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["Bakery Products/Desserts"],"y":[1501],"type":"bar","name":"Bakery Products/Desserts","marker":{"color":"rgba(49,104,142,1)","line":{"color":"rgba(49,104,142,1)"}},"textfont":{"color":"rgba(49,104,142,1)"},"error_y":{"color":"rgba(49,104,142,1)"},"error_x":{"color":"rgba(49,104,142,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["Pizza"],"y":[2075],"type":"bar","name":"Pizza","marker":{"color":"rgba(38,130,142,1)","line":{"color":"rgba(38,130,142,1)"}},"textfont":{"color":"rgba(38,130,142,1)"},"error_y":{"color":"rgba(38,130,142,1)"},"error_x":{"color":"rgba(38,130,142,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["Japanese"],"y":[2117],"type":"bar","name":"Japanese","marker":{"color":"rgba(31,158,137,1)","line":{"color":"rgba(31,158,137,1)"}},"textfont":{"color":"rgba(31,158,137,1)"},"error_y":{"color":"rgba(31,158,137,1)"},"error_x":{"color":"rgba(31,158,137,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["Italian"],"y":[2453],"type":"bar","name":"Italian","marker":{"color":"rgba(53,183,121,1)","line":{"color":"rgba(53,183,121,1)"}},"textfont":{"color":"rgba(53,183,121,1)"},"error_y":{"color":"rgba(53,183,121,1)"},"error_x":{"color":"rgba(53,183,121,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["Chinese"],"y":[2486],"type":"bar","name":"Chinese","marker":{"color":"rgba(109,205,89,1)","line":{"color":"rgba(109,205,89,1)"}},"textfont":{"color":"rgba(109,205,89,1)"},"error_y":{"color":"rgba(109,205,89,1)"},"error_x":{"color":"rgba(109,205,89,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["Coffee/Tea"],"y":[4921],"type":"bar","name":"Coffee/Tea","marker":{"color":"rgba(180,222,44,1)","line":{"color":"rgba(180,222,44,1)"}},"textfont":{"color":"rgba(180,222,44,1)"},"error_y":{"color":"rgba(180,222,44,1)"},"error_x":{"color":"rgba(180,222,44,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["American"],"y":[10315],"type":"bar","name":"American","marker":{"color":"rgba(253,231,37,1)","line":{"color":"rgba(253,231,37,1)"}},"textfont":{"color":"rgba(253,231,37,1)"},"error_y":{"color":"rgba(253,231,37,1)"},"error_x":{"color":"rgba(253,231,37,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
-<p>The <code>American</code> cuisine
+<div class="plotly html-widget html-fill-item" id="htmlwidget-a6a19d8a59d9f8bdc998" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-a6a19d8a59d9f8bdc998">{"x":{"visdat":{"1c0032b06072":["function () ","plotlyVisDat"]},"cur_data":"1c0032b06072","attrs":{"1c0032b06072":{"x":{},"y":{},"color":{},"colors":"viridis","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Top 10 Cuisine Types in Manhattan","xaxis":{"domain":[0,1],"automargin":true,"title":"Cuisine Type","type":"category","categoryorder":"array","categoryarray":["Sandwiches","French","Mexican","Bakery Products/Desserts","Pizza","Chinese","Japanese","Italian","Coffee/Tea","American"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Count N"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["Sandwiches"],"y":[181],"type":"bar","name":"Sandwiches","marker":{"color":"rgba(68,1,84,1)","line":{"color":"rgba(68,1,84,1)"}},"textfont":{"color":"rgba(68,1,84,1)"},"error_y":{"color":"rgba(68,1,84,1)"},"error_x":{"color":"rgba(68,1,84,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["French"],"y":[227],"type":"bar","name":"French","marker":{"color":"rgba(72,40,120,1)","line":{"color":"rgba(72,40,120,1)"}},"textfont":{"color":"rgba(72,40,120,1)"},"error_y":{"color":"rgba(72,40,120,1)"},"error_x":{"color":"rgba(72,40,120,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["Mexican"],"y":[286],"type":"bar","name":"Mexican","marker":{"color":"rgba(62,74,137,1)","line":{"color":"rgba(62,74,137,1)"}},"textfont":{"color":"rgba(62,74,137,1)"},"error_y":{"color":"rgba(62,74,137,1)"},"error_x":{"color":"rgba(62,74,137,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["Bakery Products/Desserts"],"y":[295],"type":"bar","name":"Bakery Products/Desserts","marker":{"color":"rgba(49,104,142,1)","line":{"color":"rgba(49,104,142,1)"}},"textfont":{"color":"rgba(49,104,142,1)"},"error_y":{"color":"rgba(49,104,142,1)"},"error_x":{"color":"rgba(49,104,142,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["Pizza"],"y":[459],"type":"bar","name":"Pizza","marker":{"color":"rgba(38,130,142,1)","line":{"color":"rgba(38,130,142,1)"}},"textfont":{"color":"rgba(38,130,142,1)"},"error_y":{"color":"rgba(38,130,142,1)"},"error_x":{"color":"rgba(38,130,142,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["Chinese"],"y":[477],"type":"bar","name":"Chinese","marker":{"color":"rgba(31,158,137,1)","line":{"color":"rgba(31,158,137,1)"}},"textfont":{"color":"rgba(31,158,137,1)"},"error_y":{"color":"rgba(31,158,137,1)"},"error_x":{"color":"rgba(31,158,137,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["Japanese"],"y":[512],"type":"bar","name":"Japanese","marker":{"color":"rgba(53,183,121,1)","line":{"color":"rgba(53,183,121,1)"}},"textfont":{"color":"rgba(53,183,121,1)"},"error_y":{"color":"rgba(53,183,121,1)"},"error_x":{"color":"rgba(53,183,121,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["Italian"],"y":[561],"type":"bar","name":"Italian","marker":{"color":"rgba(109,205,89,1)","line":{"color":"rgba(109,205,89,1)"}},"textfont":{"color":"rgba(109,205,89,1)"},"error_y":{"color":"rgba(109,205,89,1)"},"error_x":{"color":"rgba(109,205,89,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["Coffee/Tea"],"y":[1062],"type":"bar","name":"Coffee/Tea","marker":{"color":"rgba(180,222,44,1)","line":{"color":"rgba(180,222,44,1)"}},"textfont":{"color":"rgba(180,222,44,1)"},"error_y":{"color":"rgba(180,222,44,1)"},"error_x":{"color":"rgba(180,222,44,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["American"],"y":[2456],"type":"bar","name":"American","marker":{"color":"rgba(253,231,37,1)","line":{"color":"rgba(253,231,37,1)"}},"textfont":{"color":"rgba(253,231,37,1)"},"error_y":{"color":"rgba(253,231,37,1)"},"error_x":{"color":"rgba(253,231,37,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p>The 2456 <code>American</code> cuisine restaurants
 <code>dominates the dining scene</code>, reflecting its widespread
 appeal and availability. Popular cuisines such as
 <code>Chinese, Italian, and Japanese</code> highlight Manhattan’s
 <code>global culinary diversity</code>, catering to a broad range of
 tastes.</p>
 <p>We find out that
-<code>coffee and tea establishments are notably abundant</code>,
+<code>1062 coffee and tea establishments are notably abundant</code>,
 suggesting a strong demand for quick-service options among the busy
 urban population. Meanwhile, niche categories like bakery products,
 sandwiches, and French cuisine add variety to the dining landscape. Our

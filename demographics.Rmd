@@ -1,7 +1,5 @@
 ---
-title: "demographics"
-author: "Restaurant group"
-date: "2024-12-02"
+title: "Demographics of Mahattan Restaurants"
 output: 
   html_document:
     code_folding: hide
@@ -18,7 +16,7 @@ knitr::opts_chunk$set(collapse = TRUE,
   fig.format = "png")
 ```
 
-## Demographics of Manhattan Restaurants
+### Exploring the Culinary Landscape of Manhattan: A Demographic Analysis of Restaurant Types and Hygiene Grades
 ```{r}
 library(tidyverse)
 library(plotly)
@@ -49,7 +47,7 @@ cleaned_data = manhattan_data %>%
   ))
 ```
 
-## Types of Restaurants
+### Types of Restaurants
 
 #### Let's explore the restaurants distribution across Mahattan
 ```{r}
@@ -64,7 +62,8 @@ top_10_cuisines = cleaned_data %>%
   pull(cuisine_description)
 
 filtered_data = cleaned_data %>%
-  filter(cuisine_description %in% top_10_cuisines)
+  filter(cuisine_description %in% top_10_cuisines) %>% 
+  distinct(camis, dba,cuisine_description)
 
 # Create an EDA histogram using plotly
 cuisine_plot = filtered_data %>% 
@@ -83,11 +82,10 @@ cuisine_plot = filtered_data %>%
   )
 
 cuisine_plot
-
 ```
-The `American` cuisine `dominates the dining scene`, reflecting its widespread appeal and availability. Popular cuisines such as `Chinese, Italian, and Japanese` highlight Manhattan's `global culinary diversity`, catering to a broad range of tastes. 
+The 2456 `American` cuisine restaurants `dominates the dining scene`, reflecting its widespread appeal and availability. Popular cuisines such as `Chinese, Italian, and Japanese` highlight Manhattan's `global culinary diversity`, catering to a broad range of tastes. 
 
-We find out that `coffee and tea establishments are notably abundant`, suggesting a strong demand for quick-service options among the busy urban population. Meanwhile, niche categories like bakery products, sandwiches, and French cuisine add variety to the dining landscape. Our plot underscores the `rich and diverse food` culture that defines `Manhattan`.
+We find out that `1062 coffee and tea establishments are notably abundant`, suggesting a strong demand for quick-service options among the busy urban population. Meanwhile, niche categories like bakery products, sandwiches, and French cuisine add variety to the dining landscape. Our plot underscores the `rich and diverse food` culture that defines `Manhattan`.
 
 <br><br> 
   
@@ -110,3 +108,4 @@ knitr::include_graphics("./pictures/coffee&tea.png")
 :::
   
 ::::
+
