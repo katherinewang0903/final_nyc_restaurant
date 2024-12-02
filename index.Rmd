@@ -1,5 +1,5 @@
 ---
-title: "Restaurant Dining Safety in NYC Manhattan"
+title: " Dining Safety in Manhattan: Analyzing NYC Restaurant Hygiene Ratings"
 output: 
   html_document:
     code_folding: hide
@@ -8,7 +8,6 @@ output:
     toc_float: true
     theme: cerulean
 ---
-# Dining Safety in Manhattan: Analyzing NYC Restaurant Hygiene Ratings
 
 ## Welcome to our project website!
 
@@ -47,6 +46,16 @@ Our goal is to provide a comprehensive overview of dining safety and hygiene sta
 
 ### Screen cast 
 <iframe width="560" height="315" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+### Project contributors:
+
+* Katherine Wang (dw3093)
+* Ruicong Du (rd3096)
+* Yining He(yh3683)
+* Qianxuan Huang (qh2285) 
+* Wentao Zhou (wz2722)
+
+click [here](About-Us.html) if you want to learn more about us.
 
 --- 
 
