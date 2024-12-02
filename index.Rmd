@@ -28,7 +28,6 @@ Our goal is to provide a comprehensive overview of dining safety and hygiene sta
 - **Provide Recommendations**: Help users find restaurants based on cuisine type, location, and hygiene ratings.
 - **Highlight Violations**: Examine common violations and their impact on scores and grades.
 
----
 
 ### Key Deliverables
 
@@ -36,18 +35,22 @@ Our goal is to provide a comprehensive overview of dining safety and hygiene sta
 2. **Demographics Analysis**: Insights into restaurant types and hygiene score distributions.
 3. **Customized Recommendations**: Filterable restaurant lists based on user preferences.
 
----
 
 ### Planned Analyses
 
-- **Neighborhood Comparisons**: Investigate hygiene practices across Manhattan's zip codes.
+- **Neighborhood Comparisons**: Investigate hygiene practices across Manhattan's neighborhoods.
 - **Cuisine-Type Analysis**: Compare inspection scores among different types of cuisine.
 - **Violation Impact**: Determine how critical violations affect restaurant grades.
 - **Temporal Trends**: Analyze inspection scores over time.
 
 ---
 
-### Contanct information
+### Screen cast 
+<iframe width="560" height="315" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+--- 
+
+### Contanct and reference
 If you are interested in our project and want to collaborate please [email me](mailto:rd3096@cumc.columbia.edu).
 
 For more informartion about New York's Squirrels, check out these references:
