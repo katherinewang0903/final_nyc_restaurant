@@ -23,6 +23,7 @@ library(plotly)
 library(ggplot2)
 library(knitr)
 library(readr)
+library(viridis)
 ```
 This section provides an overview of the types of restaurants in Manhattan, their distribution, and the scoring scales used in health inspections.
 ```{r}
@@ -110,3 +111,56 @@ knitr::include_graphics("./pictures/coffee&tea.png")
   
 ::::
 
+### Restaurant Grades by Cuisine
+
+#### How Do Different Cuisine Types in Manhattan Fare in Health Inspections?
+
+*`Restaurant Hygiene Inspection Grading System:`
+
+*`A: Grade A – The highest level of food safety and hygiene standards.`
+*`B: Grade B – Satisfactory hygiene, but improvements are recommended.`
+*`C: Grade C – Subpar hygiene, requiring immediate improvements.`
+*`Z: Grade Pending – Awaiting a finalized grade post-inspection.`
+*`P: Grade Pending (Reopening) – Issued to establishments reopening after a closure due to prior violations.`
+*`N: Not Yet Graded – Inspection completed, but a grade has not been assigned yet.`
+
+```{r}
+
+# Reorder 'grade' factor levels
+filtered_data <- filtered_data %>%
+  mutate(grade = factor(grade, levels = c("Z", "P", "N", "C", "B", "A")))  # Order Z -> A
+
+# Calculate proportions for each cuisine and grade
+proportion_data <- filtered_data %>%
+  group_by(cuisine_description, grade) %>%
+  summarise(count = n(), .groups = 'drop') %>%
+  group_by(cuisine_description) %>%
+  mutate(proportion = count / sum(count)) %>%
+  ungroup()
+
+# Create the plot
+plot <- plot_ly(
+  data = proportion_data,
+  x = ~cuisine_description,
+  y = ~proportion,
+  color = ~grade,
+  colors = viridis(256),
+  type = "bar",
+  hoverinfo = "text",
+  text = ~paste("Cuisine Type:", cuisine_description,
+                "<br>Grade:", grade,
+                "<br>Proportion:", round(proportion, 2))
+) %>%
+  layout(
+    barmode = "stack",  # Display proportions as stacked bars
+    title = "Grade Distribution by Cuisine Type",
+    xaxis = list(title = "Cuisine Type", tickangle = 45),
+    yaxis = list(title = "Proportion"),
+    legend = list(title = list(text = "Grade"))
+  )
+
+# Display the plot
+plot
+```
+
+The chart shows that most restaurants in Manhattan maintain high hygiene standards, with`Grade A` being the most common, ranging from 50% to 80%. `Coffee/Tea` (80%) and `French` (70%) cuisines have the highest percentage of `Grade A`, while `Bakery Product
