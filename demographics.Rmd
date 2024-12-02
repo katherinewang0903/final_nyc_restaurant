@@ -1,0 +1,40 @@
+---
+title: "demographics"
+author: "Restaurant group"
+date: "2024-12-02"
+output: 
+  html_document:
+    code_folding: hide
+    always_allow_html: true
+    toc: true
+    toc_float: true
+    theme: sandstone
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, 
+                      message = FALSE, 
+                     fig.path = "descriptives_files/",
+  fig.format = "png")
+```
+
+## Demographics of Manhattan Restaurants
+```{r}
+library(tidyverse)
+library(plotly)
+library(ggplot2)
+library(knitr)
+library(readr)
+```
+This section provides an overview of the types of restaurants in Manhattan, their distribution, and the scoring scales used in health inspections.
+
+## Types of Restaurants
+
+### We will explore the restaurants distribution across Mahattan
+
+```{r}
+manhattan_data = read_csv("Manhattan_Restaurant_Inspection_Results.csv", na = c("NA", "", "."))
+
+str (manhattan_data)
+```
+
