@@ -21,3 +21,29 @@ This platform investigates restaurant hygiene in Manhattan using the NYC Departm
 
 Our goal is to provide a comprehensive overview of dining safety and hygiene standards through data visualization and advanced analytics. Explore the site to discover trends, comparisons, and recommendations tailored to enhance public health and dining experiences.
 
+## Project Objectives
+
+- **Identify Trends**: Analyze inspection scores over time to assess improvements or declines in hygiene standards.
+- **Visualize Hygiene Data**: Use interactive maps to display hygiene scores and critical violation records.
+- **Provide Recommendations**: Help users find restaurants based on cuisine type, location, and hygiene ratings.
+- **Highlight Violations**: Examine common violations and their impact on scores and grades.
+
+---
+
+## Key Deliverables
+
+1. **Interactive Map**: Display hygiene scores and violation records across Manhattan.
+2. **Demographics Analysis**: Insights into restaurant types and hygiene score distributions.
+3. **Customized Recommendations**: Filterable restaurant lists based on user preferences.
+
+---
+
+## Planned Analyses
+
+- **Neighborhood Comparisons**: Investigate hygiene practices across Manhattan's zip codes.
+- **Cuisine-Type Analysis**: Compare inspection scores among different types of cuisine.
+- **Violation Impact**: Determine how critical violations affect restaurant grades.
+- **Temporal Trends**: Analyze inspection scores over time.
+
+---
+
