@@ -62,11 +62,12 @@ top_10_cuisines = cleaned_data %>%
   pull(cuisine_description)
 
 filtered_data = cleaned_data %>%
-  filter(cuisine_description %in% top_10_cuisines) %>% 
-  distinct(camis, dba,cuisine_description)
+  filter(cuisine_description %in% top_10_cuisines) 
+  
 
 # Create an EDA histogram using plotly
-cuisine_plot = filtered_data %>% 
+cuisine_plot = filtered_data %>%
+  distinct(camis, dba,cuisine_description) %>% 
   count(cuisine_description) %>% 
   mutate(cuisine_description = fct_reorder(cuisine_description, n)) %>% 
   plot_ly(
