@@ -83,6 +83,7 @@ cuisine_plot = filtered_data %>%
   )
 
 cuisine_plot
+
 ```
 The `American` cuisine `dominates the dining scene`, reflecting its widespread appeal and availability. Popular cuisines such as `Chinese, Italian, and Japanese` highlight Manhattan's `global culinary diversity`, catering to a broad range of tastes. 
 
