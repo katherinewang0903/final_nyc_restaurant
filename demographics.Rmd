@@ -1,0 +1,90 @@
+---
+title: "demographics"
+author: "Restaurant group"
+date: "2024-12-02"
+output: 
+  html_document:
+    code_folding: hide
+    always_allow_html: true
+    toc: true
+    toc_float: true
+    theme: sandstone
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, 
+                      message = FALSE, 
+                     fig.path = "descriptives_files/",
+  fig.format = "png")
+```
+
+## Demographics of Manhattan Restaurants
+```{r}
+library(tidyverse)
+library(plotly)
+library(ggplot2)
+library(knitr)
+library(readr)
+```
+This section provides an overview of the types of restaurants in Manhattan, their distribution, and the scoring scales used in health inspections.
+```{r}
+# First, we will import the data and remove rows with missing restaurant name, cuisine type, grade, or score, then create a new variable called region
+
+manhattan_data = read_csv("Manhattan_Restaurant_Inspection_Results.csv", na = c("NA", "", "."))
+str (manhattan_data)
+
+cleaned_data = manhattan_data %>%
+  janitor::clean_names() %>%  
+  filter(
+    !is.na(dba),                         
+    !is.na(cuisine_description),       
+    !is.na(grade),                       
+    !is.na(score),                       
+    !is.na(zipcode)
+  ) %>% mutate(region = case_when(
+    zipcode >= 10000 & zipcode <= 10025 ~ "Downtown",
+    zipcode >= 10026 & zipcode <= 10040 ~ "Midtown",
+    zipcode >= 10041 & zipcode <= 10282 ~ "Uptown",
+    TRUE ~ "Other" # For ZIP codes like 11371, 12345, etc.
+  ))
+```
+
+## Types of Restaurants
+
+#### Let's explore the restaurants distribution across Mahattan
+```{r}
+
+```
+#### What are the top 10 cuisine types in Manhattan?
+```{r}
+# we will Filter for the top 10 cuisine types
+top_10_cuisines = cleaned_data %>%
+  count(cuisine_description, sort = TRUE) %>%
+  slice_max(n, n = 10) %>%
+  pull(cuisine_description)
+
+filtered_data = cleaned_data %>%
+  filter(cuisine_description %in% top_10_cuisines)
+
+# Create an EDA histogram using plotly
+cuisine_plot = filtered_data %>% 
+  count(cuisine_description) %>% 
+  mutate(cuisine_description = fct_reorder(cuisine_description, n)) %>% 
+  plot_ly(
+    x = ~cuisine_description, 
+    y = ~n,
+    type = 'bar',
+    color = ~cuisine_description,
+    colors = "viridis") %>% 
+  layout(
+    title = "Top 10 Cuisine Types in Manhattan",
+    xaxis = list(title = "Cuisine Type"),   
+    yaxis = list(title = "Count N") 
+  )
+
+cuisine_plot
+```
+The American cuisine dominates the dining scene, reflecting its widespread appeal and availability. Popular cuisines such as Chinese, Italian, and Japanese highlight Manhattan's global culinary diversity, catering to a broad range of tastes. 
+
+We find out that coffee and tea establishments are notably abundant, suggesting a strong demand for quick-service options among the busy urban population. Meanwhile, niche categories like bakery products, sandwiches, and French cuisine add variety to the dining landscape. Our EDAplot underscores the rich and diverse food culture that defines Manhattan.
+
