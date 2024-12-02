@@ -2,7 +2,6 @@
 title: "DOHMH New York City Restaurant Inspection Results"
 output: 
   html_document:
-    css: styles.css
     toc: true
     toc_float: true
     theme: sandstone
