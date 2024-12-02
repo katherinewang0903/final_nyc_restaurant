@@ -52,8 +52,58 @@ cleaned_data = manhattan_data %>%
 
 #### Let's explore the restaurants distribution across Mahattan
 ```{r}
+selected_cuisines <- c(
+  "Sandwiches", "French", "Mexican", "Bakery Products/Desserts",
+  "Pizza", "Japanese", "Italian", "Chinese", "Coffee/Tea", "American"
+)
 
+filtered_restaurant_data <- filtered_data %>%
+  filter(cuisine_description %in% selected_cuisines) %>%  
+  distinct(camis, .keep_all = TRUE)                      
+
+
+filtered_restaurant_data <- filtered_restaurant_data %>%
+  mutate(
+    hover_info = paste(
+      "CAMIS:", camis, "<br>",
+      "DBA:", dba, "<br>",
+      "Grade:", grade, "<br>",
+      "Cuisine:", cuisine_description
+    )
+  )
+
+
+restaurant_map <- plot_ly(
+  data = filtered_restaurant_data,
+  lat = ~latitude,         
+  lon = ~longitude,         
+  type = 'scattermapbox',
+  mode = 'markers',
+  text = ~hover_info,      
+  hoverinfo = 'text',
+  marker = list(size = 8, opacity = 0.8), 
+  color = ~cuisine_description,          
+  colors = viridis_pal(option = "D")(length(selected_cuisines)) 
+) %>%
+  layout(
+    mapbox = list(
+      style = "carto-positron", 
+      zoom = 10,                 
+      center = list(
+        lat = mean(filtered_restaurant_data$latitude, na.rm = TRUE),
+        lon = mean(filtered_restaurant_data$longitude, na.rm = TRUE)
+      )
+    ),
+    title = list(  
+      text = "Demographics of Manhattan Restaurants",  
+      font = list(size = 18)                           
+    )
+  )
+
+
+restaurant_map
 ```
+
 #### What are the top 10 cuisine types in Manhattan?
 ```{r}
 # we will Filter for the top 10 cuisine types
@@ -164,3 +214,10 @@ plot
 ```
 
 The chart shows that most restaurants in Manhattan maintain high hygiene standards, with`Grade A` being the most common, ranging from 50% to 80%. `Coffee/Tea` (80%) and `French` (70%) cuisines have the highest percentage of `Grade A`, while `Bakery Product
+
+```{r, echo=FALSE, out.width="60%", fig.align='center'}
+knitr::include_graphics("./pictures/sanitary.jpg")
+```
+<center> <p>NYC restaurant inspection grade</p> </div>
+
+
