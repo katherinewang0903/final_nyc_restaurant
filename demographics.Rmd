@@ -83,8 +83,30 @@ cuisine_plot = filtered_data %>%
   )
 
 cuisine_plot
+
 ```
-The American cuisine dominates the dining scene, reflecting its widespread appeal and availability. Popular cuisines such as Chinese, Italian, and Japanese highlight Manhattan's global culinary diversity, catering to a broad range of tastes. 
+The `American` cuisine `dominates the dining scene`, reflecting its widespread appeal and availability. Popular cuisines such as `Chinese, Italian, and Japanese` highlight Manhattan's `global culinary diversity`, catering to a broad range of tastes. 
 
-We find out that coffee and tea establishments are notably abundant, suggesting a strong demand for quick-service options among the busy urban population. Meanwhile, niche categories like bakery products, sandwiches, and French cuisine add variety to the dining landscape. Our EDAplot underscores the rich and diverse food culture that defines Manhattan.
+We find out that `coffee and tea establishments are notably abundant`, suggesting a strong demand for quick-service options among the busy urban population. Meanwhile, niche categories like bakery products, sandwiches, and French cuisine add variety to the dining landscape. Our plot underscores the `rich and diverse food` culture that defines `Manhattan`.
 
+<br><br> 
+  
+::: {style="display: flex; justify-content: center; gap: 20px;"}
+
+<div style="width: 45%; text-align: center;">
+
+```{r, echo=FALSE, out.width="100%", fig.align='center'}
+knitr::include_graphics("./pictures/americanfood.webp")
+```
+
+<p>American Food</p> </div> <div style="width: 45%; text-align: center;"> 
+
+```{r, echo=FALSE, out.width="100%", fig.align='center'} 
+knitr::include_graphics("./pictures/coffee&tea.png") 
+```
+
+<p>Coffee and Tea</p> </div>
+
+:::
+  
+::::
