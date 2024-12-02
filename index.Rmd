@@ -6,7 +6,7 @@ output:
     always_allow_html: true
     toc: true
     toc_float: true
-    theme: cosmo
+    theme: sandstone
 ---
 
 ## Welcome to our project website!
