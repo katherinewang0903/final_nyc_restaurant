@@ -21,7 +21,7 @@ This platform investigates restaurant hygiene in Manhattan using the NYC Departm
 
 Our goal is to provide a comprehensive overview of dining safety and hygiene standards through data visualization and advanced analytics. Explore the site to discover trends, comparisons, and recommendations tailored to enhance public health and dining experiences.
 
-## Project Objectives
+### Project Objectives
 
 - **Identify Trends**: Analyze inspection scores over time to assess improvements or declines in hygiene standards.
 - **Visualize Hygiene Data**: Use interactive maps to display hygiene scores and critical violation records.
@@ -30,7 +30,7 @@ Our goal is to provide a comprehensive overview of dining safety and hygiene sta
 
 ---
 
-## Key Deliverables
+### Key Deliverables
 
 1. **Interactive Map**: Display hygiene scores and violation records across Manhattan.
 2. **Demographics Analysis**: Insights into restaurant types and hygiene score distributions.
@@ -38,7 +38,7 @@ Our goal is to provide a comprehensive overview of dining safety and hygiene sta
 
 ---
 
-## Planned Analyses
+### Planned Analyses
 
 - **Neighborhood Comparisons**: Investigate hygiene practices across Manhattan's zip codes.
 - **Cuisine-Type Analysis**: Compare inspection scores among different types of cuisine.
@@ -47,3 +47,9 @@ Our goal is to provide a comprehensive overview of dining safety and hygiene sta
 
 ---
 
+### Contanct information
+If you are interested in our project and want to collaborate please [email me](mailto:rd3096@cumc.columbia.edu).
+
+For more informartion about New York's Squirrels, check out these references:
+
+1. https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j/about_data
