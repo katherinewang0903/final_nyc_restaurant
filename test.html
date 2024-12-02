@@ -9,14 +9,16 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="wentao zhou" />
 
+<meta name="date" content="2024-11-21" />
 
-<title>Dining Safety in Manhattan: Analyzing NYC Restaurant Hygiene Ratings</title>
+<title>text</title>
 
 <script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -29,11 +31,7 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
@@ -222,73 +220,7 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
-<style type="text/css">
-.code-folding-btn { margin-bottom: 4px; }
-</style>
 
-
-
-<style type="text/css">
-
-#TOC {
-  margin: 25px 0px 20px 0px;
-}
-@media (max-width: 768px) {
-#TOC {
-  position: relative;
-  width: 100%;
-}
-}
-
-@media print {
-.toc-content {
-  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
-  float: right;
-}
-}
-
-.toc-content {
-  padding-left: 30px;
-  padding-right: 40px;
-}
-
-div.main-container {
-  max-width: 1200px;
-}
-
-div.tocify {
-  width: 20%;
-  max-width: 260px;
-  max-height: 85%;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  div.tocify {
-    width: 25%;
-  }
-}
-
-@media (max-width: 767px) {
-  div.tocify {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-.tocify ul, .tocify li {
-  line-height: 20px;
-}
-
-.tocify-subheader .tocify-item {
-  font-size: 0.90em;
-}
-
-.tocify .list-group-item {
-  border-radius: 0px;
-}
-
-
-</style>
 
 
 
@@ -298,16 +230,6 @@ div.tocify {
 
 
 <div class="container-fluid main-container">
-
-
-<!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row">
-<div class="col-xs-12 col-sm-4 col-md-3">
-<div id="TOC" class="tocify">
-</div>
-</div>
-
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -354,111 +276,19 @@ div.tocify {
 
 <div id="header">
 
-<div class="btn-group pull-right float-right">
-<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
-<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
-<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
-<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
-</ul>
-</div>
 
 
-
-<h1 class="title toc-ignore">Dining Safety in Manhattan: Analyzing NYC
-Restaurant Hygiene Ratings</h1>
+<h1 class="title toc-ignore">text</h1>
+<h4 class="author">wentao zhou</h4>
+<h4 class="date">2024-11-21</h4>
 
 </div>
 
 
-<div id="welcome-to-our-project-website" class="section level2">
-<h2>Welcome to our project website!</h2>
-<img src="pictures/dinning.webp" width="60%" style="display: block; margin: auto;" />
-<center style="font-size: 10px;">
-Photo from: <a
-href="https://www.cntraveler.com/gallery/best-restaurants-in-new-york-city/"
-class="uri">https://www.cntraveler.com/gallery/best-restaurants-in-new-york-city/</a>
-</center>
-<p>This platform investigates restaurant hygiene in Manhattan using the
-NYC Department of Health and Mental Hygiene (DOHMH) Restaurant
-Inspection Results dataset.</p>
-<p>Our goal is to provide a comprehensive overview of dining safety and
-hygiene standards through data visualization and advanced analytics.
-Explore the site to discover trends, comparisons, and recommendations
-tailored to enhance public health and dining experiences.</p>
-<div id="project-objectives" class="section level3">
-<h3>Project Objectives</h3>
-<ul>
-<li><strong>Identify Trends</strong>: Analyze inspection scores over
-time to assess improvements or declines in hygiene standards.</li>
-<li><strong>Visualize Hygiene Data</strong>: Use interactive maps to
-display hygiene scores and critical violation records.</li>
-<li><strong>Provide Recommendations</strong>: Help users find
-restaurants based on cuisine type, location, and hygiene ratings.</li>
-<li><strong>Highlight Violations</strong>: Examine common violations and
-their impact on scores and grades.</li>
-</ul>
-</div>
-<div id="key-deliverables" class="section level3">
-<h3>Key Deliverables</h3>
-<ol style="list-style-type: decimal">
-<li><strong>Interactive Map</strong>: Display hygiene scores and
-violation records across Manhattan.</li>
-<li><strong>Demographics Analysis</strong>: Insights into restaurant
-types and hygiene score distributions.</li>
-<li><strong>Customized Recommendations</strong>: Filterable restaurant
-lists based on user preferences.</li>
-</ol>
-</div>
-<div id="planned-analyses" class="section level3">
-<h3>Planned Analyses</h3>
-<ul>
-<li><strong>Neighborhood Comparisons</strong>: Investigate hygiene
-practices across Manhattan’s neighborhoods.</li>
-<li><strong>Cuisine-Type Analysis</strong>: Compare inspection scores
-among different types of cuisine.</li>
-<li><strong>Violation Impact</strong>: Determine how critical violations
-affect restaurant grades.</li>
-<li><strong>Temporal Trends</strong>: Analyze inspection scores over
-time.</li>
-</ul>
-<hr />
-</div>
-<div id="screen-cast" class="section level3">
-<h3>Screen cast</h3>
-<iframe width="560" height="315" src title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
-</iframe>
-</div>
-<div id="project-contributors" class="section level3">
-<h3>Project contributors:</h3>
-<ul>
-<li>Katherine Wang (dw3093)</li>
-<li>Ruicong Du (rd3096)</li>
-<li>Yining He(yh3683)</li>
-<li>Qianxuan Huang (qh2285)</li>
-<li>Wentao Zhou (wz2722)</li>
-</ul>
-<p>click <a href="About-Us.html">here</a> if you want to learn more
-about us.</p>
-<hr />
-</div>
-<div id="contanct-and-reference" class="section level3">
-<h3>Contanct and reference</h3>
-<p>If you are interested in our project and want to collaborate please
-<a href="mailto:rd3096@cumc.columbia.edu">email me</a>.</p>
-<p>For more informartion about New York’s Squirrels, check out these
-references:</p>
-<ol style="list-style-type: decimal">
-<li><a
-href="https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j/about_data"
-class="uri">https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j/about_data</a></li>
-</ol>
-</div>
-</div>
+<p>111</p>
 
 
 
-</div>
-</div>
 
 </div>
 
@@ -490,41 +320,7 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
-<script>
-$(document).ready(function () {
-  window.initializeCodeFolding("hide" === "show");
-});
-</script>
 
-<script>
-$(document).ready(function ()  {
-
-    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
-    $('.unlisted.unnumbered').addClass('toc-ignore')
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
