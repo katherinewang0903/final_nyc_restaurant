@@ -62,6 +62,6 @@ click [here](About-Us.html) if you want to learn more about us.
 ### Contanct and reference
 If you are interested in our project and want to collaborate please [email me](mailto:rd3096@cumc.columbia.edu).
 
-For more informartion about New York's Squirrels, check out these references:
+For more informartion about New York's restaurants hygiene ratings, check out these references:
 
 1. https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j/about_data
