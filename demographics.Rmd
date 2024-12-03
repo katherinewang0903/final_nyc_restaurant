@@ -222,5 +222,3 @@ The chart shows that most restaurants in Manhattan maintain high hygiene standar
 knitr::include_graphics("./pictures/sanitary.jpg")
 ```
 <center> <p>NYC restaurant inspection grade</p> </div>
-
-
