@@ -27,6 +27,7 @@ library(knitr)
 library(readr)
 library(dplyr)
 library(tidyr)
+library(scales)
 ```
 
 • N = Not Yet Graded• A = Grade A• B = Grade B• C = Grade C• Z = Grade Pending• P= Grade Pending issued on re-opening following an initial inspection that resulted in a closure
@@ -59,18 +60,8 @@ cleaned_data = manhattan_data %>%
 
 4. Effect of violations on Grade (A,B,C…) Effect of Critical Violations on Grades
 Analysis: Examine how critical violations affect the overall grade a restaurant receives. This can help show if critical violations are strongly correlated with lower grades.
-Visualization: Grouped bar chart showing average scores and grades for restaurants with and without critical violations (based on CRITICAL FLAG). You could also add a pie chart to show the proportion of critical vs. non-critical violations.
-```{r}
-violation_counts <- cleaned_data %>%
-  group_by(`violation_description`) %>% 
-  summarise(count = n()) %>%
-  arrange(desc(count))
+Visualization: Grouped bar chart showing average scores and grades for restaurants with and without critical violations (based on CRITICAL FLAG). 
 
-# 查看结果
-print(violation_counts)
-
-
-```
 ```{r}
 # Analyze the effect of violation_description on grade
 # Group by critical flag and grade to calculate counts
@@ -112,104 +103,77 @@ violation_score = average_score %>%
   )
 ```
 
-
+Chi-Square Test between critical_flag and grade:
+conclusion: p-value<0.05, reject null, they are significant related.
 ```{r}
-# Prepare data for pie chart
-violation_pie_data <- cleaned_data %>%
-  mutate(CRITICAL_FLAG = ifelse(violation_description == "Critical", "Critical", "Non-Critical")) %>%
-  group_by(CRITICAL_FLAG) %>%
-  summarize(count = n(), .groups = "drop") %>%
-  mutate(percentage = count / sum(count) * 100)
+contingency_table <- table(cleaned_data$critical_flag, cleaned_data$grade)
 
-# Create a pie chart
-ggplot(data = violation_pie_data, aes(x = "", y = percentage, fill = CRITICAL_FLAG)) +
-  geom_bar(stat = "identity", width = 1) +
-  coord_polar(theta = "y") +
-  labs(title = "Proportion of Critical vs Non-Critical Violations",
-       x = NULL,
-       y = NULL,
-       fill = "Violation Type") +
-  theme_minimal() +
-  theme(axis.text.x = element_blank(), axis.ticks = element_blank())
+chi_test <- chisq.test(contingency_table)
+
+print(chi_test)
+
 
 ```
 
-6. Restaurant Type vs. Violation Frequency (Point-Biserial or Spearman):
-Explore whether certain restaurant types are associated with a higher frequency of violations.
-Example Question: Do seafood restaurants face more violations related to food safety compared to dessert shops?
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## Types of Restaurants
-
-#### Let's explore the restaurants distribution across Mahattan
+6. Restaurant Type vs. Violation Frequency (Spearman):
+Explore whether certain restaurant types are associated with a higher frequency of violations. find which restaurant type has largest precent of critical violation.
 ```{r}
+# Group by cuisine_description and calculate total and critical counts
+violation_cuisine <- cleaned_data %>%
+  mutate(critical_flag = ifelse(critical_flag == "Critical", 1, 0)) %>%
+  group_by(cuisine_description) %>%
+  summarize(total_violations = n(),
+            critical_violations = sum(critical_flag, na.rm = TRUE),
+            critical_percent = (critical_violations / total_violations),
+            critical_percentage = percent(critical_percent, accuracy = 0.01)
+            ) %>%
+  arrange(desc(critical_percentage))  %>% # Sort by percentage of critical violations 
+  head(10) # View top 10 restaurant types with the highest percentage of critical violations
 
-```
-#### What are the top 10 cuisine types in Manhattan?
-```{r}
-# we will Filter for the top 10 cuisine types
-top_10_cuisines = cleaned_data %>%
-  count(cuisine_description, sort = TRUE) %>%
-  slice_max(n, n = 10) %>%
-  pull(cuisine_description)
-
-filtered_data = cleaned_data %>%
-  filter(cuisine_description %in% top_10_cuisines)
-
-# Create an EDA histogram using plotly
-cuisine_plot = filtered_data %>% 
-  count(cuisine_description) %>% 
-  mutate(cuisine_description = fct_reorder(cuisine_description, n)) %>% 
-  plot_ly(
-    x = ~cuisine_description, 
-    y = ~n,
-    type = 'bar',
-    color = ~cuisine_description,
-    colors = "viridis") %>% 
-  layout(
-    title = "Top 10 Cuisine Types in Manhattan",
-    xaxis = list(title = "Cuisine Type"),   
-    yaxis = list(title = "Count N") 
+plot_ly(
+  type = 'table',
+  header = list(
+    values = c("Cuisine Description", "Critical Percentage"),
+    align = c("center", "center"),
+    font = list(size = 14, color = "white"),
+    fill = list(color = "purple")
+  ),
+  cells = list(
+    values = rbind(violation_cuisine$cuisine_description, violation_cuisine$critical_percentage),
+    align = c("center", "center"),
+    font = list(size = 12),
+    fill = list(color = c("white", "white"))
   )
+)
+```
+what type of violations are most comment in Chinese/Japanese cuisine:
+```{r}
+chinese_japanese <- cleaned_data %>%
+  filter(cuisine_description == "Chinese/Japanese") %>% # 42 rows in total
+  group_by(violation_description) %>%
+  summarize(num_violation = n(),
+            violation_percent = num_violation / 42,  
+            violation_percentage = percent(violation_percent, accuracy = 0.01)) %>%
+  arrange(desc(violation_percent))
 
-cuisine_plot
 
 ```
-The `American` cuisine `dominates the dining scene`, reflecting its widespread appeal and availability. Popular cuisines such as `Chinese, Italian, and Japanese` highlight Manhattan's `global culinary diversity`, catering to a broad range of tastes. 
-
-We find out that `coffee and tea establishments are notably abundant`, suggesting a strong demand for quick-service options among the busy urban population. Meanwhile, niche categories like bakery products, sandwiches, and French cuisine add variety to the dining landscape. Our plot underscores the `rich and diverse food` culture that defines `Manhattan`.
-
-<br><br> 
-  
-::: {style="display: flex; justify-content: center; gap: 20px;"}
-
-<div style="width: 45%; text-align: center;">
-
-```{r, echo=FALSE, out.width="100%", fig.align='center'}
-knitr::include_graphics("./pictures/americanfood.webp")
+what type of violations are most comment in critical violation:
+```{r}
+violation_critical <- cleaned_data %>%
+  filter(critical_flag == "Critical") %>% # 19,953 rows in total
+  group_by(violation_description) %>%
+  summarize(num_violation = n(),
+            violation_percent = num_violation / 19953) %>%
+  mutate(
+    if violation_percent < 0.003, then violation = "Other"),
+if else violation = violation_description)
 ```
 
-<p>American Food</p> </div> <div style="width: 45%; text-align: center;"> 
 
-```{r, echo=FALSE, out.width="100%", fig.align='center'} 
-knitr::include_graphics("./pictures/coffee&tea.png") 
-```
 
-<p>Coffee and Tea</p> </div>
 
-:::
-  
-::::
+
+
+
+
