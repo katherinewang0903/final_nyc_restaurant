@@ -76,7 +76,7 @@ average_score <- cleaned_data %>%
 
 
 # Create an EDA using plotly
-violation_grade = violation_grade_summary %>% 
+violation_grade_summary %>% 
   plot_ly(
     x = ~grade, 
     y = ~count,
@@ -89,7 +89,7 @@ violation_grade = violation_grade_summary %>%
     yaxis = list(title = "Restaurant Number") 
   )
 
-violation_score = average_score %>% 
+average_score %>% 
   plot_ly(
     x = ~grade, 
     y = ~avg_score,
@@ -164,16 +164,30 @@ violation_critical <- cleaned_data %>%
   filter(critical_flag == "Critical") %>% # 19,953 rows in total
   group_by(violation_description) %>%
   summarize(num_violation = n(),
-            violation_percent = num_violation / 19953) %>%
+            violation_percent = num_violation / 19953,  
+            violation_percentage = percent(violation_percent, accuracy = 0.01)) %>%
   mutate(
-    if violation_percent < 0.003, then violation = "Other"),
-if else violation = violation_description)
+    violation_description = if_else(violation_percent < 0.03, "Other", violation_description)  # Reassign small categories to "Other"
+  ) %>%
+  arrange(desc(violation_percent))
+
+critical_total <- violation_critical %>%
+  group_by(violation_description) %>%
+  summarize(
+            violation_percent = sum(violation_percent),  
+            violation_percentage = percent(violation_percent, accuracy = 0.01))
+
+
+# Create a pie chart
+plot_ly(
+  data = critical_total,
+  labels = ~violation_description,  # Labels for slices
+  values = ~violation_percent,  # Proportions for slices
+  type = 'pie',  # Pie chart type
+  hoverinfo = 'label+value+percent'  # Display information on hover
+) %>%
+  layout(title = "Violation Description Percentages",
+         legend = list( x = 1.2, y = 0.5 ))
+
+
 ```
-
-
-
-
-
-
-
-
