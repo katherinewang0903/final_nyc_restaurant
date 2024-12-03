@@ -1,0 +1,215 @@
+---
+title: "violation analysis"
+author: "Restaurant group"
+date: "2024-12-02"
+output: 
+  html_document:
+    code_folding: hide
+    always_allow_html: true
+    toc: true
+    toc_float: true
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, 
+                      message = FALSE, 
+                     fig.path = "violation_files/",
+  fig.format = "png")
+```
+
+## Analysis related to violation of Manhattan Restaurants
+```{r}
+library(tidyverse)
+library(plotly)
+library(ggplot2)
+library(knitr)
+library(readr)
+library(dplyr)
+library(tidyr)
+```
+
+• N = Not Yet Graded• A = Grade A• B = Grade B• C = Grade C• Z = Grade Pending• P= Grade Pending issued on re-opening following an initial inspection that resulted in a closure
+
+Indicator of critical violation; "• Critical • Not Critical • Not Applicable"; Critical violations are those most likely to contribute to food-borne illness
+```{r}
+# The same data cleaning process in demographics part, also only consider data with valid violation_description and critical_flag, and grade A, B, C.
+
+manhattan_data = read_csv("Manhattan_Restaurant_Inspection_Results.csv", na = c("NA", "", "."))
+str (manhattan_data)
+
+cleaned_data = manhattan_data %>%
+  janitor::clean_names() %>%  
+  filter(
+    !is.na(dba),                         
+    !is.na(cuisine_description),       
+    !is.na(grade),                       
+    !is.na(score),                       
+    !is.na(zipcode),
+    !is.na(violation_description),
+    !is.na(critical_flag),
+    grade %in% c("A", "B", "C")
+  ) %>% mutate(region = case_when(
+    zipcode >= 10000 & zipcode <= 10025 ~ "Downtown",
+    zipcode >= 10026 & zipcode <= 10040 ~ "Midtown",
+    zipcode >= 10041 & zipcode <= 10282 ~ "Uptown",
+    TRUE ~ "Other" # For ZIP codes like 11371, 12345, etc.
+  ))
+```
+
+4. Effect of violations on Grade (A,B,C…) Effect of Critical Violations on Grades
+Analysis: Examine how critical violations affect the overall grade a restaurant receives. This can help show if critical violations are strongly correlated with lower grades.
+Visualization: Grouped bar chart showing average scores and grades for restaurants with and without critical violations (based on CRITICAL FLAG). You could also add a pie chart to show the proportion of critical vs. non-critical violations.
+```{r}
+violation_counts <- cleaned_data %>%
+  group_by(`violation_description`) %>% 
+  summarise(count = n()) %>%
+  arrange(desc(count))
+
+# 查看结果
+print(violation_counts)
+
+
+```
+```{r}
+# Analyze the effect of violation_description on grade
+# Group by critical flag and grade to calculate counts
+violation_grade_summary <- cleaned_data %>%
+  group_by(critical_flag, grade) %>%
+  summarize(count = n(), .groups = "drop")
+
+# Calculate average scores by CRITICAL_FLAG and grade
+average_score <- cleaned_data %>%
+  group_by(critical_flag, grade) %>%
+  summarize(avg_score = mean(score), .groups = "drop")
+
+
+# Create an EDA using plotly
+violation_grade = violation_grade_summary %>% 
+  plot_ly(
+    x = ~grade, 
+    y = ~count,
+    type = 'bar',
+    color = ~critical_flag,
+    colors = "viridis") %>% 
+  layout(
+    title = "Effect of Violation Type on Restaurant Grade",
+    xaxis = list(title = "Grade"),   
+    yaxis = list(title = "Restaurant Number") 
+  )
+
+violation_score = average_score %>% 
+  plot_ly(
+    x = ~grade, 
+    y = ~avg_score,
+    type = 'bar',
+    color = ~critical_flag,
+    colors = "viridis") %>% 
+  layout(
+    title = "Effect of Violation Type on Restaurant Score",
+    xaxis = list(title = "Grade"),   
+    yaxis = list(title = "Restaurant Average Score") 
+  )
+```
+
+
+```{r}
+# Prepare data for pie chart
+violation_pie_data <- cleaned_data %>%
+  mutate(CRITICAL_FLAG = ifelse(violation_description == "Critical", "Critical", "Non-Critical")) %>%
+  group_by(CRITICAL_FLAG) %>%
+  summarize(count = n(), .groups = "drop") %>%
+  mutate(percentage = count / sum(count) * 100)
+
+# Create a pie chart
+ggplot(data = violation_pie_data, aes(x = "", y = percentage, fill = CRITICAL_FLAG)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar(theta = "y") +
+  labs(title = "Proportion of Critical vs Non-Critical Violations",
+       x = NULL,
+       y = NULL,
+       fill = "Violation Type") +
+  theme_minimal() +
+  theme(axis.text.x = element_blank(), axis.ticks = element_blank())
+
+```
+
+6. Restaurant Type vs. Violation Frequency (Point-Biserial or Spearman):
+Explore whether certain restaurant types are associated with a higher frequency of violations.
+Example Question: Do seafood restaurants face more violations related to food safety compared to dessert shops?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Types of Restaurants
+
+#### Let's explore the restaurants distribution across Mahattan
+```{r}
+
+```
+#### What are the top 10 cuisine types in Manhattan?
+```{r}
+# we will Filter for the top 10 cuisine types
+top_10_cuisines = cleaned_data %>%
+  count(cuisine_description, sort = TRUE) %>%
+  slice_max(n, n = 10) %>%
+  pull(cuisine_description)
+
+filtered_data = cleaned_data %>%
+  filter(cuisine_description %in% top_10_cuisines)
+
+# Create an EDA histogram using plotly
+cuisine_plot = filtered_data %>% 
+  count(cuisine_description) %>% 
+  mutate(cuisine_description = fct_reorder(cuisine_description, n)) %>% 
+  plot_ly(
+    x = ~cuisine_description, 
+    y = ~n,
+    type = 'bar',
+    color = ~cuisine_description,
+    colors = "viridis") %>% 
+  layout(
+    title = "Top 10 Cuisine Types in Manhattan",
+    xaxis = list(title = "Cuisine Type"),   
+    yaxis = list(title = "Count N") 
+  )
+
+cuisine_plot
+
+```
+The `American` cuisine `dominates the dining scene`, reflecting its widespread appeal and availability. Popular cuisines such as `Chinese, Italian, and Japanese` highlight Manhattan's `global culinary diversity`, catering to a broad range of tastes. 
+
+We find out that `coffee and tea establishments are notably abundant`, suggesting a strong demand for quick-service options among the busy urban population. Meanwhile, niche categories like bakery products, sandwiches, and French cuisine add variety to the dining landscape. Our plot underscores the `rich and diverse food` culture that defines `Manhattan`.
+
+<br><br> 
+  
+::: {style="display: flex; justify-content: center; gap: 20px;"}
+
+<div style="width: 45%; text-align: center;">
+
+```{r, echo=FALSE, out.width="100%", fig.align='center'}
+knitr::include_graphics("./pictures/americanfood.webp")
+```
+
+<p>American Food</p> </div> <div style="width: 45%; text-align: center;"> 
+
+```{r, echo=FALSE, out.width="100%", fig.align='center'} 
+knitr::include_graphics("./pictures/coffee&tea.png") 
+```
+
+<p>Coffee and Tea</p> </div>
+
+:::
+  
+::::
