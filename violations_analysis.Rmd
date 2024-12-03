@@ -30,9 +30,10 @@ library(tidyr)
 library(scales)
 ```
 
-• N = Not Yet Graded• A = Grade A• B = Grade B• C = Grade C• Z = Grade Pending• P= Grade Pending issued on re-opening following an initial inspection that resulted in a closure
 
-Indicator of critical violation; "• Critical • Not Critical • Not Applicable"; Critical violations are those most likely to contribute to food-borne illness
+In this chapter, we analyze the relationship between inspection violations and grades. Our analysis focuses exclusively on data where the grades are A, B, or C, and excludes records with grades labeled as N (Not Yet Graded), Z (Grade Pending), or P (Grade Pending issued upon reopening after a closure). We also exclude "Not Applicable" entries for critical violation indicators.
+<br>
+Inspection violations are categorized into two groups: Critical and Not Critical. Critical violations represent the most significant risks for foodborne illnesses. To ensure accuracy and relevance, we begin by filtering out unnecessary data from the dataset before proceeding with the analysis.
 ```{r}
 # The same data cleaning process in demographics part, also only consider data with valid violation_description and critical_flag, and grade A, B, C.
 
@@ -58,10 +59,7 @@ cleaned_data = manhattan_data %>%
   ))
 ```
 
-4. Effect of violations on Grade (A,B,C…) Effect of Critical Violations on Grades
-Analysis: Examine how critical violations affect the overall grade a restaurant receives. This can help show if critical violations are strongly correlated with lower grades.
-Visualization: Grouped bar chart showing average scores and grades for restaurants with and without critical violations (based on CRITICAL FLAG). 
-
+First, we analyze the frequency distribution of grades. For both Critical and Not Critical groups, the majority of restaurants received a Grade A, followed by Grade B, and then Grade C. However, only within Grade A do we observe more restaurants with Not Critical violations compared to Critical violations.
 ```{r}
 # Analyze the effect of violation_description on grade
 # Group by critical flag and grade to calculate counts
@@ -75,7 +73,7 @@ average_score <- cleaned_data %>%
   summarize(avg_score = mean(score), .groups = "drop")
 
 
-# Create an EDA using plotly
+# Create an EDA of grade and count using plotly
 violation_grade_summary %>% 
   plot_ly(
     x = ~grade, 
@@ -89,6 +87,11 @@ violation_grade_summary %>%
     yaxis = list(title = "Restaurant Number") 
   )
 
+```
+
+Additionally, when examining inspection scores across all grade categories, restaurants with Not Critical violations consistently achieve lower scores. This pattern aligns with the corresponding grade results, further highlighting the relationship between inspection outcomes and grade assignments.
+```{r}
+# Create an EDA of score and count using plotly
 average_score %>% 
   plot_ly(
     x = ~grade, 
@@ -103,20 +106,51 @@ average_score %>%
   )
 ```
 
-Chi-Square Test between critical_flag and grade:
-conclusion: p-value<0.05, reject null, they are significant related.
+Next, we conducted a Chi-Square Test to examine the relationship between the critical flag and grade. The results are visualized using a Contingency Table Heatmap. The analysis shows a p-value smaller than 0.05, leading us to reject the null hypothesis that the critical flag and grade are independent. This indicates a significant relationship between the critical flag and grade at the 0.05 significance level.
 ```{r}
+# Chi-Square Test
 contingency_table <- table(cleaned_data$critical_flag, cleaned_data$grade)
-
 chi_test <- chisq.test(contingency_table)
-
 print(chi_test)
 
 
+# Convert the contingency table to a matrix for visualization
+contingency_matrix <- as.matrix(contingency_table)
+
+
+# Extract chi-square test statistic and p-value
+chi_stat <- round(chi_test$statistic, 2)
+chi_pval <- format.pval(chi_test$p.value, digits = 3)
+
+# Add the chi-square test result as annotations
+plot_ly(
+  x = colnames(contingency_matrix),
+  y = rownames(contingency_matrix),
+  z = contingency_matrix,
+  type = "heatmap",
+  colors = colorRamp(c("white", "purple"))
+) %>%
+  layout(
+    title = "Contingency Table Heatmap with Chi-Square Result",
+    xaxis = list(title = "Grade"),
+    yaxis = list(title = "Critical Flag"),
+    colorbar = list(title = "Count"),
+    annotations = list(
+      list(
+        x = 2.1, 
+        y = 1.1,
+        text = paste("Chi-Square Statistic:", chi_stat, "<br>P-Value:", chi_pval),
+        showarrow = FALSE,
+        font = list(size = 14)
+      )
+    )
+  )
+
 ```
 
-6. Restaurant Type vs. Violation Frequency (Spearman):
-Explore whether certain restaurant types are associated with a higher frequency of violations. find which restaurant type has largest precent of critical violation.
+Then, we analyze the relationship between restaurant cuisine type and violation. To identify patterns, we calculate the percentage of critical violations for each cuisine type and rank them accordingly. Our analysis highlights the top 10 cuisine types with the highest percentage of violations, with Chinese/Japanese cuisine emerging as the category with the highest violation rate.
+<br>
+This finding provides valuable insights into how specific cuisine types are associated with inspection outcomes, offering a deeper understanding of potential factors influencing violation frequencies. Such insights could guide further investigation into operational practices or compliance challenges unique to these cuisine categories.
 ```{r}
 # Group by cuisine_description and calculate total and critical counts
 violation_cuisine <- cleaned_data %>%
@@ -146,19 +180,11 @@ plot_ly(
   )
 )
 ```
-what type of violations are most comment in Chinese/Japanese cuisine:
-```{r}
-chinese_japanese <- cleaned_data %>%
-  filter(cuisine_description == "Chinese/Japanese") %>% # 42 rows in total
-  group_by(violation_description) %>%
-  summarize(num_violation = n(),
-            violation_percent = num_violation / 42,  
-            violation_percentage = percent(violation_percent, accuracy = 0.01)) %>%
-  arrange(desc(violation_percent))
-
-
-```
-what type of violations are most comment in critical violation:
+Among all restaurants with critical violations, we aimed to identify the most common types of violations. To achieve this, we calculated the percentage of each violation type and grouped all categories with less than 3% into an "Other" category for clarity. The results are summarized in a pie chart, providing a clear visualization of the distribution of critical violations.
+<br>
+The analysis reveals that the most frequent critical violation is related to improper temperature control of TCS (Time/Temperature Control for Safety) foods. Specifically, this includes cold TCS food items held above 41°F, smoked or processed fish held above 38°F, intact raw eggs held above 45°F, or reduced oxygen packaged (ROP) TCS foods held above the required temperatures, except during active necessary preparation.
+<br>
+This finding underscores the importance of proper temperature management in ensuring food safety and reducing the risk of foodborne illnesses.
 ```{r}
 violation_critical <- cleaned_data %>%
   filter(critical_flag == "Critical") %>% # 19,953 rows in total
@@ -175,7 +201,7 @@ critical_total <- violation_critical %>%
   group_by(violation_description) %>%
   summarize(
             violation_percent = sum(violation_percent),  
-            violation_percentage = percent(violation_percent, accuracy = 0.01))
+            violation_percentage = percent(violation_percent, accuracy = 0.01)) #combine percentage of "other"
 
 
 # Create a pie chart
