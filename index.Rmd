@@ -55,7 +55,7 @@ Our goal is to provide a comprehensive overview of dining safety and hygiene sta
 * Qianxuan Huang (qh2285) 
 * Wentao Zhou (wz2722)
 
-click [here](About-Us.html) if you want to learn more about us.
+click [here](aboutus.html) if you want to learn more about us.
 
 --- 
 
