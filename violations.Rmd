@@ -1,7 +1,6 @@
 ---
 title: "violation analysis"
-author: "Restaurant group"
-date: "2024-12-02"
+
 output: 
   html_document:
     code_folding: hide
