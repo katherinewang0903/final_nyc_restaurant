@@ -263,5 +263,3 @@ Description of violation names in the above pie chart:
 * Other: Any violation description not listed in the above categories.
 
 The analysis reveals that the most frequent critical violation is related to washing and temperature problem. These are more than a quarter in total percentage. This finding underscores the importance of proper temperature management and remain cleaning in ensuring food safety and reducing the risk of foodborne illnesses. Also, restaurants owner who want to avoid bad grade in inspection need to perticullar pay attention to them.
-
-::
