@@ -47,3 +47,5 @@ output:
 *MS-Environmental Health Science*
 
 <img src="ourphoto/wentao.jpg" style="width:30%;">
+
+Go [Home](index.html)
