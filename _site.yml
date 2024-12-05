@@ -1,4 +1,4 @@
-name: "<Restaurant group>'s Site"
+name: "<NYC Restaurant Group>'s Site"
 output_dir: "."
 navbar:
   title: "<Home>"
