@@ -1,0 +1,267 @@
+---
+title: "violation analysis"
+author: "Restaurant group"
+date: "2024-12-02"
+output: 
+  html_document:
+    code_folding: hide
+    always_allow_html: true
+    toc: true
+    toc_float: true
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, 
+                      message = FALSE, 
+                     fig.path = "violation_files/",
+  fig.format = "png")
+```
+
+## Analysis related to violation of Manhattan Restaurants
+```{r}
+library(tidyverse)
+library(plotly)
+library(ggplot2)
+library(knitr)
+library(readr)
+library(dplyr)
+library(tidyr)
+library(scales)
+```
+
+
+In this chapter, we analyze the relationship between inspection violations and grades. Our analysis focuses exclusively on data where the grades are A, B, or C, and excludes records with grades labeled as N (Not Yet Graded), Z (Grade Pending), or P (Grade Pending issued upon reopening after a closure). We also exclude "Not Applicable" entries for critical violation indicators.
+<br>
+Inspection violations are categorized into two groups: Critical and Not Critical. Critical violations represent the most significant risks for foodborne illnesses. To ensure accuracy and relevance, we begin by filtering out unnecessary data from the dataset before proceeding with the analysis.
+```{r}
+# The same data cleaning process in demographics part, also only consider data with valid violation_description and critical_flag, and grade A, B, C.
+
+manhattan_data = read_csv("Manhattan_Restaurant_Inspection_Results.csv", na = c("NA", "", "."))
+str (manhattan_data)
+
+violation_data = manhattan_data %>%
+  janitor::clean_names() %>%  
+  filter(
+    !is.na(dba),                         
+    !is.na(cuisine_description),       
+    !is.na(grade),                       
+    !is.na(score),                       
+    !is.na(zipcode),
+    !is.na(violation_description),
+    !is.na(critical_flag),
+    grade %in% c("A", "B", "C")
+  ) %>% mutate(region = case_when(
+    zipcode >= 10000 & zipcode <= 10025 ~ "Downtown",
+    zipcode >= 10026 & zipcode <= 10040 ~ "Midtown",
+    zipcode >= 10041 & zipcode <= 10282 ~ "Uptown",
+    TRUE ~ "Other" # For ZIP codes like 11371, 12345, etc.
+  ))
+```
+### Grade Distribution
+
+First, we analyze the frequency distribution of grades. For both Critical and Not Critical groups, the majority of restaurants received a Grade A, followed by Grade B, and then Grade C. However, only within Grade A do we observe more restaurants with Not Critical violations compared to Critical violations.
+```{r}
+# Analyze the effect of violation_description on grade
+# Group by critical flag and grade to calculate counts
+violation_grade_summary <- violation_data %>%
+  group_by(critical_flag, grade) %>%
+  summarize(count = n(), .groups = "drop")
+
+# Calculate average scores by CRITICAL_FLAG and grade
+average_score <- violation_data %>%
+  group_by(critical_flag, grade) %>%
+  summarize(avg_score = mean(score), .groups = "drop")
+
+
+# Create an EDA of grade and count using plotly
+violation_grade_summary %>% 
+  plot_ly(
+    x = ~grade, 
+    y = ~count,
+    type = 'bar',
+    color = ~critical_flag,
+    colors = "viridis") %>% 
+  layout(
+    title = "Effect of Violation Type on Restaurant Grade",
+    xaxis = list(title = "Grade"),   
+    yaxis = list(title = "Restaurant Number") 
+  )
+
+```
+
+
+Additionally, when examining inspection scores across all grade categories, restaurants with Not Critical violations consistently achieve lower scores. This pattern aligns with the corresponding grade results, further highlighting the relationship between inspection outcomes and grade assignments.
+```{r}
+# Create an EDA of score and count using plotly
+average_score %>% 
+  plot_ly(
+    x = ~grade, 
+    y = ~avg_score,
+    type = 'bar',
+    color = ~critical_flag,
+    colors = "viridis") %>% 
+  layout(
+    title = "Effect of Violation Type on Restaurant Score",
+    xaxis = list(title = "Grade"),   
+    yaxis = list(title = "Restaurant Average Score") 
+  )
+```
+
+### Chi-Square Test
+
+Next, we conducted a Chi-Square Test to examine the relationship between the critical flag and grade. The results are visualized using a Contingency Table Heatmap. The analysis shows a p-value smaller than 0.05, leading us to reject the null hypothesis that the critical flag and grade are independent. This indicates a significant relationship between the critical flag and grade at the 0.05 significance level.
+```{r}
+# Chi-Square Test
+contingency_table <- table(violation_data$critical_flag, violation_data$grade)
+chi_test <- chisq.test(contingency_table)
+print(chi_test)
+
+
+# Convert the contingency table to a matrix for visualization
+contingency_matrix <- as.matrix(contingency_table)
+
+
+# Extract chi-square test statistic and p-value
+chi_stat <- round(chi_test$statistic, 2)
+chi_pval <- format.pval(chi_test$p.value, digits = 3)
+
+# Add the chi-square test result as annotations
+plot_ly(
+  x = colnames(contingency_matrix),
+  y = rownames(contingency_matrix),
+  z = contingency_matrix,
+  type = "heatmap",
+  colors = colorRamp(c("white", "purple"))
+) %>%
+  layout(
+    title = "Contingency Table Heatmap with Chi-Square Result",
+    xaxis = list(title = "Grade"),
+    yaxis = list(title = "Critical Flag"),
+    colorbar = list(title = "Count"),
+    annotations = list(
+      list(
+        x = 2.1, 
+        y = 1.1,
+        text = paste("Chi-Square Statistic:", chi_stat, "<br>P-Value:", chi_pval),
+        showarrow = FALSE,
+        font = list(size = 14)
+      )
+    )
+  )
+
+```
+### Critical Flag vs. Cuisine Description
+
+Then, we analyze the relationship between restaurant cuisine type and violation. To identify patterns, we calculate the percentage of critical violations for each cuisine type and rank them accordingly. Our analysis highlights the top 10 cuisine types with the highest percentage of violations, with Chinese/Japanese cuisine emerging as the category with the highest violation rate.
+<br>
+This finding provides valuable insights into how specific cuisine types are associated with inspection outcomes, offering a deeper understanding of potential factors influencing violation frequencies. Such insights could guide further investigation into operational practices or compliance challenges unique to these cuisine categories.
+```{r}
+# Group by cuisine_description and calculate total and critical counts
+violation_cuisine <- violation_data %>%
+  mutate(critical_flag = ifelse(critical_flag == "Critical", 1, 0)) %>%
+  group_by(cuisine_description) %>%
+  summarize(total_violations = n(),
+            critical_violations = sum(critical_flag, na.rm = TRUE),
+            critical_percent = (critical_violations / total_violations),
+            critical_percentage = percent(critical_percent, accuracy = 0.01)
+            ) %>%
+  arrange(desc(critical_percentage))  %>% # Sort by percentage of critical violations 
+  head(10) # View top 10 restaurant types with the highest percentage of critical violations
+
+plot_ly(
+  type = 'table',
+  header = list(
+    values = c("Cuisine Description", "Critical Percentage"),
+    align = c("center", "center"),
+    font = list(size = 14, color = "white"),
+    fill = list(color = "purple")
+  ),
+  cells = list(
+    values = rbind(violation_cuisine$cuisine_description, violation_cuisine$critical_percentage),
+    align = c("center", "center"),
+    font = list(size = 12),
+    fill = list(color = c("white", "white"))
+  )
+)
+```
+### Violation Type Analysis
+
+Among all restaurants with critical violations, we aimed to identify the most common types of violations. To achieve this, we calculated the percentage of each violation type and grouped all categories with less than 3% into an "Other" category for clarity. The results are summarized in a pie chart, providing a clear visualization of the distribution of critical violations.
+```{r}
+violation_critical <- violation_data %>%
+  filter(critical_flag == "Critical") %>% # 19,953 rows in total
+  group_by(violation_description) %>%
+  summarize(num_violation = n(),
+            violation_percent = num_violation / 19953,  
+            violation_percentage = percent(violation_percent, accuracy = 0.01)) %>%
+  mutate(
+    violation_description = if_else(violation_percent < 0.03, "Other", violation_description)  # Reassign small categories to "Other"
+  ) %>%
+  arrange(desc(violation_percent))
+
+critical_total <- violation_critical %>%
+  group_by(violation_description) %>%
+  summarize(
+            violation_percent = sum(violation_percent),  
+            violation_percentage = percent(violation_percent, accuracy = 0.01)) #combine percentage of "other"
+
+critical_name = critical_total %>%
+  mutate(
+    violation_name = case_when(
+      violation_description == "Cold TCS food item held above 41 °F; smoked or processed fish held above 38 °F; intact raw eggs held above 45 °F; or reduced oxygen packaged (ROP) TCS foods held above required temperatures except during active necessary preparation." ~ "Temperature of Storage",
+      violation_description == "Evidence of mice or live mice in establishment's food or non-food areas." ~ "Mice Problem",
+      violation_description == "Filth flies or food/refuse/sewage associated with (FRSA) flies or other nuisance pests in establishment’s food and/or non-food areas. FRSA flies include house flies, blow flies, bottle flies, flesh flies, drain flies, Phorid flies and fruit flies." ~ "Flies Problem",
+      violation_description == "Food Protection Certificate (FPC) not held by manager or supervisor of food operations." ~ "FPC",
+      violation_description == "Food contact surface not properly washed, rinsed and sanitized after each use and following any activity when contamination may have occurred." ~ "Washing Problem",
+      violation_description == "Food, supplies, or equipment not protected from potential source of contamination during storage, preparation, transportation, display, service or from customer’s refillable, reusable container. Condiments not in single-service containers or dispensed directly by the vendor." ~ "Contamination Problem",
+      violation_description == "Hot TCS food item not held at or above 140 °F." ~ "TCS",
+      violation_description == "Raw, cooked or prepared food is adulterated, contaminated, cross-contaminated, or not discarded in accordance with HACCP plan." ~ "HACCP",
+      violation_description == "Sanitized equipment or utensil, including in-use food dispensing utensil, improperly used or stored." ~ "Sanitization Problem",
+      TRUE ~ "Other"  # Default category for any other description
+    )
+  )
+
+
+# Create a pie chart
+plot_ly(
+  data = critical_name,
+  labels = ~violation_name, 
+  values = ~violation_percent,  
+  type = 'pie',  # Pie chart type
+  textinfo = 'label',  # Display labels and percentages
+  hoverinfo = 'label+percent' , # Show additional info on hover
+    colors = "viridis"
+) %>%
+  layout(title = "Violation Description Percentages",
+         legend = list( x = 1.2, y = 0.5 ))
+
+
+```
+
+Description of violation names in the above pie chart: 
+
+* Temperature of Storage: Cold TCS food item held above 41 °F; smoked or processed fish held above 38 °F; intact raw eggs held above 45 °F; or reduced oxygen packaged (ROP) TCS foods held above required temperatures except during active necessary preparation.
+
+* Mice Problem: Evidence of mice or live mice in establishment's food or non-food areas. 
+
+* Flies Problem: Filth flies or food/refuse/sewage associated with (FRSA) flies or other nuisance pests in establishment’s food and/or non-food areas. FRSA flies include house flies, blow flies, bottle flies, flesh flies, drain flies, Phorid flies and fruit flies.
+
+* FPC: Food Protection Certificate (FPC) not held by manager or supervisor of food operations.
+
+* Washing Problem: Food contact surface not properly washed, rinsed and sanitized after each use and following any activity when contamination may have occurred.
+
+* Contamination Problem: Food, supplies, or equipment not protected from potential source of contamination during storage, preparation, transportation, display, service or from customer’s refillable, reusable container. Condiments not in single-service containers or dispensed directly by the vendor. 
+
+* TCS: Hot TCS food item not held at or above 140 °F. <br>
+
+* HACCP: Raw, cooked or prepared food is adulterated, contaminated, cross-contaminated, or not discarded in accordance with HACCP plan.
+
+
+* Sanitization Problem: Sanitized equipment or utensil, including in-use food dispensing utensil, improperly used or stored. <br>
+
+* Other: Any violation description not listed in the above categories.
+
+The analysis reveals that the most frequent critical violation is related to washing and temperature problem. These are more than a quarter in total percentage. This finding underscores the importance of proper temperature management and remain cleaning in ensuring food safety and reducing the risk of foodborne illnesses. Also, restaurants owner who want to avoid bad grade in inspection need to perticullar pay attention to them.
+
+::

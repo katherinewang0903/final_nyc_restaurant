@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Restaurant group" />
+
+<meta name="date" content="2024-12-03" />
+
+<title>Location vs. Grade analysis</title>
+
+<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="site_libs/plotly-binding-4.10.4/plotly.js"></script>
+<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="site_libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+<link href="site_libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="site_libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"><Home></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">HOME</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="aboutus.html">About us</a>
+</li>
+<li>
+  <a href="demographics.html">Demographics</a>
+</li>
+<li>
+  <a href="Data-Source.html">Data Source</a>
+</li>
+<li>
+  <a href="location_grade.html">location_grade</a>
+</li>
+<li>
+  <a href="violations_analysis.html">violations_analysis</a>
+</li>
+<li>
+  <a href="mailto:rd3096@cumc.columbia.edu">
+    <span class="fa fa-envelope fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://github.com/katherinewang0903/final_nyc_restaurant.github.io">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Location vs. Grade analysis</h1>
+<h4 class="author">Restaurant group</h4>
+<h4 class="date">2024-12-03</h4>
+
+</div>
+
+
+<pre class="r"><code>library(tidyverse)
+library(plotly)
+library(ggplot2)
+library(knitr)
+library(readr)
+library(dplyr)
+library(tidyr)
+library(scales)
+library(vcd)
+library(tidyverse)
+library(htmltools)</code></pre>
+<p>In this chapter, we analyze the relationship between locations and
+grades. Our analysis focuses exclusively on data where the grades are A,
+B, or C, and excludes records with grades labeled as N (Not Yet Graded),
+Z (Grade Pending), or P (Grade Pending issued upon reopening after a
+closure). To ensure accuracy and relevance, we begin by filtering out
+unnecessary data from the dataset before proceeding with the
+analysis.</p>
+<pre class="r"><code># The same data cleaning process in demographics part, also only consider data with grade A, B, C.
+manhattan_data = read_csv(&quot;Manhattan_Restaurant_Inspection_Results.csv&quot;, na = c(&quot;NA&quot;, &quot;&quot;, &quot;.&quot;))
+str (manhattan_data)
+## spc_tbl_ [94,616 × 27] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+##  $ CAMIS                : num [1:94616] 50140436 50158081 50152703 50160975 50161087 ...
+##  $ DBA                  : chr [1:94616] &quot;JUST SALAD&quot; &quot;THE MANNER&quot; &quot;MIDNIGHT BLUE&quot; &quot;BLUE BLOSSOM&quot; ...
+##  $ BORO                 : chr [1:94616] &quot;Manhattan&quot; &quot;Manhattan&quot; &quot;Manhattan&quot; &quot;Manhattan&quot; ...
+##  $ BUILDING             : chr [1:94616] &quot;2853&quot; &quot;58&quot; &quot;106&quot; &quot;108&quot; ...
+##  $ STREET               : chr [1:94616] &quot;BROADWAY&quot; &quot;THOMPSON STREET&quot; &quot;EAST   19 STREET&quot; &quot;WEST   39 STREET&quot; ...
+##  $ ZIPCODE              : num [1:94616] 10025 10012 10003 10018 10025 ...
+##  $ PHONE                : num [1:94616] 7.32e+09 9.17e+09 3.48e+09 6.47e+09 9.29e+09 ...
+##  $ CUISINE DESCRIPTION  : chr [1:94616] NA NA NA NA ...
+##  $ INSPECTION DATE      : chr [1:94616] &quot;01/01/1900&quot; &quot;01/01/1900&quot; &quot;01/01/1900&quot; &quot;01/01/1900&quot; ...
+##  $ ACTION               : chr [1:94616] NA NA NA NA ...
+##  $ VIOLATION CODE       : chr [1:94616] NA NA NA NA ...
+##  $ VIOLATION DESCRIPTION: chr [1:94616] NA NA NA NA ...
+##  $ CRITICAL FLAG        : chr [1:94616] &quot;Not Applicable&quot; &quot;Not Applicable&quot; &quot;Not Applicable&quot; &quot;Not Applicable&quot; ...
+##  $ SCORE                : num [1:94616] NA NA NA NA NA NA NA NA NA NA ...
+##  $ GRADE                : chr [1:94616] NA NA NA NA ...
+##  $ GRADE DATE           : chr [1:94616] NA NA NA NA ...
+##  $ RECORD DATE          : chr [1:94616] &quot;11/05/2024&quot; &quot;11/05/2024&quot; &quot;11/05/2024&quot; &quot;11/05/2024&quot; ...
+##  $ INSPECTION TYPE      : chr [1:94616] NA NA NA NA ...
+##  $ Latitude             : num [1:94616] 40.8 40.7 40.7 40.8 40.8 ...
+##  $ Longitude            : num [1:94616] -74 -74 -74 -74 -74 ...
+##  $ Community Board      : num [1:94616] 109 102 105 105 107 108 101 105 104 102 ...
+##  $ Council District     : chr [1:94616] &quot;07&quot; &quot;01&quot; &quot;02&quot; &quot;04&quot; ...
+##  $ Census Tract         : chr [1:94616] &quot;019900&quot; &quot;004700&quot; &quot;005000&quot; &quot;011300&quot; ...
+##  $ BIN                  : num [1:94616] 1075440 1087362 1017905 1015273 1055676 ...
+##  $ BBL                  : num [1:94616] 1.02e+09 1.00e+09 1.01e+09 1.01e+09 1.02e+09 ...
+##  $ NTA                  : chr [1:94616] &quot;MN09&quot; &quot;MN24&quot; &quot;MN21&quot; &quot;MN17&quot; ...
+##  $ Location Point1      : logi [1:94616] NA NA NA NA NA NA ...
+##  - attr(*, &quot;spec&quot;)=
+##   .. cols(
+##   ..   CAMIS = col_double(),
+##   ..   DBA = col_character(),
+##   ..   BORO = col_character(),
+##   ..   BUILDING = col_character(),
+##   ..   STREET = col_character(),
+##   ..   ZIPCODE = col_double(),
+##   ..   PHONE = col_double(),
+##   ..   `CUISINE DESCRIPTION` = col_character(),
+##   ..   `INSPECTION DATE` = col_character(),
+##   ..   ACTION = col_character(),
+##   ..   `VIOLATION CODE` = col_character(),
+##   ..   `VIOLATION DESCRIPTION` = col_character(),
+##   ..   `CRITICAL FLAG` = col_character(),
+##   ..   SCORE = col_double(),
+##   ..   GRADE = col_character(),
+##   ..   `GRADE DATE` = col_character(),
+##   ..   `RECORD DATE` = col_character(),
+##   ..   `INSPECTION TYPE` = col_character(),
+##   ..   Latitude = col_double(),
+##   ..   Longitude = col_double(),
+##   ..   `Community Board` = col_double(),
+##   ..   `Council District` = col_character(),
+##   ..   `Census Tract` = col_character(),
+##   ..   BIN = col_double(),
+##   ..   BBL = col_double(),
+##   ..   NTA = col_character(),
+##   ..   `Location Point1` = col_logical()
+##   .. )
+##  - attr(*, &quot;problems&quot;)=&lt;externalptr&gt;
+
+zip_grade = manhattan_data %&gt;%
+  janitor::clean_names() %&gt;%  
+  filter(
+    !is.na(dba),                         
+    !is.na(cuisine_description),       
+    !is.na(grade),                       
+    !is.na(score),                       
+    !is.na(zipcode),
+    grade %in% c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;)
+  ) %&gt;% mutate(region = case_when(
+    zipcode &gt;= 10000 &amp; zipcode &lt;= 10025 ~ &quot;Downtown&quot;,
+    zipcode &gt;= 10026 &amp; zipcode &lt;= 10040 ~ &quot;Midtown&quot;,
+    zipcode &gt;= 10041 &amp; zipcode &lt;= 10282 ~ &quot;Uptown&quot;,
+    TRUE ~ &quot;Other&quot; # For ZIP codes like 11371, 12345, etc.
+  ))</code></pre>
+<div id="chi-square-test" class="section level3">
+<h3>Chi-Square Test</h3>
+<p>To investigate if where restaurants are located influence their
+inspection grades, we produce Chi-Square test. The result is presented
+in the Contingency Table Heatmap below. The p-value is less than 0.05,
+leading us to reject the null hypothesis that the region and grade are
+independent. This indicates a there a significant difference in the
+distribution of grades among regions at the 0.05 significance level.</p>
+<pre class="r"><code># Create a contingency table of zip_code vs. grade
+contingency_table &lt;- table(zip_grade$region, zip_grade$grade)
+
+# Perform Chi-Square Test
+chi_test &lt;- chisq.test(contingency_table)
+## Warning in chisq.test(contingency_table): Chi-squared approximation may be
+## incorrect
+
+# Convert the contingency table to a matrix
+contingency_matrix &lt;- as.matrix(contingency_table) 
+contingency_matrix &lt;- contingency_matrix[order(contingency_matrix[, &quot;A&quot;], decreasing = TRUE), ]
+
+# Extract the residuals (contributions to the Chi-Square statistic)
+residuals_matrix &lt;- chi_test$residuals
+
+
+# Extract chi-square test statistic and p-value
+chi_stat &lt;- round(chi_test$statistic, 2)
+chi_pval &lt;- format.pval(chi_test$p.value, digits = 3)
+
+# Add the chi-square test result as annotations
+plot_ly(
+  x = colnames(contingency_matrix),
+  y = rownames(contingency_matrix),
+  z = contingency_matrix,
+  type = &quot;heatmap&quot;,
+  colors = colorRamp(c(&quot;white&quot;, &quot;purple&quot;))
+) %&gt;%
+  layout(
+    title = &quot;Contingency Table Heatmap with Chi-Square Result&quot;,
+    xaxis = list(title = &quot;Grade&quot;),
+    yaxis = list(title = &quot;Region&quot;),
+    colorbar = list(title = &quot;Count&quot;),
+    annotations = list(
+      list(
+        x = 2.1, 
+        y = 3,
+        text = paste(&quot;Chi-Square Statistic:&quot;, chi_stat, &quot;&lt;br&gt;P-Value:&quot;, chi_pval),
+        showarrow = FALSE,
+        font = list(size = 14)
+      )
+    )
+  )
+## Warning: &#39;layout&#39; objects don&#39;t have these attributes: &#39;colorbar&#39;
+## Valid attributes include:
+## &#39;_deprecated&#39;, &#39;activeshape&#39;, &#39;annotations&#39;, &#39;autosize&#39;, &#39;autotypenumbers&#39;, &#39;calendar&#39;, &#39;clickmode&#39;, &#39;coloraxis&#39;, &#39;colorscale&#39;, &#39;colorway&#39;, &#39;computed&#39;, &#39;datarevision&#39;, &#39;dragmode&#39;, &#39;editrevision&#39;, &#39;editType&#39;, &#39;font&#39;, &#39;geo&#39;, &#39;grid&#39;, &#39;height&#39;, &#39;hidesources&#39;, &#39;hoverdistance&#39;, &#39;hoverlabel&#39;, &#39;hovermode&#39;, &#39;images&#39;, &#39;legend&#39;, &#39;mapbox&#39;, &#39;margin&#39;, &#39;meta&#39;, &#39;metasrc&#39;, &#39;modebar&#39;, &#39;newshape&#39;, &#39;paper_bgcolor&#39;, &#39;plot_bgcolor&#39;, &#39;polar&#39;, &#39;scene&#39;, &#39;selectdirection&#39;, &#39;selectionrevision&#39;, &#39;separators&#39;, &#39;shapes&#39;, &#39;showlegend&#39;, &#39;sliders&#39;, &#39;smith&#39;, &#39;spikedistance&#39;, &#39;template&#39;, &#39;ternary&#39;, &#39;title&#39;, &#39;transition&#39;, &#39;uirevision&#39;, &#39;uniformtext&#39;, &#39;updatemenus&#39;, &#39;width&#39;, &#39;xaxis&#39;, &#39;yaxis&#39;, &#39;barmode&#39;, &#39;bargap&#39;, &#39;mapType&#39;</code></pre>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-712fea19a24ec50bf3c9" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-712fea19a24ec50bf3c9">{"x":{"visdat":{"b11e7ebfd957":["function () ","plotlyVisDat"]},"cur_data":"b11e7ebfd957","attrs":{"b11e7ebfd957":{"x":["A","B","C"],"y":["Downtown","Midtown","Uptown","Other"],"z":[[23922,3503,2266],[6187,1127,620],[1903,240,230],[10,0,0]],"colors":["function (x) ","roundcolor(cbind(palette[[1L]](x), palette[[2L]](x), palette[[3L]](x), ","    if (alpha) palette[[4L]](x))) * 255"],"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"heatmap"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Contingency Table Heatmap with Chi-Square Result","xaxis":{"domain":[0,1],"automargin":true,"title":"Grade"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Region"},"colorbar":{"title":"Count"},"annotations":[{"x":2.1000000000000001,"y":3,"text":"Chi-Square Statistic: 58.33 <br>P-Value: 9.83e-11","showarrow":false,"font":{"size":14}}],"scene":{"zaxis":{"title":[]}},"hovermode":"closest","showlegend":false,"legend":{"yanchor":"top","y":0.5}},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"colorbar":{"title":"","ticklen":2,"len":0.5,"lenmode":"fraction","y":1,"yanchor":"top"},"colorscale":[["0","rgba(255,255,255,1)"],["0.0416666666666667","rgba(251,246,254,1)"],["0.0833333333333333","rgba(247,236,254,1)"],["0.125","rgba(243,227,253,1)"],["0.166666666666667","rgba(239,218,252,1)"],["0.208333333333333","rgba(235,209,252,1)"],["0.25","rgba(231,199,251,1)"],["0.291666666666667","rgba(227,190,251,1)"],["0.333333333333333","rgba(223,181,250,1)"],["0.375","rgba(219,171,249,1)"],["0.416666666666667","rgba(215,162,249,1)"],["0.458333333333333","rgba(211,153,248,1)"],["0.5","rgba(208,144,248,1)"],["0.541666666666667","rgba(204,134,247,1)"],["0.583333333333333","rgba(200,125,246,1)"],["0.625","rgba(196,116,246,1)"],["0.666666666666667","rgba(192,106,245,1)"],["0.708333333333333","rgba(188,97,244,1)"],["0.75","rgba(184,88,244,1)"],["0.791666666666667","rgba(180,78,243,1)"],["0.833333333333333","rgba(176,69,242,1)"],["0.875","rgba(172,60,242,1)"],["0.916666666666667","rgba(168,51,241,1)"],["0.958333333333333","rgba(164,41,241,1)"],["1","rgba(160,32,240,1)"]],"showscale":true,"x":["A","B","C"],"y":["Downtown","Midtown","Uptown","Other"],"z":[[23922,3503,2266],[6187,1127,620],[1903,240,230],[10,0,0]],"type":"heatmap","xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="cramérs-v-test" class="section level3">
+<h3>Cramér’s V test</h3>
+<p>To investigate how strong the association is between located and
+grades, we produce Cramér’s V test. The Cramér’s V Value is 0.123, which
+is larger than 0.1 (Weak association) and smaller than 0.3 (Moderate
+association), so that we conclude they have weak association. <br> This
+conclusion is visualized in theree pie charts below of different regions
+that we can’t tell large difference among them.</p>
+<pre class="r"><code># Calculate Cramér’s V
+cramer_v &lt;- assocstats(contingency_table)$cramer
+
+# Print Cramér’s V
+print(paste(&quot;Cramér&#39;s V:&quot;, round(cramer_v, 3)))
+## [1] &quot;Cramér&#39;s V: 0.027&quot;</code></pre>
+<pre class="r"><code>
+# uptown visualization
+uptown &lt;- zip_grade %&gt;%
+  filter(region == &quot;Uptown&quot;) %&gt;%
+  group_by(region, grade) %&gt;%
+  summarize(count = n(), .groups = &quot;drop&quot;)
+uptown_pie = plot_ly(
+  data = uptown,
+  labels = ~grade,  # Grades (A, B, C)
+  values = ~count,  # Counts of each grade
+  type = &#39;pie&#39;,
+  textinfo = &#39;label+percent&#39;,  # Display labels and percentages
+  hoverinfo = &#39;label+value+percent&#39; , # Show additional info on hover
+    colors = &quot;viridis&quot;
+) %&gt;%
+  layout(
+    title = &quot;Uptown&quot; ,
+    legend = list(title = list(text = &quot;Grade&quot;))
+  )
+
+# Midtown visualization
+midtown &lt;- zip_grade %&gt;%
+  filter(region == &quot;Midtown&quot;) %&gt;%
+  group_by(region, grade) %&gt;%
+  summarize(count = n(), .groups = &quot;drop&quot;)
+midtown_pie = plot_ly(
+  data = midtown,
+  labels = ~grade,  # Grades (A, B, C)
+  values = ~count,  # Counts of each grade
+  type = &#39;pie&#39;,
+  textinfo = &#39;label+percent&#39;,  # Display labels and percentages
+  hoverinfo = &#39;label+value+percent&#39; , # Show additional info on hover
+    colors = &quot;viridis&quot;
+) %&gt;%
+  layout(
+    title = &quot;Midtown&quot; ,
+    legend = list(title = list(text = &quot;Grade&quot;))
+  )
+
+# Downtown visualization
+downtown &lt;- zip_grade %&gt;%
+  filter(region == &quot;Downtown&quot;) %&gt;%
+  group_by(region, grade) %&gt;%
+  summarize(count = n(), .groups = &quot;drop&quot;)
+downtown_pie = plot_ly(
+  data = downtown,
+  labels = ~grade,  # Grades (A, B, C)
+  values = ~count,  # Counts of each grade
+  type = &#39;pie&#39;,
+  textinfo = &#39;label+percent&#39;,  # Display labels and percentages
+  hoverinfo = &#39;label+value+percent&#39; , # Show additional info on hover
+    colors = &quot;viridis&quot;
+) %&gt;%
+  layout(
+    title = &quot;Downtown&quot; ,
+    legend = list(title = list(text = &quot;Grade&quot;))
+  )
+
+# Combine the pie charts into one layout
+doc &lt;- htmltools::tagList(
+  div(uptown_pie, style = &quot;float:left;width:33.3%;&quot;),
+  div(midtown_pie, style = &quot;float:left;width:33.3%;&quot;),
+  div(downtown_pie, style = &quot;float:right;width:33.3%;&quot;) 
+)
+
+htmltools::browsable(doc)</code></pre>
+<div style="float:left;width:33.3%;">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-ef159a69ca1f3933bb32" style="width:100%;height:400px;"></div>
+<script type="application/json" data-for="htmlwidget-ef159a69ca1f3933bb32">{"x":{"visdat":{"b11e339c7332":["function () ","plotlyVisDat"]},"cur_data":"b11e339c7332","attrs":{"b11e339c7332":{"labels":{},"values":{},"textinfo":"label+percent","hoverinfo":"label+value+percent","colors":"viridis","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"pie"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Uptown","legend":{"title":{"text":"Grade"}},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"labels":["A","B","C"],"values":[1903,240,230],"textinfo":"label+percent","hoverinfo":["label+value+percent","label+value+percent","label+value+percent"],"type":"pie","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(255,255,255,1)"}},"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+<div style="float:left;width:33.3%;">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-74e384a8c85f72e27b52" style="width:100%;height:400px;"></div>
+<script type="application/json" data-for="htmlwidget-74e384a8c85f72e27b52">{"x":{"visdat":{"b11e644ef216":["function () ","plotlyVisDat"]},"cur_data":"b11e644ef216","attrs":{"b11e644ef216":{"labels":{},"values":{},"textinfo":"label+percent","hoverinfo":"label+value+percent","colors":"viridis","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"pie"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Midtown","legend":{"title":{"text":"Grade"}},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"labels":["A","B","C"],"values":[6187,1127,620],"textinfo":"label+percent","hoverinfo":["label+value+percent","label+value+percent","label+value+percent"],"type":"pie","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(255,255,255,1)"}},"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+<div style="float:right;width:33.3%;">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-4d33c3f6e707e01173b9" style="width:100%;height:400px;"></div>
+<script type="application/json" data-for="htmlwidget-4d33c3f6e707e01173b9">{"x":{"visdat":{"b11e7af7b5cc":["function () ","plotlyVisDat"]},"cur_data":"b11e7af7b5cc","attrs":{"b11e7af7b5cc":{"labels":{},"values":{},"textinfo":"label+percent","hoverinfo":"label+value+percent","colors":"viridis","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"pie"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Downtown","legend":{"title":{"text":"Grade"}},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"labels":["A","B","C"],"values":[23922,3503,2266],"textinfo":"label+percent","hoverinfo":["label+value+percent","label+value+percent","label+value+percent"],"type":"pie","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(255,255,255,1)"}},"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
