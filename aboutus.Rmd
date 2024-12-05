@@ -2,7 +2,7 @@
 title: "MEET OUR TEAM"
 output: 
   html_document:
-    theme: flatly
+    theme: cosmo
     toc: true
     toc_float: true
 ---
