@@ -1,8 +1,87 @@
 ---
-title: "text"
-author: "wentao zhou"
-date: "2024-11-21"
-output: html_document
+title: "Manhattan Restaurant Hygiene Analysis"
+output: 
+  html_document:
+    theme: cosmo
+    toc: true
+    toc_float: true
 ---
 
-111
+## Inspection Score Distribution by Grade
+```{r}
+library(dplyr)
+library(ggplot2)
+library(readr)
+library(knitr)
+
+# Load the data
+data <- read_csv("Manhattan_Restaurant_Inspection_Results.csv")
+
+# Filter and clean the data for analysis
+grade_data <- data %>%
+  select(GRADE, SCORE) %>%
+  filter(!is.na(GRADE) & !is.na(SCORE)) %>%
+  mutate(SCORE = as.numeric(SCORE)) %>%
+  filter(!is.na(SCORE))
+
+# Box plot for score distribution by grade
+ggplot(grade_data, aes(x = GRADE, y = SCORE, fill = GRADE)) +
+  geom_boxplot(outlier.color = "red", outlier.size = 1) +
+  scale_fill_brewer(palette = "Set3") +
+  labs(
+    title = "Inspection Score Distribution by Grade",
+    x = "Grade",
+    y = "Inspection Score"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
+
+```
+
+```{r}
+# Add a year column to the dataset for temporal analysis
+time_data <- data %>%
+  filter(!is.na(GRADE), !is.na(`INSPECTION DATE`)) %>%
+  mutate(
+    YEAR = as.numeric(format(as.Date(`INSPECTION DATE`, format = "%m/%d/%Y"), "%Y"))
+  )
+
+# Group and summarize data by year and borough
+grade_trends_borough <- time_data %>%
+  group_by(YEAR, BORO, GRADE) %>%
+  summarise(Count = n(), .groups = "drop")
+
+# Plot grade trends over time by borough
+ggplot(grade_trends_borough, aes(x = YEAR, y = Count, color = GRADE, group = GRADE)) +
+  geom_line() +
+  facet_wrap(~ BORO, scales = "free_y") +
+  labs(
+    title = "Grade Distribution Over Time by Borough",
+    x = "Year",
+    y = "Number of Restaurants",
+    color = "Grade"
+  ) +
+  theme_minimal()
+
+# Group and summarize data by year and cuisine type
+grade_trends_cuisine <- time_data %>%
+  filter(`CUISINE DESCRIPTION` == "Italian") %>%
+  group_by(YEAR, `CUISINE DESCRIPTION`, GRADE) %>%
+  summarise(Count = n(), .groups = "drop")
+
+# Plot grade trends over time for Italian restaurants
+ggplot(grade_trends_cuisine, aes(x = YEAR, y = Count, color = GRADE, group = GRADE)) +
+  geom_line() +
+  labs(
+    title = "Grade Distribution Over Time for Italian Restaurants",
+    x = "Year",
+    y = "Number of Restaurants",
+    color = "Grade"
+  ) +
+  theme_minimal()
+
+```
+
+
