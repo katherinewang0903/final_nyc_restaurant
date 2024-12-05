@@ -1,5 +1,5 @@
 ---
-title: " Dining Safety in Manhattan: Analyzing NYC Restaurant Hygiene Ratings"
+title: "Dining Safety in Manhattan: Analyzing NYC Restaurant Hygiene Ratings"
 output: 
   html_document:
     code_folding: hide
