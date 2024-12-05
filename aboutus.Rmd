@@ -1,0 +1,49 @@
+---
+title: "MEET OUR TEAM"
+output: 
+  html_document:
+    theme: flatly
+    toc: true
+    toc_float: true
+---
+## **Yining He**
+
+*MPH-Epidemiology*
+
+<img src="ourphoto/yining.jpg" style="width:30%;">
+
+
+
+
+## **Ruicong Du**
+
+*MPH-Epidemiology*
+
+<img src="ourphoto/tim.jpg" style="width:30%;">
+
+
+
+
+## **Katherine Wang**
+
+*MPH-Epidemiology*
+
+<img src="ourphoto/katherine.jpg" style="width:30%;">
+
+
+
+
+## **Qianxuan Huang**
+
+*MPH-Biostatistics*
+
+<img src="ourphoto/qianxuan.jpg" style="width:30%;">
+
+
+
+
+## **Wentao Zhou**
+
+*MS-Environmental Health Science*
+
+<img src="ourphoto/wentao.jpg" style="width:30%;">

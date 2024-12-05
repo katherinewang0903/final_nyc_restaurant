@@ -1,0 +1,22 @@
+name: "<Restaurant group>'s Site"
+output_dir: "."
+navbar:
+  title: "<Home>"
+  left:
+    - text: "HOME"
+      href: index.html
+  right:
+    - text: "About us"
+      href: aboutus.html
+    - text: "Demographics"
+      href: demographics.html
+    - text: "Data Source"
+      href: Data-Source.html
+    - icon: fa-envelope fa-lg
+      href: mailto:rd3096@cumc.columbia.edu
+    - icon: fa-github fa-lg
+      href: https://github.com/katherinewang0903/final_nyc_restaurant.github.io
+      
+output:
+  html_document:
+    theme: cosmo
