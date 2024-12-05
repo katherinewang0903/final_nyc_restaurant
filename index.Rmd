@@ -9,6 +9,7 @@ output:
     theme: cosmo
 ---
 
+
 ## Welcome to our project website!
 
 ```{r, echo=FALSE, out.width="60%", fig.align = 'center'}
