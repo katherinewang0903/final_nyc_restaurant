@@ -6,10 +6,16 @@ navbar:
     - text: "HOME"
       href: index.html
   right:
+    - text: "About us"
+      href: aboutus.html
     - text: "Demographics"
       href: demographics.html
     - text: "Data Source"
       href: Data-Source.html
+    - text: "Location"
+      href: location.html
+    - text: "Violations"
+      href: violations.html
     - icon: fa-envelope fa-lg
       href: mailto:rd3096@cumc.columbia.edu
     - icon: fa-github fa-lg

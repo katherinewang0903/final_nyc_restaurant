@@ -1,0 +1,187 @@
+---
+title: "Location vs. Grade analysis"
+
+output: 
+  html_document:
+    code_folding: hide
+    always_allow_html: true
+    toc: true
+    toc_float: true
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, 
+                      message = FALSE, 
+                     fig.path = "violation_files/",
+  fig.format = "png")
+```
+
+
+```{r}
+library(tidyverse)
+library(plotly)
+library(ggplot2)
+library(knitr)
+library(readr)
+library(dplyr)
+library(tidyr)
+library(scales)
+library(vcd)
+library(tidyverse)
+library(htmltools)
+```
+
+In this chapter, we analyze the relationship between locations and grades. Our analysis focuses exclusively on data where the grades are A, B, or C, and excludes records with grades labeled as N (Not Yet Graded), Z (Grade Pending), or P (Grade Pending issued upon reopening after a closure). To ensure accuracy and relevance, we begin by filtering out unnecessary data from the dataset before proceeding with the analysis.
+```{r}
+# The same data cleaning process in demographics part, also only consider data with grade A, B, C.
+manhattan_data = read_csv("Manhattan_Restaurant_Inspection_Results.csv", na = c("NA", "", "."))
+str (manhattan_data)
+
+zip_grade = manhattan_data %>%
+  janitor::clean_names() %>%  
+  filter(
+    !is.na(dba),                         
+    !is.na(cuisine_description),       
+    !is.na(grade),                       
+    !is.na(score),                       
+    !is.na(zipcode),
+    grade %in% c("A", "B", "C")
+  ) %>% mutate(region = case_when(
+    zipcode >= 10000 & zipcode <= 10025 ~ "Downtown",
+    zipcode >= 10026 & zipcode <= 10040 ~ "Midtown",
+    zipcode >= 10041 & zipcode <= 10282 ~ "Uptown",
+    TRUE ~ "Other" # For ZIP codes like 11371, 12345, etc.
+  ))
+```
+### Chi-Square Test
+
+To investigate if where restaurants are located influence their inspection grades, we produce Chi-Square test. The result is presented in the Contingency Table Heatmap below. The p-value is less than 0.05, leading us to reject the null hypothesis that the region and grade are independent. This indicates a there a significant difference in the distribution of grades among regions at the 0.05 significance level.
+
+```{r}
+# Create a contingency table of zip_code vs. grade
+contingency_table <- table(zip_grade$region, zip_grade$grade)
+
+# Perform Chi-Square Test
+chi_test <- chisq.test(contingency_table)
+
+# Convert the contingency table to a matrix
+contingency_matrix <- as.matrix(contingency_table) 
+contingency_matrix <- contingency_matrix[order(contingency_matrix[, "A"], decreasing = TRUE), ]
+
+# Extract the residuals (contributions to the Chi-Square statistic)
+residuals_matrix <- chi_test$residuals
+
+
+# Extract chi-square test statistic and p-value
+chi_stat <- round(chi_test$statistic, 2)
+chi_pval <- format.pval(chi_test$p.value, digits = 3)
+
+# Add the chi-square test result as annotations
+plot_ly(
+  x = colnames(contingency_matrix),
+  y = rownames(contingency_matrix),
+  z = contingency_matrix,
+  type = "heatmap",
+  colors = colorRamp(c("white", "purple"))
+) %>%
+  layout(
+    title = "Contingency Table Heatmap with Chi-Square Result",
+    xaxis = list(title = "Grade"),
+    yaxis = list(title = "Region"),
+    colorbar = list(title = "Count"),
+    annotations = list(
+      list(
+        x = 2.1, 
+        y = 3,
+        text = paste("Chi-Square Statistic:", chi_stat, "<br>P-Value:", chi_pval),
+        showarrow = FALSE,
+        font = list(size = 14)
+      )
+    )
+  )
+```
+### Cramér’s V test
+
+To investigate how strong the association is between located and grades, we produce Cramér’s V test. The Cramér’s V Value is  0.123, which is larger than 0.1 (Weak association) and smaller than 0.3 (Moderate association), so that we conclude they have weak association. <br>
+This conclusion is visualized in theree pie charts below of different regions that we can't tell large difference among them.
+```{r}
+# Calculate Cramér’s V
+cramer_v <- assocstats(contingency_table)$cramer
+
+# Print Cramér’s V
+print(paste("Cramér's V:", round(cramer_v, 3)))
+
+```
+
+
+```{r}
+
+# uptown visualization
+uptown <- zip_grade %>%
+  filter(region == "Uptown") %>%
+  group_by(region, grade) %>%
+  summarize(count = n(), .groups = "drop")
+uptown_pie = plot_ly(
+  data = uptown,
+  labels = ~grade,  # Grades (A, B, C)
+  values = ~count,  # Counts of each grade
+  type = 'pie',
+  textinfo = 'label+percent',  # Display labels and percentages
+  hoverinfo = 'label+value+percent' , # Show additional info on hover
+    colors = "viridis"
+) %>%
+  layout(
+    title = "Uptown" ,
+    legend = list(title = list(text = "Grade"))
+  )
+
+# Midtown visualization
+midtown <- zip_grade %>%
+  filter(region == "Midtown") %>%
+  group_by(region, grade) %>%
+  summarize(count = n(), .groups = "drop")
+midtown_pie = plot_ly(
+  data = midtown,
+  labels = ~grade,  # Grades (A, B, C)
+  values = ~count,  # Counts of each grade
+  type = 'pie',
+  textinfo = 'label+percent',  # Display labels and percentages
+  hoverinfo = 'label+value+percent' , # Show additional info on hover
+    colors = "viridis"
+) %>%
+  layout(
+    title = "Midtown" ,
+    legend = list(title = list(text = "Grade"))
+  )
+
+# Downtown visualization
+downtown <- zip_grade %>%
+  filter(region == "Downtown") %>%
+  group_by(region, grade) %>%
+  summarize(count = n(), .groups = "drop")
+downtown_pie = plot_ly(
+  data = downtown,
+  labels = ~grade,  # Grades (A, B, C)
+  values = ~count,  # Counts of each grade
+  type = 'pie',
+  textinfo = 'label+percent',  # Display labels and percentages
+  hoverinfo = 'label+value+percent' , # Show additional info on hover
+    colors = "viridis"
+) %>%
+  layout(
+    title = "Downtown" ,
+    legend = list(title = list(text = "Grade"))
+  )
+
+# Combine the pie charts into one layout
+doc <- htmltools::tagList(
+  div(uptown_pie, style = "float:left;width:33.3%;"),
+  div(midtown_pie, style = "float:left;width:33.3%;"),
+  div(downtown_pie, style = "float:right;width:33.3%;") 
+)
+
+htmltools::browsable(doc)
+
+```
+
