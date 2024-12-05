@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>violation analysis</title>
+
+<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="site_libs/plotly-binding-4.10.4/plotly.js"></script>
+<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="site_libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+<link href="site_libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="site_libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"><Home></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">HOME</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="aboutus.html">About us</a>
+</li>
+<li>
+  <a href="demographics.html">Demographics</a>
+</li>
+<li>
+  <a href="Data-Source.html">Data Source</a>
+</li>
+<li>
+  <a href="location.html">Location</a>
+</li>
+<li>
+  <a href="violations.html">Violations</a>
+</li>
+<li>
+  <a href="mailto:rd3096@cumc.columbia.edu">
+    <span class="fa fa-envelope fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://github.com/katherinewang0903/final_nyc_restaurant.github.io">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">violation analysis</h1>
+
+</div>
+
+
+<div id="analysis-related-to-violation-of-manhattan-restaurants"
+class="section level2">
+<h2>Analysis related to violation of Manhattan Restaurants</h2>
+<pre class="r"><code>library(tidyverse)
+library(plotly)
+library(ggplot2)
+library(knitr)
+library(readr)
+library(dplyr)
+library(tidyr)
+library(scales)</code></pre>
+<p>In this chapter, we analyze the relationship between inspection
+violations and grades. Our analysis focuses exclusively on data where
+the grades are A, B, or C, and excludes records with grades labeled as N
+(Not Yet Graded), Z (Grade Pending), or P (Grade Pending issued upon
+reopening after a closure). We also exclude “Not Applicable” entries for
+critical violation indicators. <br> Inspection violations are
+categorized into two groups: Critical and Not Critical. Critical
+violations represent the most significant risks for foodborne illnesses.
+To ensure accuracy and relevance, we begin by filtering out unnecessary
+data from the dataset before proceeding with the analysis.</p>
+<pre class="r"><code># The same data cleaning process in demographics part, also only consider data with valid violation_description and critical_flag, and grade A, B, C.
+
+manhattan_data = read_csv(&quot;Manhattan_Restaurant_Inspection_Results.csv&quot;, na = c(&quot;NA&quot;, &quot;&quot;, &quot;.&quot;))
+str (manhattan_data)
+## spc_tbl_ [94,616 × 27] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+##  $ CAMIS                : num [1:94616] 50140436 50158081 50152703 50160975 50161087 ...
+##  $ DBA                  : chr [1:94616] &quot;JUST SALAD&quot; &quot;THE MANNER&quot; &quot;MIDNIGHT BLUE&quot; &quot;BLUE BLOSSOM&quot; ...
+##  $ BORO                 : chr [1:94616] &quot;Manhattan&quot; &quot;Manhattan&quot; &quot;Manhattan&quot; &quot;Manhattan&quot; ...
+##  $ BUILDING             : chr [1:94616] &quot;2853&quot; &quot;58&quot; &quot;106&quot; &quot;108&quot; ...
+##  $ STREET               : chr [1:94616] &quot;BROADWAY&quot; &quot;THOMPSON STREET&quot; &quot;EAST   19 STREET&quot; &quot;WEST   39 STREET&quot; ...
+##  $ ZIPCODE              : num [1:94616] 10025 10012 10003 10018 10025 ...
+##  $ PHONE                : num [1:94616] 7.32e+09 9.17e+09 3.48e+09 6.47e+09 9.29e+09 ...
+##  $ CUISINE DESCRIPTION  : chr [1:94616] NA NA NA NA ...
+##  $ INSPECTION DATE      : chr [1:94616] &quot;01/01/1900&quot; &quot;01/01/1900&quot; &quot;01/01/1900&quot; &quot;01/01/1900&quot; ...
+##  $ ACTION               : chr [1:94616] NA NA NA NA ...
+##  $ VIOLATION CODE       : chr [1:94616] NA NA NA NA ...
+##  $ VIOLATION DESCRIPTION: chr [1:94616] NA NA NA NA ...
+##  $ CRITICAL FLAG        : chr [1:94616] &quot;Not Applicable&quot; &quot;Not Applicable&quot; &quot;Not Applicable&quot; &quot;Not Applicable&quot; ...
+##  $ SCORE                : num [1:94616] NA NA NA NA NA NA NA NA NA NA ...
+##  $ GRADE                : chr [1:94616] NA NA NA NA ...
+##  $ GRADE DATE           : chr [1:94616] NA NA NA NA ...
+##  $ RECORD DATE          : chr [1:94616] &quot;11/05/2024&quot; &quot;11/05/2024&quot; &quot;11/05/2024&quot; &quot;11/05/2024&quot; ...
+##  $ INSPECTION TYPE      : chr [1:94616] NA NA NA NA ...
+##  $ Latitude             : num [1:94616] 40.8 40.7 40.7 40.8 40.8 ...
+##  $ Longitude            : num [1:94616] -74 -74 -74 -74 -74 ...
+##  $ Community Board      : num [1:94616] 109 102 105 105 107 108 101 105 104 102 ...
+##  $ Council District     : chr [1:94616] &quot;07&quot; &quot;01&quot; &quot;02&quot; &quot;04&quot; ...
+##  $ Census Tract         : chr [1:94616] &quot;019900&quot; &quot;004700&quot; &quot;005000&quot; &quot;011300&quot; ...
+##  $ BIN                  : num [1:94616] 1075440 1087362 1017905 1015273 1055676 ...
+##  $ BBL                  : num [1:94616] 1.02e+09 1.00e+09 1.01e+09 1.01e+09 1.02e+09 ...
+##  $ NTA                  : chr [1:94616] &quot;MN09&quot; &quot;MN24&quot; &quot;MN21&quot; &quot;MN17&quot; ...
+##  $ Location Point1      : logi [1:94616] NA NA NA NA NA NA ...
+##  - attr(*, &quot;spec&quot;)=
+##   .. cols(
+##   ..   CAMIS = col_double(),
+##   ..   DBA = col_character(),
+##   ..   BORO = col_character(),
+##   ..   BUILDING = col_character(),
+##   ..   STREET = col_character(),
+##   ..   ZIPCODE = col_double(),
+##   ..   PHONE = col_double(),
+##   ..   `CUISINE DESCRIPTION` = col_character(),
+##   ..   `INSPECTION DATE` = col_character(),
+##   ..   ACTION = col_character(),
+##   ..   `VIOLATION CODE` = col_character(),
+##   ..   `VIOLATION DESCRIPTION` = col_character(),
+##   ..   `CRITICAL FLAG` = col_character(),
+##   ..   SCORE = col_double(),
+##   ..   GRADE = col_character(),
+##   ..   `GRADE DATE` = col_character(),
+##   ..   `RECORD DATE` = col_character(),
+##   ..   `INSPECTION TYPE` = col_character(),
+##   ..   Latitude = col_double(),
+##   ..   Longitude = col_double(),
+##   ..   `Community Board` = col_double(),
+##   ..   `Council District` = col_character(),
+##   ..   `Census Tract` = col_character(),
+##   ..   BIN = col_double(),
+##   ..   BBL = col_double(),
+##   ..   NTA = col_character(),
+##   ..   `Location Point1` = col_logical()
+##   .. )
+##  - attr(*, &quot;problems&quot;)=&lt;externalptr&gt;
+
+violation_data = manhattan_data %&gt;%
+  janitor::clean_names() %&gt;%  
+  filter(
+    !is.na(dba),                         
+    !is.na(cuisine_description),       
+    !is.na(grade),                       
+    !is.na(score),                       
+    !is.na(zipcode),
+    !is.na(violation_description),
+    !is.na(critical_flag),
+    grade %in% c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;)
+  ) %&gt;% mutate(region = case_when(
+    zipcode &gt;= 10000 &amp; zipcode &lt;= 10025 ~ &quot;Downtown&quot;,
+    zipcode &gt;= 10026 &amp; zipcode &lt;= 10040 ~ &quot;Midtown&quot;,
+    zipcode &gt;= 10041 &amp; zipcode &lt;= 10282 ~ &quot;Uptown&quot;,
+    TRUE ~ &quot;Other&quot; # For ZIP codes like 11371, 12345, etc.
+  ))</code></pre>
+<div id="grade-distribution" class="section level3">
+<h3>Grade Distribution</h3>
+<p>First, we analyze the frequency distribution of grades. For both
+Critical and Not Critical groups, the majority of restaurants received a
+Grade A, followed by Grade B, and then Grade C. However, only within
+Grade A do we observe more restaurants with Not Critical violations
+compared to Critical violations.</p>
+<pre class="r"><code># Analyze the effect of violation_description on grade
+# Group by critical flag and grade to calculate counts
+violation_grade_summary &lt;- violation_data %&gt;%
+  group_by(critical_flag, grade) %&gt;%
+  summarize(count = n(), .groups = &quot;drop&quot;)
+
+# Calculate average scores by CRITICAL_FLAG and grade
+average_score &lt;- violation_data %&gt;%
+  group_by(critical_flag, grade) %&gt;%
+  summarize(avg_score = mean(score), .groups = &quot;drop&quot;)
+
+
+# Create an EDA of grade and count using plotly
+violation_grade_summary %&gt;% 
+  plot_ly(
+    x = ~grade, 
+    y = ~count,
+    type = &#39;bar&#39;,
+    color = ~critical_flag,
+    colors = &quot;viridis&quot;) %&gt;% 
+  layout(
+    title = &quot;Effect of Violation Type on Restaurant Grade&quot;,
+    xaxis = list(title = &quot;Grade&quot;),   
+    yaxis = list(title = &quot;Restaurant Number&quot;) 
+  )</code></pre>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-99d1453ecd78df295a59" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-99d1453ecd78df295a59">{"x":{"visdat":{"ea519bd301e":["function () ","plotlyVisDat"]},"cur_data":"ea519bd301e","attrs":{"ea519bd301e":{"x":{},"y":{},"color":{},"colors":"viridis","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Effect of Violation Type on Restaurant Grade","xaxis":{"domain":[0,1],"automargin":true,"title":"Grade","type":"category","categoryorder":"array","categoryarray":["A","B","C"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Restaurant Number"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["A","B","C"],"y":[14813,3110,2030],"type":"bar","name":"Critical","marker":{"color":"rgba(68,1,84,1)","line":{"color":"rgba(68,1,84,1)"}},"textfont":{"color":"rgba(68,1,84,1)"},"error_y":{"color":"rgba(68,1,84,1)"},"error_x":{"color":"rgba(68,1,84,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["A","B","C"],"y":[17059,1760,1081],"type":"bar","name":"Not Critical","marker":{"color":"rgba(253,231,37,1)","line":{"color":"rgba(253,231,37,1)"}},"textfont":{"color":"rgba(253,231,37,1)"},"error_y":{"color":"rgba(253,231,37,1)"},"error_x":{"color":"rgba(253,231,37,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p>Additionally, when examining inspection scores across all grade
+categories, restaurants with Not Critical violations consistently
+achieve lower scores. This pattern aligns with the corresponding grade
+results, further highlighting the relationship between inspection
+outcomes and grade assignments.</p>
+<pre class="r"><code># Create an EDA of score and count using plotly
+average_score %&gt;% 
+  plot_ly(
+    x = ~grade, 
+    y = ~avg_score,
+    type = &#39;bar&#39;,
+    color = ~critical_flag,
+    colors = &quot;viridis&quot;) %&gt;% 
+  layout(
+    title = &quot;Effect of Violation Type on Restaurant Score&quot;,
+    xaxis = list(title = &quot;Grade&quot;),   
+    yaxis = list(title = &quot;Restaurant Average Score&quot;) 
+  )</code></pre>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-c76bff2891e4fe61fc43" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-c76bff2891e4fe61fc43">{"x":{"visdat":{"ea52696c4c1":["function () ","plotlyVisDat"]},"cur_data":"ea52696c4c1","attrs":{"ea52696c4c1":{"x":{},"y":{},"color":{},"colors":"viridis","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Effect of Violation Type on Restaurant Score","xaxis":{"domain":[0,1],"automargin":true,"title":"Grade","type":"category","categoryorder":"array","categoryarray":["A","B","C"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Restaurant Average Score"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["A","B","C"],"y":[10.361236751502059,21.772347266881027,43.002463054187189],"type":"bar","name":"Critical","marker":{"color":"rgba(68,1,84,1)","line":{"color":"rgba(68,1,84,1)"}},"textfont":{"color":"rgba(68,1,84,1)"},"error_y":{"color":"rgba(68,1,84,1)"},"error_x":{"color":"rgba(68,1,84,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["A","B","C"],"y":[9.427750747406062,21.610795454545453,42.025901942645696],"type":"bar","name":"Not Critical","marker":{"color":"rgba(253,231,37,1)","line":{"color":"rgba(253,231,37,1)"}},"textfont":{"color":"rgba(253,231,37,1)"},"error_y":{"color":"rgba(253,231,37,1)"},"error_x":{"color":"rgba(253,231,37,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="chi-square-test" class="section level3">
+<h3>Chi-Square Test</h3>
+<p>Next, we conducted a Chi-Square Test to examine the relationship
+between the critical flag and grade. The results are visualized using a
+Contingency Table Heatmap. The analysis shows a p-value smaller than
+0.05, leading us to reject the null hypothesis that the critical flag
+and grade are independent. This indicates a significant relationship
+between the critical flag and grade at the 0.05 significance level.</p>
+<pre class="r"><code># Chi-Square Test
+contingency_table &lt;- table(violation_data$critical_flag, violation_data$grade)
+chi_test &lt;- chisq.test(contingency_table)
+print(chi_test)
+## 
+##  Pearson&#39;s Chi-squared test
+## 
+## data:  contingency_table
+## X-squared = 821.92, df = 2, p-value &lt; 2.2e-16
+
+
+# Convert the contingency table to a matrix for visualization
+contingency_matrix &lt;- as.matrix(contingency_table)
+
+
+# Extract chi-square test statistic and p-value
+chi_stat &lt;- round(chi_test$statistic, 2)
+chi_pval &lt;- format.pval(chi_test$p.value, digits = 3)
+
+# Add the chi-square test result as annotations
+plot_ly(
+  x = colnames(contingency_matrix),
+  y = rownames(contingency_matrix),
+  z = contingency_matrix,
+  type = &quot;heatmap&quot;,
+  colors = colorRamp(c(&quot;white&quot;, &quot;purple&quot;))
+) %&gt;%
+  layout(
+    title = &quot;Contingency Table Heatmap with Chi-Square Result&quot;,
+    xaxis = list(title = &quot;Grade&quot;),
+    yaxis = list(title = &quot;Critical Flag&quot;),
+    colorbar = list(title = &quot;Count&quot;),
+    annotations = list(
+      list(
+        x = 2.1, 
+        y = 1.1,
+        text = paste(&quot;Chi-Square Statistic:&quot;, chi_stat, &quot;&lt;br&gt;P-Value:&quot;, chi_pval),
+        showarrow = FALSE,
+        font = list(size = 14)
+      )
+    )
+  )
+## Warning: &#39;layout&#39; objects don&#39;t have these attributes: &#39;colorbar&#39;
+## Valid attributes include:
+## &#39;_deprecated&#39;, &#39;activeshape&#39;, &#39;annotations&#39;, &#39;autosize&#39;, &#39;autotypenumbers&#39;, &#39;calendar&#39;, &#39;clickmode&#39;, &#39;coloraxis&#39;, &#39;colorscale&#39;, &#39;colorway&#39;, &#39;computed&#39;, &#39;datarevision&#39;, &#39;dragmode&#39;, &#39;editrevision&#39;, &#39;editType&#39;, &#39;font&#39;, &#39;geo&#39;, &#39;grid&#39;, &#39;height&#39;, &#39;hidesources&#39;, &#39;hoverdistance&#39;, &#39;hoverlabel&#39;, &#39;hovermode&#39;, &#39;images&#39;, &#39;legend&#39;, &#39;mapbox&#39;, &#39;margin&#39;, &#39;meta&#39;, &#39;metasrc&#39;, &#39;modebar&#39;, &#39;newshape&#39;, &#39;paper_bgcolor&#39;, &#39;plot_bgcolor&#39;, &#39;polar&#39;, &#39;scene&#39;, &#39;selectdirection&#39;, &#39;selectionrevision&#39;, &#39;separators&#39;, &#39;shapes&#39;, &#39;showlegend&#39;, &#39;sliders&#39;, &#39;smith&#39;, &#39;spikedistance&#39;, &#39;template&#39;, &#39;ternary&#39;, &#39;title&#39;, &#39;transition&#39;, &#39;uirevision&#39;, &#39;uniformtext&#39;, &#39;updatemenus&#39;, &#39;width&#39;, &#39;xaxis&#39;, &#39;yaxis&#39;, &#39;barmode&#39;, &#39;bargap&#39;, &#39;mapType&#39;</code></pre>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-5c985e3db990f74e9d05" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-5c985e3db990f74e9d05">{"x":{"visdat":{"ea5251de6d3":["function () ","plotlyVisDat"]},"cur_data":"ea5251de6d3","attrs":{"ea5251de6d3":{"x":["A","B","C"],"y":["Critical","Not Critical"],"z":[[14813,3110,2030],[17059,1760,1081]],"colors":["function (x) ","roundcolor(cbind(palette[[1L]](x), palette[[2L]](x), palette[[3L]](x), ","    if (alpha) palette[[4L]](x))) * 255"],"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"heatmap"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Contingency Table Heatmap with Chi-Square Result","xaxis":{"domain":[0,1],"automargin":true,"title":"Grade"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Critical Flag"},"colorbar":{"title":"Count"},"annotations":[{"x":2.1000000000000001,"y":1.1000000000000001,"text":"Chi-Square Statistic: 821.92 <br>P-Value: <2e-16","showarrow":false,"font":{"size":14}}],"scene":{"zaxis":{"title":[]}},"hovermode":"closest","showlegend":false,"legend":{"yanchor":"top","y":0.5}},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"colorbar":{"title":"","ticklen":2,"len":0.5,"lenmode":"fraction","y":1,"yanchor":"top"},"colorscale":[["0","rgba(255,255,255,1)"],["0.0416666666666667","rgba(251,246,254,1)"],["0.0833333333333333","rgba(247,236,254,1)"],["0.125","rgba(243,227,253,1)"],["0.166666666666667","rgba(239,218,252,1)"],["0.208333333333333","rgba(235,209,252,1)"],["0.25","rgba(231,199,251,1)"],["0.291666666666667","rgba(227,190,251,1)"],["0.333333333333333","rgba(223,181,250,1)"],["0.375","rgba(219,171,249,1)"],["0.416666666666667","rgba(215,162,249,1)"],["0.458333333333333","rgba(211,153,248,1)"],["0.5","rgba(208,144,248,1)"],["0.541666666666667","rgba(204,134,247,1)"],["0.583333333333333","rgba(200,125,246,1)"],["0.625","rgba(196,116,246,1)"],["0.666666666666667","rgba(192,106,245,1)"],["0.708333333333333","rgba(188,97,244,1)"],["0.75","rgba(184,88,244,1)"],["0.791666666666667","rgba(180,78,243,1)"],["0.833333333333333","rgba(176,69,242,1)"],["0.875","rgba(172,60,242,1)"],["0.916666666666667","rgba(168,51,241,1)"],["0.958333333333333","rgba(164,41,241,1)"],["1","rgba(160,32,240,1)"]],"showscale":true,"x":["A","B","C"],"y":["Critical","Not Critical"],"z":[[14813,3110,2030],[17059,1760,1081]],"type":"heatmap","xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="critical-flag-vs.-cuisine-description" class="section level3">
+<h3>Critical Flag vs. Cuisine Description</h3>
+<p>Then, we analyze the relationship between restaurant cuisine type and
+violation. To identify patterns, we calculate the percentage of critical
+violations for each cuisine type and rank them accordingly. Our analysis
+highlights the top 10 cuisine types with the highest percentage of
+violations, with Chinese/Japanese cuisine emerging as the category with
+the highest violation rate. <br> This finding provides valuable insights
+into how specific cuisine types are associated with inspection outcomes,
+offering a deeper understanding of potential factors influencing
+violation frequencies. Such insights could guide further investigation
+into operational practices or compliance challenges unique to these
+cuisine categories.</p>
+<pre class="r"><code># Group by cuisine_description and calculate total and critical counts
+violation_cuisine &lt;- violation_data %&gt;%
+  mutate(critical_flag = ifelse(critical_flag == &quot;Critical&quot;, 1, 0)) %&gt;%
+  group_by(cuisine_description) %&gt;%
+  summarize(total_violations = n(),
+            critical_violations = sum(critical_flag, na.rm = TRUE),
+            critical_percent = (critical_violations / total_violations),
+            critical_percentage = percent(critical_percent, accuracy = 0.01)
+            ) %&gt;%
+  arrange(desc(critical_percentage))  %&gt;% # Sort by percentage of critical violations 
+  head(10) # View top 10 restaurant types with the highest percentage of critical violations
+
+plot_ly(
+  type = &#39;table&#39;,
+  header = list(
+    values = c(&quot;Cuisine Description&quot;, &quot;Critical Percentage&quot;),
+    align = c(&quot;center&quot;, &quot;center&quot;),
+    font = list(size = 14, color = &quot;white&quot;),
+    fill = list(color = &quot;purple&quot;)
+  ),
+  cells = list(
+    values = rbind(violation_cuisine$cuisine_description, violation_cuisine$critical_percentage),
+    align = c(&quot;center&quot;, &quot;center&quot;),
+    font = list(size = 12),
+    fill = list(color = c(&quot;white&quot;, &quot;white&quot;))
+  )
+)</code></pre>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-cc808a756b6a11714926" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-cc808a756b6a11714926">{"x":{"visdat":{"ea54a4f1cd8":["function () ","plotlyVisDat"]},"cur_data":"ea54a4f1cd8","attrs":{"ea54a4f1cd8":{"header":{"values":["Cuisine Description","Critical Percentage"],"align":["center","center"],"font":{"size":14,"color":"white"},"fill":{"color":"purple"}},"cells":{"values":[["Chinese/Japanese","Pancakes/Waffles","Bangladeshi","Californian","Hotdogs/Pretzels","Continental","African","Vegan","Russian","Creole/Cajun"],["69.05%","68.75%","66.67%","66.67%","64.71%","63.64%","62.37%","59.30%","58.82%","55.56%"]],"align":["center","center"],"font":{"size":12},"fill":{"color":["white","white"]}},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"table"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"header":{"values":["Cuisine Description","Critical Percentage"],"align":["center","center"],"font":{"size":14,"color":"white"},"fill":{"color":"purple"}},"cells":{"values":[["Chinese/Japanese","Pancakes/Waffles","Bangladeshi","Californian","Hotdogs/Pretzels","Continental","African","Vegan","Russian","Creole/Cajun"],["69.05%","68.75%","66.67%","66.67%","64.71%","63.64%","62.37%","59.30%","58.82%","55.56%"]],"align":["center","center"],"font":{"size":12},"fill":{"color":["white","white"]}},"type":"table","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="violation-type-analysis" class="section level3">
+<h3>Violation Type Analysis</h3>
+<p>Among all restaurants with critical violations, we aimed to identify
+the most common types of violations. To achieve this, we calculated the
+percentage of each violation type and grouped all categories with less
+than 3% into an “Other” category for clarity. The results are summarized
+in a pie chart, providing a clear visualization of the distribution of
+critical violations.</p>
+<pre class="r"><code>violation_critical &lt;- violation_data %&gt;%
+  filter(critical_flag == &quot;Critical&quot;) %&gt;% # 19,953 rows in total
+  group_by(violation_description) %&gt;%
+  summarize(num_violation = n(),
+            violation_percent = num_violation / 19953,  
+            violation_percentage = percent(violation_percent, accuracy = 0.01)) %&gt;%
+  mutate(
+    violation_description = if_else(violation_percent &lt; 0.03, &quot;Other&quot;, violation_description)  # Reassign small categories to &quot;Other&quot;
+  ) %&gt;%
+  arrange(desc(violation_percent))
+
+critical_total &lt;- violation_critical %&gt;%
+  group_by(violation_description) %&gt;%
+  summarize(
+            violation_percent = sum(violation_percent),  
+            violation_percentage = percent(violation_percent, accuracy = 0.01)) #combine percentage of &quot;other&quot;
+
+critical_name = critical_total %&gt;%
+  mutate(
+    violation_name = case_when(
+      violation_description == &quot;Cold TCS food item held above 41 °F; smoked or processed fish held above 38 °F; intact raw eggs held above 45 °F; or reduced oxygen packaged (ROP) TCS foods held above required temperatures except during active necessary preparation.&quot; ~ &quot;Temperature of Storage&quot;,
+      violation_description == &quot;Evidence of mice or live mice in establishment&#39;s food or non-food areas.&quot; ~ &quot;Mice Problem&quot;,
+      violation_description == &quot;Filth flies or food/refuse/sewage associated with (FRSA) flies or other nuisance pests in establishment’s food and/or non-food areas. FRSA flies include house flies, blow flies, bottle flies, flesh flies, drain flies, Phorid flies and fruit flies.&quot; ~ &quot;Flies Problem&quot;,
+      violation_description == &quot;Food Protection Certificate (FPC) not held by manager or supervisor of food operations.&quot; ~ &quot;FPC&quot;,
+      violation_description == &quot;Food contact surface not properly washed, rinsed and sanitized after each use and following any activity when contamination may have occurred.&quot; ~ &quot;Washing Problem&quot;,
+      violation_description == &quot;Food, supplies, or equipment not protected from potential source of contamination during storage, preparation, transportation, display, service or from customer’s refillable, reusable container. Condiments not in single-service containers or dispensed directly by the vendor.&quot; ~ &quot;Contamination Problem&quot;,
+      violation_description == &quot;Hot TCS food item not held at or above 140 °F.&quot; ~ &quot;TCS&quot;,
+      violation_description == &quot;Raw, cooked or prepared food is adulterated, contaminated, cross-contaminated, or not discarded in accordance with HACCP plan.&quot; ~ &quot;HACCP&quot;,
+      violation_description == &quot;Sanitized equipment or utensil, including in-use food dispensing utensil, improperly used or stored.&quot; ~ &quot;Sanitization Problem&quot;,
+      TRUE ~ &quot;Other&quot;  # Default category for any other description
+    )
+  )
+
+
+# Create a pie chart
+plot_ly(
+  data = critical_name,
+  labels = ~violation_name, 
+  values = ~violation_percent,  
+  type = &#39;pie&#39;,  # Pie chart type
+  textinfo = &#39;label&#39;,  # Display labels and percentages
+  hoverinfo = &#39;label+percent&#39; , # Show additional info on hover
+    colors = &quot;viridis&quot;
+) %&gt;%
+  layout(title = &quot;Violation Description Percentages&quot;,
+         legend = list( x = 1.2, y = 0.5 ))</code></pre>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-fc7c6d08093ab902a2a0" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-fc7c6d08093ab902a2a0">{"x":{"visdat":{"ea57afe8a2d":["function () ","plotlyVisDat"]},"cur_data":"ea57afe8a2d","attrs":{"ea57afe8a2d":{"labels":{},"values":{},"textinfo":"label","hoverinfo":"label+percent","colors":"viridis","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"pie"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Violation Description Percentages","legend":{"x":1.2,"y":0.5},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"labels":["Temperature of Storage","Mice Problem","Flies Problem","FPC","Washing Problem","Contamination Problem","TCS","Other","HACCP","Sanitization Problem"],"values":[0.087706109356988929,0.071768656342404646,0.039492808099032724,0.031423846038189748,0.17751716533854558,0.060692627675036338,0.071969127449506343,0.38159675236806495,0.039292336991931041,0.038540570340299701],"textinfo":"label","hoverinfo":["label+percent","label+percent","label+percent","label+percent","label+percent","label+percent","label+percent","label+percent","label+percent","label+percent"],"type":"pie","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(255,255,255,1)"}},"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p>Description of violation names in the above pie chart:</p>
+<ul>
+<li><p>Temperature of Storage: Cold TCS food item held above 41 °F;
+smoked or processed fish held above 38 °F; intact raw eggs held above 45
+°F; or reduced oxygen packaged (ROP) TCS foods held above required
+temperatures except during active necessary preparation.</p></li>
+<li><p>Mice Problem: Evidence of mice or live mice in establishment’s
+food or non-food areas.</p></li>
+<li><p>Flies Problem: Filth flies or food/refuse/sewage associated with
+(FRSA) flies or other nuisance pests in establishment’s food and/or
+non-food areas. FRSA flies include house flies, blow flies, bottle
+flies, flesh flies, drain flies, Phorid flies and fruit flies.</p></li>
+<li><p>FPC: Food Protection Certificate (FPC) not held by manager or
+supervisor of food operations.</p></li>
+<li><p>Washing Problem: Food contact surface not properly washed, rinsed
+and sanitized after each use and following any activity when
+contamination may have occurred.</p></li>
+<li><p>Contamination Problem: Food, supplies, or equipment not protected
+from potential source of contamination during storage, preparation,
+transportation, display, service or from customer’s refillable, reusable
+container. Condiments not in single-service containers or dispensed
+directly by the vendor.</p></li>
+<li><p>TCS: Hot TCS food item not held at or above 140 °F. <br></p></li>
+<li><p>HACCP: Raw, cooked or prepared food is adulterated, contaminated,
+cross-contaminated, or not discarded in accordance with HACCP
+plan.</p></li>
+<li><p>Sanitization Problem: Sanitized equipment or utensil, including
+in-use food dispensing utensil, improperly used or stored. <br></p></li>
+<li><p>Other: Any violation description not listed in the above
+categories.</p></li>
+</ul>
+<p>The analysis reveals that the most frequent critical violation is
+related to washing and temperature problem. These are more than a
+quarter in total percentage. This finding underscores the importance of
+proper temperature management and remain cleaning in ensuring food
+safety and reducing the risk of foodborne illnesses. Also, restaurants
+owner who want to avoid bad grade in inspection need to perticullar pay
+attention to them.</p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
