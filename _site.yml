@@ -5,9 +5,11 @@ navbar:
   left:
     - text: "HOME"
       href: index.html
-  right:
     - text: "About Us"
       href: aboutus.html
+    - text: "Report"
+      href: report.html
+  right:
     - text: "Demographics"
       href: demographics.html
     - text: "Data Source"
