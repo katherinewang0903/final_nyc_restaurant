@@ -1,5 +1,5 @@
 ---
-title: "Dining Safety in Manhattan: Analyzing NYC Restaurant Hygiene Ratings"
+title: " Dining Safety in Manhattan: Analyzing NYC Restaurant Hygiene Ratings"
 output: 
   html_document:
     code_folding: hide
@@ -9,17 +9,16 @@ output:
     theme: cosmo
 ---
 
-
-## Welcome to our project website!
-
-```{r, echo=FALSE, out.width="60%", fig.align = 'center'}
+```{r, echo=FALSE, out.width="80%", fig.align = 'center'}
 knitr::include_graphics("./pictures/dinning.webp")
 ```
 <center style="font-size: 10px;"> Photo from:  https://www.cntraveler.com/gallery/best-restaurants-in-new-york-city/ </center>
 
+## Welcome!
+
 This platform investigates restaurant hygiene in Manhattan using the NYC Department of Health and Mental Hygiene (DOHMH) Restaurant Inspection Results dataset.
 
-Our goal is to provide a comprehensive overview of dining safety and hygiene standards through data visualization and advanced analytics. Explore the site to discover trends, comparisons, and recommendations tailored to enhance public health and dining experiences.
+Dining safety is the cornerstone of a positive and enjoyable culinary experience, especially in a bustling metropolis like Manhattan. With thousands of restaurants serving diverse cuisines, ensuring hygiene and cleanliness is not just about health—it’s about trust, reputation, and creating a welcoming environment. Imagine confidently enjoying your favorite meal, knowing the establishment has met the highest safety standards. In a city where food culture thrives, understanding dining safety empowers you to make informed decisions, avoid potential risks, and fully embrace the joy of eating out. Let’s explore how hygiene ratings reveal the true champions of safe and delicious dining in Manhattan!
 
 ### Project Objectives
 
