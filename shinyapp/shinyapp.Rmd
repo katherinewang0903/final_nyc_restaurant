@@ -1,0 +1,143 @@
+---
+title: "Find the Cleanest NYC Restaurant Serving Your Favorite Cuisine!"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+runtime: shiny
+---
+
+```{r}
+library(shiny)
+library(dplyr)
+library(leaflet)
+library(janitor)
+library(readr)
+
+data <- read_csv("Manhattan_Restaurant_Inspection_Results.csv")
+
+data <- data %>%
+  janitor::clean_names() %>%
+  filter(
+    !is.na(dba),
+    !is.na(cuisine_description),
+    !is.na(grade),
+    !is.na(score),
+    !is.na(zipcode),
+    grade %in% c("A", "B", "C")
+  ) %>%
+  mutate(
+    region = case_when(
+      zipcode %in% c(10004, 10005, 10006, 10007, 100388) ~ "Financial District",
+      zipcode %in% c(10013, 10002) ~ "Chinatown",
+      zipcode %in% c(10014, 10011) ~ "West Village",
+      zipcode %in% c(10021, 10028, 10065, 10075, 10128) ~ "Upper East Side",
+      zipcode %in% c(10023, 10024, 10025, 10069) ~ "Upper West Side",
+      zipcode %in% c(10026, 10027, 10030, 10031, 10032, 10037, 10039) ~ "Harlem",
+      zipcode %in% c(10032, 10033, 10040) ~ "Washington Heights",
+      zipcode %in% c(10003, 10009) ~ "East Village",
+      zipcode %in% c(10001, 10011) ~ "Chelsea",
+      zipcode %in% c(10280, 10282) ~ "Battery Park City",
+      zipcode %in% c(10002) ~ "Bowery",
+      zipcode %in% c(10012, 10013) ~ "SoHo",
+      zipcode %in% c(10003, 10010) ~ "Gramercy Park",
+      zipcode %in% c(10001, 10003, 10010, 10011, 10016) ~ "Flatiron District",
+      zipcode %in% c(10028, 10128) ~ "Carnegie Hill",
+      zipcode %in% c(10007, 10013) ~ "Tribeca",
+      zipcode %in% c(10004) ~ "Governors Island",
+      TRUE ~ "Other"
+    )
+  )
+
+ui <- fluidPage(
+  titlePanel("Find the Cleanest NYC Restaurant Serving Your Favorite Cuisine!"),
+  
+  sidebarLayout(
+    sidebarPanel(
+      selectInput(
+        inputId = "region",
+        label = "Select Region",
+        choices = unique(data$region),
+        selected = "Lower Manhattan",
+        multiple = TRUE
+      ),
+      selectInput(
+        inputId = "cuisine",
+        label = "Select Cuisine Type",
+        choices = unique(data$cuisine_description),
+        selected = NULL,
+        multiple = FALSE
+      ),
+      selectInput(
+        inputId = "grade",
+        label = "Select Hygiene Grade",
+        choices = c("A", "B", "C"),
+        selected = "A"
+      ),
+      actionButton("apply_filters", "Apply Filters")
+    ),
+    
+    mainPanel(
+      leafletOutput("map", height = "600px"),
+      textOutput("summary")
+    )
+  )
+)
+
+server <- function(input, output, session) {
+  filtered <- reactive({
+    req(input$region, input$cuisine, input$grade)
+    
+    data %>%
+      filter(
+        region %in% input$region,
+        cuisine_description == input$cuisine,
+        grade == input$grade
+      )
+  })
+  
+  output$map <- renderLeaflet({
+    req(filtered())
+    data <- filtered()
+    
+    leaflet(data) %>%
+      addProviderTiles("CartoDB.Positron") %>%
+      addCircleMarkers(
+        lng = ~longitude,
+        lat = ~latitude,
+        radius = 6,
+        color = ~case_when(
+          grade == "A" ~ "green",
+          grade == "B" ~ "orange",
+          grade == "C" ~ "red"
+        ),
+        label = ~paste(
+          "Name: ", dba,
+          "<br>Cuisine: ", cuisine_description,
+          "<br>Grade: ", grade,
+          "<br>Score: ", score,
+          sep = ""
+        ),
+        popup = ~paste(
+          "<strong>", dba, "</strong><br>",
+          "Cuisine: ", cuisine_description, "<br>",
+          "Grade: ", grade, "<br>",
+          "Score: ", score, "<br>",
+          "Region: ", region
+        )
+      ) %>%
+      addLegend(
+        "topright",
+        colors = c("green", "orange", "red"),
+        labels = c("Grade A", "Grade B", "Grade C"),
+        title = "Legend"
+      )
+  })
+  
+  output$summary <- renderText({
+    req(filtered())
+    paste0("Found ", nrow(filtered()), " restaurants matching your filters.")
+  })
+}
+shinyApp(ui = ui, server = server)
+```
