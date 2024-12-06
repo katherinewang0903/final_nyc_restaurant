@@ -17,6 +17,19 @@ navbar:
     - text: "Violations"
       href: violations.html
     - icon: fa-envelope fa-lg
+    - text: "Shiny App"
+      href: shinyapp.html
+      menu:
+        - text: "Qianxuan Huang"
+          href: mailto:qh2285@cumc.columbia.edu
+        - text: "Katherine Wang"
+          href: mailto:dw3093@cumc.columbia.edu
+        - text: "Ruicong Du"
+          href: mailto:rd3096@cumc.columbia.edu
+        - text: "Yining He"
+          href: mailto:yh3683@cumc.columbia.edu
+        - text: "Wentao Zhou"
+          href: mailto:wz2722@cumc.columbia.edu
       href: mailto:rd3096@cumc.columbia.edu
     - icon: fa-github fa-lg
       href: https://github.com/katherinewang0903/final_nyc_restaurant.github.io
