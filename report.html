@@ -445,6 +445,21 @@ practical public health issues covered in our coursework.</p>
 </div>
 <div id="initial-questions" class="section level3">
 <h3>Initial questions</h3>
+<p>Our initial questions focused on restaurant hygiene issues in
+Manhattan, aiming to help people identify restaurants that are both
+suitable for their taste preferences and meet high hygiene standards. We
+were interested in the following:</p>
+<ol style="list-style-type: decimal">
+<li><p>What is the most common cuisine type among restaurants in
+Manhattan, and what are their hygiene ratings?</p></li>
+<li><p>Are there significant differences in inspection scores among
+different citical violations and location respectively?</p></li>
+<li><p>Which cuisine types are more prone to critical health
+violations?</p></li>
+<li><p>How are inspection grades (A, B, C) distributed across different
+part of manhattan?</p></li>
+<li><p>Modeling…</p></li>
+</ol>
 <p><br></p>
 <p>After exploratory analysis and better understanding the strengths
 (large sample) and limitations (few obvious spacial trends, short
@@ -530,10 +545,61 @@ establishment.</li>
 </div>
 <div id="exploratory-analysis" class="section level3">
 <h3>Exploratory analysis</h3>
+<p>As for <a
+href="https://katherinewang0903.github.io/final_nyc_restaurant.github.io/violations.html">analysis
+related to violation</a>, we focuses exclusively on data where the
+grades are A, B, or C, and excludes records with grades labeled as N
+(Not Yet Graded), Z (Grade Pending), or P (Grade Pending issued upon
+reopening after a closure). We also exclude “Not Applicable” entries for
+critical violation indicators. Inspection violations are categorized
+into two groups: Critical and Not Critical. Critical violations
+represent the most significant risks for foodborne illnesses. To ensure
+accuracy and relevance, we begin by filtering out unnecessary data from
+the dataset before proceeding with the analysis. <br></p>
+<p>First, we analyze the frequency distribution of grades. For both
+Critical and Not Critical groups, the majority of restaurants received a
+Grade A, followed by Grade B, and then Grade C. However, only within
+Grade A do we observe more restaurants with Not Critical violations
+compared to Critical violations. Additionally, when examining inspection
+scores across all grade categories, restaurants with Not Critical
+violations consistently achieve lower scores. This pattern aligns with
+the corresponding grade results, further highlighting the relationship
+between inspection outcomes and grade assignments. <br></p>
+<p>Next, we conducted a Chi-Square Test to examine the relationship
+between the critical flag and grade. The results are visualized using a
+Contingency Table Heatmap. The analysis shows a p-value smaller than
+0.05, leading us to reject the null hypothesis that the critical flag
+and grade are independent. This indicates a significant relationship
+between the critical flag and grade at the 0.05 significance level.
+<br></p>
+<p>Then, we analyze the relationship between restaurant cuisine type and
+violation. To identify patterns, we calculate the percentage of critical
+violations for each cuisine type and rank them accordingly. Our analysis
+highlights the top 10 cuisine types with the highest percentage of
+violations, which are Chinese/Japanese, Pancakes/Waffles, Bangladeshi,
+Californian, Hotdogs/Pretzels, Continental, African, Vegan, Russian, and
+Creole/Cajun. This finding provides valuable insights into how specific
+cuisine types are associated with inspection outcomes, offering a deeper
+understanding of potential factors influencing violation frequencies.
+Such insights could guide further investigation into operational
+practices or compliance challenges unique to these cuisine categories.
+<br></p>
+<p>Among all restaurants with critical violations, we aimed to identify
+the most common types of violations. To achieve this, we calculated the
+percentage of each violation type and grouped all categories with less
+than 3% into an “Other” category for clarity. The results are summarized
+in a pie chart, providing a clear visualization of the distribution of
+critical violations. The analysis reveals that the most frequent
+critical violation is related to washing and temperature problem. These
+are more than a quarter in total percentage. This finding underscores
+the importance of proper temperature management and remain cleaning in
+ensuring food safety and reducing the risk of foodborne illnesses. Also,
+restaurants owner who want to avoid bad grade in inspection need to
+perticullar pay attention to them. <br></p>
 <p><br></p>
 </div>
-<div id="additional-analysis" class="section level3">
-<h3>Additional analysis</h3>
+<div id="shiny-app" class="section level3">
+<h3>Shiny App</h3>
 <p><br></p>
 </div>
 <div id="discussion" class="section level3">
