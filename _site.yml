@@ -18,7 +18,7 @@ navbar:
       href: violations.html
     - icon: fa-envelope fa-lg
     - text: "Shiny App"
-      href: shinyapp.html
+      href: shinyapp.dcf
       menu:
         - text: "Qianxuan Huang"
           href: mailto:qh2285@cumc.columbia.edu
