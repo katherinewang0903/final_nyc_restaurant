@@ -120,5 +120,3 @@ map_density <- map_density %>%
 
 map_density
 ```
-
-
