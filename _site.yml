@@ -17,7 +17,7 @@ navbar:
     - text: "Violations"
       href: violations.html
     - text: "Shiny App"
-      href: http://katherinewang0903.shinyapps.io/final_nyc_restaurant
+      href:  https://katherinewang0903.shinyapps.io/shinyapp/
     - icon: fa-envelope fa-lg
       menu:
         - text: "Qianxuan Huang"
