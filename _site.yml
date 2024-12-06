@@ -18,7 +18,7 @@ navbar:
       href: violations.html
     - icon: fa-envelope fa-lg
     - text: "Shiny App"
-      href: http://127.0.0.1:6663/shinyapp.Rmd
+      href: http://katherinewang0903.shinyapps.io/final_nyc_restaurant
       menu:
         - text: "Qianxuan Huang"
           href: mailto:qh2285@cumc.columbia.edu
