@@ -6,12 +6,12 @@ navbar:
     - text: "HOME"
       href: index.html
   right:
-    - text: "About us"
+    - text: "About Us"
       href: aboutus.html
     - text: "Demographics"
       href: demographics.html
     - text: "Data Source"
-      href: Data-Source.html
+      href: datasource.html
     - text: "Location"
       href: location.html
     - text: "Violations"
