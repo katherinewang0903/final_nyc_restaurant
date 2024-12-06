@@ -182,6 +182,5 @@ doc <- htmltools::tagList(
 )
 
 htmltools::browsable(doc)
-
 ```
-
+Go [Home](index.html)
