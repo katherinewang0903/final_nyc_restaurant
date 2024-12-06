@@ -6,16 +6,21 @@ output:
     vertical_layout: fill
 runtime: shiny
 ---
-
 ```{r}
 library(shiny)
 library(dplyr)
 library(leaflet)
 library(janitor)
 library(readr)
+```
 
+
+```{r}
 data <- read_csv("Manhattan_Restaurant_Inspection_Results.csv")
+```
 
+
+```{r}
 data <- data %>%
   janitor::clean_names() %>%
   filter(
