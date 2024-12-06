@@ -6,6 +6,7 @@ output:
     vertical_layout: fill
 runtime: shiny
 ---
+
 ```{r}
 library(shiny)
 library(dplyr)
@@ -15,11 +16,9 @@ library(readr)
 library(rsconnect)
 ```
 
-
 ```{r}
 data <- read_csv("Manhattan_Restaurant_Inspection_Results.csv")
 ```
-
 
 ```{r}
 data <- data %>%
