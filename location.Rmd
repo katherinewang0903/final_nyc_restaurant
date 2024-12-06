@@ -1,5 +1,5 @@
 ---
-title: "Location vs. Grade Analysis"
+title: "ANALYSIS of Location vs. Grade"
 
 output: 
   html_document:
