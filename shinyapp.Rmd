@@ -138,6 +138,13 @@ server <- function(input, output, session) {
 shinyApp(ui = ui, server = server)
 ```
 ```{r}
+# Install the rsconnect package if not already installed
+install.packages("rsconnect")
 
+# Load rsconnect
+library(rsconnect)
+
+# Deploy your app
+rsconnect::deployApp("http://127.0.0.1:7467/")
 ```
 
