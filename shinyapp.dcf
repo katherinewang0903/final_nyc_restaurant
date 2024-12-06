@@ -5,4 +5,5 @@ account: katherinewang0903
 server: shinyapps.io
 hostUrl: https://api.katherinewang0903.io/v1
 url: https://katherinewang0903.shinyapp.io/shinyapp/
+dependencies: [shiny]
 version: 1
