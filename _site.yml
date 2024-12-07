@@ -20,6 +20,8 @@ navbar:
       href: violations.html
     - text: "Cuisines"
       href: cuisine.html
+    - text: "Distribution"
+      href: distributionpage.html
     - text: "Shiny App"
       href:  https://katherinewang0903.shinyapps.io/shinyapp/
     - icon: fa-envelope fa-lg
