@@ -33,16 +33,16 @@ data <- data %>%
   ) %>%
   mutate(
     region = case_when(
-      zipcode %in% c(10004, 10005, 10006, 10007, 100388) ~ "Financial District",
+      zipcode %in% c(10004, 10005, 10006, 10007, 10008, 10038, 10271, 10041) ~ "Financial District",
       zipcode %in% c(10013, 10002) ~ "Chinatown",
       zipcode %in% c(10014, 10011) ~ "West Village",
-      zipcode %in% c(10021, 10028, 10065, 10075, 10128) ~ "Upper East Side",
-      zipcode %in% c(10023, 10024, 10025, 10069) ~ "Upper West Side",
-      zipcode %in% c(10026, 10027, 10030, 10031, 10032, 10037, 10039) ~ "Harlem",
-      zipcode %in% c(10032, 10033, 10040) ~ "Washington Heights",
+      zipcode %in% c(10021, 10028, 10065, 10075, 10128, 10029) ~ "Upper East Side",
+      zipcode %in% c(10023, 10024, 10025, 10069, 10115, 10121, 10123) ~ "Upper West Side",
+      zipcode %in% c(10026, 10027, 10030, 10031, 10035, 10037, 10039) ~ "Harlem",
+      zipcode %in% c(10032, 10033, 10034, 10040) ~ "Washington Heights",
       zipcode %in% c(10003, 10009) ~ "East Village",
       zipcode %in% c(10001, 10011) ~ "Chelsea",
-      zipcode %in% c(10280, 10282) ~ "Battery Park City",
+      zipcode %in% c(10280, 10281, 10282) ~ "Battery Park City",
       zipcode %in% c(10002) ~ "Bowery",
       zipcode %in% c(10012, 10013) ~ "SoHo",
       zipcode %in% c(10003, 10010) ~ "Gramercy Park",
@@ -50,6 +50,8 @@ data <- data %>%
       zipcode %in% c(10028, 10128) ~ "Carnegie Hill",
       zipcode %in% c(10007, 10013) ~ "Tribeca",
       zipcode %in% c(10004) ~ "Governors Island",
+      zipcode %in% c(10016, 10106, 10103, 10104, 10105, 10106, 10107, 10110, 10111, 10112, 10113, 10017, 10119, 10018, 10019, 10169, 10153, 10020, 10121, 10022, 10036, 10118, 10119, 10120, 10151) ~ "Midtown",
+      zipcode %in% c(10044) ~ "Roosevelt Island",
       TRUE ~ "Other"
     )
   )
