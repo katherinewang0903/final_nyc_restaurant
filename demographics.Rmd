@@ -213,7 +213,7 @@ plot <- plot_ly(
 plot
 ```
 
-The chart shows that most restaurants in Manhattan maintain high hygiene standards, with`Grade A` being the most common, ranging from 50% to 80%. `Coffee/Tea` (80%) and `French` (70%) cuisines have the highest percentage of `Grade A`, while `Bakery Product
+The chart shows that most restaurants in Manhattan maintain high hygiene standards, with`Grade A` being the most common, ranging from 50% to 80%. `Coffee/Tea` (80%) and `French` (70%) cuisines have the highest percentage of `Grade A`, while `Bakery Product/Desserts` (50%) have the lowest,indicating areas for improvement. `Chinese` and `Japanese` restaurants have more variability, with higher proportions of `lower grades` (B and c) and pending, grades (z and P) , suggesting these cuisines might need extra attention to improve food safety.
 
 ```{r, echo=FALSE, out.width="60%", fig.align='center'}
 knitr::include_graphics("./pictures/sanitary.jpg")
