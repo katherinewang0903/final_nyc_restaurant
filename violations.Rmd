@@ -1,5 +1,5 @@
 ---
-title: "violation analysis"
+title: "ANALYSIS of Violation"
 
 output: 
   html_document:
@@ -59,7 +59,7 @@ violation_data = manhattan_data %>%
 ```
 ### Grade Distribution
 
-First, we analyze the frequency distribution of grades. For both Critical and Not Critical groups, the majority of restaurants received a Grade A, followed by Grade B, and then Grade C. However, only within Grade A do we observe more restaurants with `Not Critical violations compared to Critical violations`.
+First, we analyze the `frequency distribution` of grades. For both Critical and Not Critical groups, the majority of restaurants received a Grade A, followed by Grade B, and then Grade C. However, only within `Grade A` do we observe `more restaurants with Not Critical violations compared to Critical violations`.
 ```{r}
 # Analyze the effect of violation_description on grade
 # Group by critical flag and grade to calculate counts
@@ -90,7 +90,7 @@ violation_grade_summary %>%
 ```
 
 
-Additionally, when examining inspection scores across all grade categories, restaurants with Not Critical violations consistently achieve lower scores. This pattern aligns with the corresponding grade results, further highlighting the relationship between inspection outcomes and grade assignments.
+Additionally, when examining inspection scores across all grade categories, restaurants with `Not Critical violations` consistently achieve `lower scores`. This pattern aligns with the corresponding grade results, further highlighting the relationship between inspection outcomes and grade assignments.
 ```{r}
 # Create an EDA of score and count using plotly
 average_score %>% 
@@ -109,7 +109,7 @@ average_score %>%
 
 ### Chi-Square Test
 
-Next, we conducted a `Chi-Square Test` to examine the relationship between the critical flag and grade. The results are visualized using a Contingency Table Heatmap. The analysis shows a `p-value smaller than 0.05`, leading us to reject the null hypothesis that the critical flag and grade are independent. This indicates a significant relationship between the critical flag and grade at the 0.05 significance level.
+Next, we conducted a `Chi-Square Test` to examine the relationship between the critical flag and grade. The results are visualized using a `Contingency Table Heatmap`. The analysis shows a `p-value smaller than 0.05`, leading us to reject the null hypothesis that the critical flag and grade are independent. This indicates a significant relationship between the critical flag and grade at the 0.05 significance level.
 ```{r}
 # Chi-Square Test
 contingency_table <- table(violation_data$critical_flag, violation_data$grade)
@@ -152,7 +152,7 @@ plot_ly(
 ```
 ### Critical Flag vs. Cuisine Description
 
-Then, we analyze the relationship between restaurant cuisine type and violation. To identify patterns, we calculate the percentage of critical violations for each cuisine type and rank them accordingly. Our analysis highlights the top 10 cuisine types with the highest percentage of violations, with Chinese/Japanese cuisine emerging as the category with the highest violation rate.
+Then, we analyze the relationship between restaurant cuisine type and violation. To identify patterns, we calculate `the percentage of critical violations` for each cuisine type and rank them accordingly. Our analysis highlights the top 10 cuisine types with the highest percentage of violations, with `Chinese/Japanese cuisine` emerging as the category with the highest violation rate.
 <br>
 This finding provides valuable insights into how specific cuisine types are associated with inspection outcomes, offering a deeper understanding of potential factors influencing violation frequencies. Such insights could guide further investigation into operational practices or compliance challenges unique to these cuisine categories.
 ```{r}
@@ -262,3 +262,5 @@ Description of violation names in the above pie chart:
 * `Other`: Any violation description not listed in the above categories.
 
 The analysis reveals that the most frequent critical violation is related to `washing and temperature problem`. These are `more than a quarter` in total percentage. This finding underscores the importance of `proper temperature management` and remain `cleaning` in ensuring food safety and reducing the risk of foodborne illnesses. Also, restaurants owner who want to avoid bad grade in inspection need to perticullar pay attention to them.
+
+Go [Home](index.html)

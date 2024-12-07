@@ -2,11 +2,12 @@
 title: "ANALYSIS of Cuisine Types"
 output: 
   html_document:
+    code_folding: hide
     theme: cosmo
     toc: true
     toc_float: true
 ---
-```{r}
+```{r setup, include=FALSE}
 library(dplyr)
 library(plotly)
 library(ggplot2)
@@ -25,55 +26,6 @@ kable(
   col.names = c("Grade", "Score Range"),
   caption = "NYC Restaurant Inspection Grade Score Ranges"
 )
-```
-
-
-```{r}
-filtered_data <- data %>%
-  select(`CUISINE DESCRIPTION`, SCORE) %>%
-  filter(!is.na(`CUISINE DESCRIPTION`) & !is.na(SCORE)) %>%
-  mutate(SCORE = as.numeric(SCORE)) %>%
-  filter(!is.na(SCORE)) 
-
-top_cuisines <- filtered_data %>%
-  group_by(`CUISINE DESCRIPTION`) %>%
-  summarise(avg_score = mean(SCORE, na.rm = TRUE)) %>%
-  arrange(desc(avg_score)) %>%
-  slice(1:35)
-
-top_cuisine_data <- filtered_data %>%
-  filter(`CUISINE DESCRIPTION` %in% top_cuisines$`CUISINE DESCRIPTION`)
-
-top_cuisine_data <- top_cuisine_data %>%
-  mutate(`CUISINE DESCRIPTION` = factor(`CUISINE DESCRIPTION`,
-                                        levels = top_cuisines$`CUISINE DESCRIPTION`))
-
-ggplot(top_cuisines, aes(x = reorder(`CUISINE DESCRIPTION`, -avg_score), y = avg_score)) +
-  geom_bar(stat = "identity", fill = "orange", color = "red") +
-  labs(title = "Top 35 Cuisines Types by Average Inspection Scores",
-       x = "Cuisine Description",
-       y = "Average Score") +
-  theme_minimal()+
-  theme(
-    axis.text = element_text(size = 8),
-    plot.title = element_text(hjust = 0.5, face = "bold"),
-    axis.text.x = element_text(angle = 45, hjust = 1)
-  )
-```
-
-
-```{r}
-ggplot(top_cuisine_data, aes(x = `CUISINE DESCRIPTION`, y = SCORE)) +
-  geom_boxplot(fill = "orange", color = "red") +
-  labs(title = "Inspection Score Distribution for Top 35 Cuisines",
-       x = "Cuisine Description",
-       y = "Inspection Score") +
-  theme_minimal()+
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    axis.text = element_text(size = 8),
-    plot.title = element_text(hjust = 0.5, face = "bold")
-  )
 ```
 
 ```{r}
@@ -121,4 +73,52 @@ map_density <- map_density %>%
 map_density
 ```
 
+```{r}
+filtered_data <- data %>%
+  select(`CUISINE DESCRIPTION`, SCORE) %>%
+  filter(!is.na(`CUISINE DESCRIPTION`) & !is.na(SCORE)) %>%
+  mutate(SCORE = as.numeric(SCORE)) %>%
+  filter(!is.na(SCORE)) 
 
+top_cuisines <- filtered_data %>%
+  group_by(`CUISINE DESCRIPTION`) %>%
+  summarise(avg_score = mean(SCORE, na.rm = TRUE)) %>%
+  arrange(desc(avg_score)) %>%
+  slice(1:35)
+
+top_cuisine_data <- filtered_data %>%
+  filter(`CUISINE DESCRIPTION` %in% top_cuisines$`CUISINE DESCRIPTION`)
+
+top_cuisine_data <- top_cuisine_data %>%
+  mutate(`CUISINE DESCRIPTION` = factor(`CUISINE DESCRIPTION`,
+                                        levels = top_cuisines$`CUISINE DESCRIPTION`))
+
+ggplot(top_cuisines, aes(x = reorder(`CUISINE DESCRIPTION`, -avg_score), y = avg_score)) +
+  geom_bar(stat = "identity", fill = "orange", color = "red") +
+  labs(title = "Top 35 Cuisines Types by Average Inspection Scores",
+       x = "Cuisine Description",
+       y = "Average Score") +
+  theme_minimal()+
+  theme(
+    axis.text = element_text(size = 8),
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+```
+
+
+```{r}
+ggplot(top_cuisine_data, aes(x = `CUISINE DESCRIPTION`, y = SCORE)) +
+  geom_boxplot(fill = "orange", color = "red") +
+  labs(title = "Inspection Score Distribution for Top 35 Cuisine Types",
+       x = "Cuisine Description",
+       y = "Inspection Score") +
+  theme_minimal()+
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    axis.text = element_text(size = 8),
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
+```
+
+Go [Home](index.html)

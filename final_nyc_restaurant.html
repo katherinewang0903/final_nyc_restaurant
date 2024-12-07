@@ -248,16 +248,19 @@ $(document).ready(function () {
         <li>
   <a href="index.html">HOME</a>
 </li>
+<li>
+  <a href="aboutus.html">About Us</a>
+</li>
+<li>
+  <a href="report.html">Report</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="aboutus.html">About us</a>
-</li>
-<li>
   <a href="demographics.html">Demographics</a>
 </li>
 <li>
-  <a href="Data-Source.html">Data Source</a>
+  <a href="datasource.html">Data Source</a>
 </li>
 <li>
   <a href="location.html">Location</a>
@@ -266,10 +269,35 @@ $(document).ready(function () {
   <a href="violations.html">Violations</a>
 </li>
 <li>
-  <a href="mailto:rd3096@cumc.columbia.edu">
+  <a href="cuisine.html">Cuisines</a>
+</li>
+<li>
+  <a href="https://katherinewang0903.shinyapps.io/shinyapp/">Shiny App</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     <span class="fa fa-envelope fa-lg"></span>
      
+     
+    <span class="caret"></span>
   </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="mailto:qh2285@cumc.columbia.edu">Qianxuan Huang</a>
+    </li>
+    <li>
+      <a href="mailto:dw3093@cumc.columbia.edu">Katherine Wang</a>
+    </li>
+    <li>
+      <a href="mailto:rd3096@cumc.columbia.edu">Ruicong Du</a>
+    </li>
+    <li>
+      <a href="mailto:yh3683@cumc.columbia.edu">Yining He</a>
+    </li>
+    <li>
+      <a href="mailto:wz2722@cumc.columbia.edu">Wentao Zhou</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="https://github.com/katherinewang0903/final_nyc_restaurant.github.io">
@@ -297,7 +325,7 @@ He (yh3683), Qianxuan Huang (qh2285)</h4>
 <pre class="r"><code>library(readr)
 manhattan_data &lt;- read_csv(&quot;Manhattan_Restaurant_Inspection_Results.csv&quot;)</code></pre>
 <pre><code>## Rows: 94616 Columns: 27
-## ── Column specification ─────────────────────
+## ── Column specification ─────────────────────────────
 ## Delimiter: &quot;,&quot;
 ## chr (17): DBA, BORO, BUILDING, STREET, CUISINE DESCRIPTION, INSPECTION DATE,...
 ## dbl  (9): CAMIS, ZIPCODE, PHONE, SCORE, Latitude, Longitude, Community Board...

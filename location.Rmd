@@ -1,5 +1,5 @@
 ---
-title: "Location vs. Grade analysis"
+title: "ANALYSIS of Location vs. Grade"
 
 output: 
   html_document:
@@ -56,7 +56,7 @@ zip_grade = manhattan_data %>%
 ```
 ### Chi-Square Test
 
-To investigate if where restaurants are located influence their inspection grades, we produce Chi-Square test. The result is presented in the Contingency Table Heatmap below. The p-value is less than 0.05, leading us to reject the null hypothesis that the region and grade are independent. This indicates a there a significant difference in the distribution of grades among regions at the 0.05 significance level.
+To investigate if where restaurants are located influence their inspection grades, we produce `Chi-Square test`. The result is presented in the `Contingency Table Heatmap` below. The `p-value is less than 0.05`, leading us to reject the null hypothesis that `the region and grade are independent`. This indicates a there a significant difference in the distribution of grades among regions at the 0.05 significance level.
 
 ```{r}
 # Create a contingency table of zip_code vs. grade
@@ -103,7 +103,7 @@ plot_ly(
 ```
 ### Cramér’s V test
 
-To investigate how strong the association is between located and grades, we produce Cramér’s V test. The Cramér’s V Value is  0.123, which is larger than 0.1 (Weak association) and smaller than 0.3 (Moderate association), so that we conclude they have weak association. <br>
+To investigate how strong the association is between located and grades, we produce `Cramér’s V test`. The `Cramér’s V Value is  0.123`, which is larger than 0.1 (Weak association) and smaller than 0.3 (Moderate association), so that we conclude they have `weak association`. <br>
 This conclusion is visualized in theree pie charts below of different regions that we can't tell large difference among them.
 ```{r}
 # Calculate Cramér’s V
@@ -182,6 +182,5 @@ doc <- htmltools::tagList(
 )
 
 htmltools::browsable(doc)
-
 ```
-
+Go [Home](index.html)
