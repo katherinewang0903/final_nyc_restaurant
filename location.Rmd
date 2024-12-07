@@ -169,7 +169,6 @@ plot_ly(
     yaxis = list(title = "Proportion of Grades", tickformat = ".0%"),
     legend = list(title = list(text = "Grade"))
   )
-
 ```
 This stacked bar chart illustrates the distribution of hygiene grades across various regions in Manhattan. Grade A, represented in blue, dominates most regions. In contrast, regions such as `Harlem` and `Washington Heights` show a slightly higher proportion of lower grades (B and C), indicating potential areas for improvement. Some regions, like `Roosevelt Island`, almost exclusively maintain grade A ratings, showcasing exceptional cleanliness. However, since only slightly differences among locations are shown, the result fits that the association is weak.
 
