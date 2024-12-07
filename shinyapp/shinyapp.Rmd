@@ -6,7 +6,6 @@ output:
     orientation: columns
     vertical_layout: fill
 ---
-
 ```{r}
 library(shiny)
 library(dplyr)
