@@ -127,18 +127,50 @@ plot_ly(
 ```
 ### Cramér’s V test
 
-To investigate how strong the association is between located and grades, we produce `Cramér’s V test`. The `Cramér’s V Value is  0.085`, which is less than 0.1 (Weak association), so that we conclude they have `weak association`. <br>
-This conclusion is visualized in theree pie charts below of different regions that we can't tell large difference among them.
+To investigate how strong the association is between locations and grades, we produce `Cramér’s V test`. The `Cramér’s V Value is  0.085`, which is less than 0.1, so that we conclude locations and grades have `weak association`. This conclusion is visualized in the stacked bar charts below of different regions that we can't tell large difference among them. 
 ```{r}
-# Calculate Cramér’s V
+# Cramér’s V
 cramer_v <- assocstats(contingency_table)$cramer
-
-# Print Cramér’s V
 print(paste("Cramér's V:", round(cramer_v, 3)))
 ```
 
 
 ```{r}
 
+filtered_location <- zip_grade %>%
+  mutate(grade = factor(grade, levels = c("C", "B", "A"))) 
+
+
+filtered_location <- filtered_location %>%
+  group_by(region, grade) %>%
+  summarise(count = n(), .groups = 'drop') %>%
+  group_by(region) %>%
+  mutate(proportion = count / sum(count)) %>%
+  ungroup()
+
+
+plot_ly(
+  data = filtered_location,
+  x = ~region,
+  y = ~proportion,
+  color = ~grade,
+  type = "bar",
+  hoverinfo = "text",
+  text = ~paste(
+    "Regions:", region,
+    "<br>Grade:", grade,
+    "<br>Proportion:", round(proportion * 100, 2), "%"
+  )
+) %>%
+  layout(
+    barmode = "stack",
+    title = "Grade Distribution Across Regions",
+    xaxis = list(title = "Regions", tickangle = 45),
+    yaxis = list(title = "Proportion of Grades", tickformat = ".0%"),
+    legend = list(title = list(text = "Grade"))
+  )
+
 ```
+This stacked bar chart illustrates the distribution of hygiene grades across various regions in Manhattan. Grade A, represented in blue, dominates most regions. In contrast, regions such as `Harlem` and `Washington Heights` show a slightly higher proportion of lower grades (B and C), indicating potential areas for improvement. Some regions, like `Roosevelt Island`, almost exclusively maintain grade A ratings, showcasing exceptional cleanliness. However, since only slightly differences among locations are shown, the result fits that the association is weak.
+
 Go [Home](index.html)
