@@ -9,10 +9,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Restaurant group" />
 
 
-<title>Dining Safety in Manhattan: Analyzing NYC Restaurant Hygiene Ratings</title>
+<title>Dining Safety in Manhattan: Analyzing Manhattan Restaurant Hygiene Ratings</title>
 
 <script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -402,9 +401,8 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Dining Safety in Manhattan: Analyzing NYC
-Restaurant Hygiene Ratings</h1>
-<h4 class="author">Restaurant group</h4>
+<h1 class="title toc-ignore">Dining Safety in Manhattan: Analyzing
+Manhattan Restaurant Hygiene Ratings</h1>
 
 </div>
 
@@ -413,8 +411,8 @@ Restaurant Hygiene Ratings</h1>
 <p><em>Katherine Wang (dw3093), Ruicong Du (rd3096), Yining He(yh3683),
 Qianxuan Huang (qh2285) Wentao Zhou (wz2722)</em></p>
 <p><br></p>
-<div id="motivation" class="section level3">
-<h3>Motivation</h3>
+<div id="motivation" class="section level2">
+<h2><strong>Motivation</strong></h2>
 <p>The motivation for this research is to evaluate food safety practices
 in Manhattan through the New York City Department of Health and Mental
 Hygiene (DOHMH) Restaurant Inspection Results dataset. This dataset
@@ -429,8 +427,8 @@ maintain and improve public health standards in Manhattan’s diverse
 dining landscape.</p>
 <p><br></p>
 </div>
-<div id="related-work" class="section level3">
-<h3>Related work</h3>
+<div id="related-work" class="section level2">
+<h2><strong>Related work</strong></h2>
 <p>We were inspired to undertake this analysis after examining the <a
 href="https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j/about_data">DOHMH
 Restaurant Inspection Results dataset</a> available on <a
@@ -443,8 +441,8 @@ data visualization and interactivity techniques while addressing
 practical public health issues covered in our coursework.</p>
 <p><br></p>
 </div>
-<div id="initial-questions" class="section level3">
-<h3>Initial questions</h3>
+<div id="initial-questions" class="section level2">
+<h2><strong>Initial questions</strong></h2>
 <p>Our initial questions focused on restaurant hygiene issues in
 Manhattan, aiming to help people identify restaurants that are both
 suitable for their taste preferences and meet high hygiene standards. We
@@ -463,8 +461,8 @@ location impact our overall hygiene grading?</p></li>
 </ol>
 <p><br></p>
 </div>
-<div id="data" class="section level3">
-<h3>Data</h3>
+<div id="data" class="section level2">
+<h2><strong>Data</strong></h2>
 <p>This dataset is derived from the <a
 href="https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j/about_data">DOHMH
 New York City Restaurant Inspection Results Dataset</a> and has been
@@ -540,19 +538,63 @@ establishment.</li>
 </ul>
 <p><br></p>
 </div>
-<div id="exploratory-analysis" class="section level3">
-<h3>Exploratory analysis</h3>
-<p>As for <a
-href="https://katherinewang0903.github.io/final_nyc_restaurant.github.io/violations.html">analysis
-related to violation</a>, we focuses exclusively on data where the
-grades are A, B, or C, and excludes records with grades labeled as N
-(Not Yet Graded), Z (Grade Pending), or P (Grade Pending issued upon
-reopening after a closure). We also exclude “Not Applicable” entries for
-critical violation indicators. Inspection violations are categorized
-into two groups: Critical and Not Critical. Critical violations
-represent the most significant risks for foodborne illnesses. To ensure
-accuracy and relevance, we begin by filtering out unnecessary data from
-the dataset before proceeding with the analysis. <br></p>
+<div id="exploratory-analysis" class="section level2">
+<h2><strong>Exploratory analysis</strong></h2>
+<div id="demographics-analysis" class="section level3">
+<h3><a
+href="https://katherinewang0903.github.io/final_nyc_restaurant.github.io/demographics.html">Demographics
+analysis</a> <br></h3>
+<p>For Demographics analysis, we focuses on the Manhattan’s restaurants
+across three dimensions: physical location, popular types of cuisine,
+and health inspection grades. The dataset was cleaned to include
+complete records, categorizing restaurants into three regions—Downtown,
+Midtown, and Uptown—based on ZIP codes. Restaurants graded as Z (Grade
+Pending), P (Pending Reopening), and N (Not Yet Graded) were excluded to
+ensure clarity and relevance in evaluating distribution patterns.
+<br></p>
+<p>The Physical Location analysis provides an overview of restaurant
+locations across Manhattan, allowing us to see each restaurant’s name,
+cuisine type, geographic location, and health inspection grade. This
+distribution reflects how restaurants cluster in different areas.
+Midtown and Downtown Manhattan have a high concentration of restaurants,
+while Uptown Manhattan has significantly fewer establishments. This
+pattern can be attributed to several factors: Midtown and Downtown are
+bustling commercial hubs with higher population density, more office
+spaces, and greater tourism activity, all of which drive demand for
+dining options. In contrast, Uptown has a lower density of commercial
+spaces and fewer tourist attractions, resulting in less restaurant
+clustering. <br></p>
+<p>Cuisine Type analysis reveals that American cuisine dominates with
+2,456 establishments, followed by Chinese, Italian, and Japanese
+cuisines, which represent Manhattan’s multicultural dining scene.
+Additionally, Coffee/Tea establishments rank prominently with over 1,000
+locations, catering to the city’s fast-paced lifestyle. This breakdown
+highlights a wide diversity in dining options, with quick-service and
+globally inspired cuisines holding substantial market. <br></p>
+<p>The Health Inspection Grade Distribution shows that most Manhattan
+restaurants maintain high hygiene standards, with Grade A being the most
+common, ranging from 50% to 80%. Coffee/Tea (80%) and French (70%)
+cuisines lead in hygiene compliance, while Bakery Products/Desserts
+(50%) have the lowest proportion of Grade A, highlighting room for
+improvement. Chinese and Japanese cuisines show greater variability,
+with higher proportions of lower grades (B and C) and pending grades (Z
+and P), suggesting specific challenges in meeting food safety standards.
+These results underscore the need for targeted interventions to support
+improved hygiene practices across all cuisine types. <br></p>
+</div>
+<div id="violations-analysis" class="section level3">
+<h3><a
+href="https://katherinewang0903.github.io/final_nyc_restaurant.github.io/violations.html">Violations
+analysis</a> <br></h3>
+<p>As for analysis related to violation, we focuses exclusively on data
+where the grades are A, B, or C, and excludes records with grades
+labeled as N (Not Yet Graded), Z (Grade Pending), or P (Grade Pending
+issued upon reopening after a closure). We also exclude “Not Applicable”
+entries for critical violation indicators. Inspection violations are
+categorized into two groups: Critical and Not Critical. Critical
+violations represent the most significant risks for foodborne illnesses.
+To ensure accuracy and relevance, we begin by filtering out unnecessary
+data from the dataset before proceeding with the analysis. <br></p>
 <p>First, we analyze the frequency distribution of grades. For both
 Critical and Not Critical groups, the majority of restaurants received a
 Grade A, followed by Grade B, and then Grade C. However, only within
@@ -583,16 +625,55 @@ restaurants owner who want to avoid bad grade in inspection need to
 perticullar pay attention to them. <br></p>
 <p><br></p>
 </div>
-<div id="shiny-app" class="section level3">
-<h3>Shiny app</h3>
+</div>
+<div id="shiny-app" class="section level2">
+<h2><strong>Shiny app</strong></h2>
+<p>The Shiny application available <a
+href="https://katherinewang0903.shinyapps.io/shinyapp/">HERE</a> offers
+an interactive platform for users to explore and analyze data related to
+Manhattan restaurants inspections. Users can filter inspection results
+by neighbourhood, cuisine types, and inspection grade, allowing for a
+tailored examination of the data. The app provides visualization of maps
+to display the distribution of inspection outcomes across different
+neighborhoods and time periods. This tool is valuable for both public
+health officials and the general public to monitor and understand
+restaurant compliance with health regulations in NYC Mahattan.</p>
 <p><br></p>
 </div>
-<div id="discussion" class="section level3">
-<h3>Discussion</h3>
+<div id="discussion" class="section level2">
+<h2><strong>Discussion</strong></h2>
+<p>Our analysis of the NYC Department of Health and Mental Hygiene’s
+Restaurant Inspection Results dataset revealed several critical findings
+about restaurant hygiene and compliance within Manhattan. One notable
+discovery was the variation in inspection scores across different
+neighborhoods, highlighting areas with more frequent critical
+violations. This suggests the need for targeted interventions in
+specific locations to ensure food safety standards are upheld.
+Additionally, our exploration into cuisine types indicated that certain
+food preparation styles are associated with higher or lower hygiene
+scores, shedding light on potential risks tied to specific cuisines.</p>
+<p>Another significant trend was the impact of critical violations on
+restaurant grades. Restaurants with repeated critical violations often
+received lower grades, emphasizing the importance of promptly addressing
+such issues to maintain customer trust and public health standards.
+Interestingly, we also observed fluctuations in overall hygiene
+compliance over time, potentially reflecting changes in enforcement
+practices or restaurant management priorities.</p>
+<p>Recent news articles have supported these findings, with reports
+indicating a decline in the frequency of health inspections due to
+staffing shortages. According to <a
+href="https://www.cbsnews.com/newyork/news/nyc-restaurant-health-inspections-2023-2024/">CBS
+News</a> about NYC Manhattan restaurant health inspections. Health
+inspections in Mahanttan have decreased by 17% in the past year, raising
+concerns about consistent enforcement of safety standards. This aligns
+with our observations of varying compliance levels, reinforcing the
+critical need for consistent oversight. By addressing these issues and
+promoting better compliance across all establishments, Manhattan’s
+dining scene can remain both vibrant and safe for all patrons.</p>
 <p><br></p>
 </div>
-<div id="references" class="section level3">
-<h3>References</h3>
+<div id="references" class="section level2">
+<h2><strong>References</strong></h2>
 <ol style="list-style-type: decimal">
 <li><a
 href="https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j/about_data"
