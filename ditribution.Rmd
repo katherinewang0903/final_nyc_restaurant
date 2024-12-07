@@ -11,82 +11,211 @@ output:
 ---
 
 
-## Inspection Score Distribution by Grade
-```{r}
-library(dplyr)
-library(ggplot2)
-library(readr)
-library(knitr)
-
-# Load the data
-data <- read_csv("Manhattan_Restaurant_Inspection_Results.csv")
-
-# Filter and clean the data for analysis
-grade_data <- data %>%
-  select(GRADE, SCORE) %>%
-  filter(!is.na(GRADE) & !is.na(SCORE)) %>%
-  mutate(SCORE = as.numeric(SCORE)) %>%
-  filter(!is.na(SCORE))
-
-# Box plot for score distribution by grade
-ggplot(grade_data, aes(x = GRADE, y = SCORE, fill = GRADE)) +
-  geom_boxplot(outlier.color = "red", outlier.size = 1) +
-  scale_fill_brewer(palette = "Set3") +
-  labs(
-    title = "Inspection Score Distribution by Grade",
-    x = "Grade",
-    y = "Inspection Score"
-  ) +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(hjust = 0.5, face = "bold")
-  )
-
-```
 
 ## Grade Distribution Over Time by neighborhoods or Type
-```{r}
-# Add a year column to the dataset for temporal analysis
+```{r setup, include = FALSE}
+# Load necessary libraries
+# Load necessary libraries
+library(dplyr)
+library(purrr)
+library(broom)
+library(readr)
+library(janitor)
+library(knitr)  # For table formatting
+library(ggplot2)
+library(stringr)
+library(viridis)
+library(plotly)
+```
+
+```{r, message=FALSE, warning=FALSE}
+data <- read_csv("Manhattan_Restaurant_Inspection_Results.csv") %>%
+  clean_names()
+
+if (!all(c("grade", "inspection_date") %in% colnames(data))) {
+  stop("The required columns 'grade' and 'inspection_date' are not found in the dataset.")
+}
+
 time_data <- data %>%
-  filter(!is.na(GRADE), !is.na(`INSPECTION DATE`)) %>%
-  mutate(
-    YEAR = as.numeric(format(as.Date(`INSPECTION DATE`, format = "%m/%d/%Y"), "%Y"))
+  filter(!is.na(grade), !is.na(inspection_date)) %>%
+  mutate(year = as.numeric(format(as.Date(inspection_date, format = "%m/%d/%Y"), "%Y")))
+
+grade_trends_borough <- time_data %>%
+  group_by(year, boro, grade) %>%
+  summarise(count = n(), .groups = "drop")
+
+viridis_colors <- viridis(n = length(unique(grade_trends_borough$grade)))
+
+plot_borough <- plot_ly(
+  grade_trends_borough,
+  x = ~year,
+  y = ~count,
+  color = ~grade,
+  colors = viridis_colors,
+  type = "scatter",
+  mode = "lines+markers",
+  split = ~grade
+) %>%
+  layout(
+    title = list(text = "Grade Distribution Over Time by Borough"),
+    xaxis = list(title = "Year"),
+    yaxis = list(title = "Number of Restaurants"),
+    legend = list(title = list(text = "Grade"), x = 1.1),
+    plot_bgcolor = 'rgba(0, 0, 0, 0)',
+    paper_bgcolor = 'rgba(0, 0, 0, 0)'
   )
 
-# Group and summarize data by year and borough
-grade_trends_borough <- time_data %>%
-  group_by(YEAR, BORO, GRADE) %>%
-  summarise(Count = n(), .groups = "drop")
-
-# Plot grade trends over time by borough
-ggplot(grade_trends_borough, aes(x = YEAR, y = Count, color = GRADE, group = GRADE)) +
-  geom_line() +
-  facet_wrap(~ BORO, scales = "free_y") +
-  labs(
-    title = "Grade Distribution Over Time by Borough",
-    x = "Year",
-    y = "Number of Restaurants",
-    color = "Grade"
-  ) +
-  theme_minimal()
-
-# Group and summarize data by year and cuisine type
 grade_trends_cuisine <- time_data %>%
-  filter(`CUISINE DESCRIPTION` == "Italian") %>%
-  group_by(YEAR, `CUISINE DESCRIPTION`, GRADE) %>%
-  summarise(Count = n(), .groups = "drop")
+  filter(cuisine_description == "Italian") %>%
+  group_by(year, cuisine_description, grade) %>%
+  summarise(count = n(), .groups = "drop")
 
-# Plot grade trends over time for Italian restaurants
-ggplot(grade_trends_cuisine, aes(x = YEAR, y = Count, color = GRADE, group = GRADE)) +
-  geom_line() +
+plot_cuisine <- plot_ly(
+  grade_trends_cuisine,
+  x = ~year,
+  y = ~count,
+  color = ~grade,
+  colors = viridis_colors,
+  type = "scatter",
+  mode = "lines+markers",
+  split = ~grade
+) %>%
+  layout(
+    title = list(text = "Grade Distribution Over Time for Italian Restaurants"),
+    xaxis = list(title = "Year"),
+    yaxis = list(title = "Number of Restaurants"),
+    legend = list(title = list(text = "Grade"), x = 1.1),
+    plot_bgcolor = 'rgba(0, 0, 0, 0)',
+    paper_bgcolor = 'rgba(0, 0, 0, 0)'
+  )
+
+plot_borough
+plot_cuisine
+
+```
+I use the plotly package to generate two interactive scatter plots to visualize the trend of restaurant levels over time.
+
+These two charts respectively show the trend of the horizontal distribution of administrative regions over time.
+Grade Trends of Italian Restaurants: Pay Attention to the Time Grade Trends of Italian Cuisine. I chose Italian restaurants as a case study to showcase to you because of our personal love for them.
+
+And I have customized interactive drawing with hover details, zooming, and switching functions.
+And it uses a transparent background and Viridis color palette, which is more beautiful.
+
+The generated graphics are distributed in levels over time according to each region:
+
+X-axis: Check the year.
+Y-axis: Obtain the number of restaurants for each level.
+Use case: Identify trends in administrative regions, such as the improvement of grades over time.
+
+Grade distribution of Italian restaurants over time:
+
+X-axis: Check the year.
+Y-axis: Number of Italian restaurants per level.
+Use case: Check if Italian restaurants maintain a higher level.
+
+
+## Regression Model
+
+```{r, message=FALSE, warning=FALSE}
+manhattan_data <- read_csv("Manhattan_Restaurant_Inspection_Results.csv", na = c("NA", "", "."))
+
+
+cleaned_data <- manhattan_data %>%
+  janitor::clean_names() %>%  
+  filter(
+    !is.na(dba),                         
+    !is.na(cuisine_description),       
+    !is.na(grade),                       
+    !is.na(zipcode),
+    grade %in% c("A", "B", "C")  # Keep only grades A, B, C
+  ) %>%
+  mutate(
+    grade_numeric = case_when(
+      grade == "A" ~ 1,
+      grade == "B" ~ 2,
+      grade == "C" ~ 3
+    ),  
+    cuisine_description = factor(cuisine_description),  
+    inspection_type = factor(inspection_type),  
+    violation_code = str_trim(as.character(violation_code)),  
+    location = case_when(  # Define location as a categorical variable
+      zipcode >= 10000 & zipcode <= 10025 ~ "Downtown",
+      zipcode >= 10026 & zipcode <= 10040 ~ "Midtown",
+      zipcode >= 10041 & zipcode <= 10282 ~ "Uptown",
+      TRUE ~ "Other"
+    )
+  ) %>%
+  mutate(location = factor(location))  # Convert location to factor
+
+
+cleaned_data <- cleaned_data %>%
+  filter(grepl("^[A-Za-z0-9]+$", violation_code))  # Keep only alphanumeric values
+
+
+predictors <- c("cuisine_description", "inspection_type", "violation_code", "location")
+
+
+univariable_results <- lapply(predictors, function(predictor) {
+  
+  formula <- as.formula(paste("grade_numeric ~", predictor))
+  
+  
+  model <- glm(formula, data = cleaned_data, family = quasipoisson)  # Treat as ordinal outcome
+  
+  
+  tidy(model) %>%
+    mutate(predictor = predictor) %>%
+    select(predictor, term, estimate, std.error, p.value)
+})
+
+
+results_table <- bind_rows(univariable_results) %>%
+  filter(term != "(Intercept)")  # Remove the intercept for clarity
+
+
+# Show only the first 10 rows of the results table
+kable(
+  head(results_table, 10),  # Display the first 10 rows
+  format = "markdown",
+  col.names = c("Predictor", "Term", "Estimate", "Std. Error", "p-value"),
+  caption = "Top 10 Univariable Ordinal Regression Results"
+)
+
+
+
+model_example <- glm(grade_numeric ~ cuisine_description, data = cleaned_data, family = quasipoisson)
+residuals_data <- augment(model_example)
+```
+
+
+```{r, warning= FALSE}
+# QQ plot
+ggplot(residuals_data, aes(sample = .resid)) +
+  stat_qq() +
+  stat_qq_line(color = "blue") +
   labs(
-    title = "Grade Distribution Over Time for Italian Restaurants",
-    x = "Year",
-    y = "Number of Restaurants",
-    color = "Grade"
+    title = "QQ Plot of Residuals",
+    x = "Theoretical Quantiles",
+    y = "Sample Quantiles"
   ) +
   theme_minimal()
 
 ```
+In order to obtain this model, we first load the dataset Manhathathattan_Tetaurant_Inspection-Results.cv and filter out irrelevant or missing data.
+And perform conversion:
+Grade_ numeric: Convert grades (A, B, C) into numerical values (1, 2, 3) for regression analysis.
+Location: The postal code is divided into four areas: city center, central city, upper city, and others.
+Violation-code: Cleaned up to ensure it only contains alphanumeric values, removing unexpected entries such as dates or special characters. And in order to make the visualization more visually appealing, I chose to only display the first ten lines of content.
+
+1. Purpose of QQplot:
+QQplot is a diagnostic tool used to compare the residual distribution of a regression model with the theoretical normal distribution. This helps evaluate the goodness of fit of the model.
+2. Plot interpretation:
+Blue line: represents the expected distribution under complete normality.
+Point: represents the actual residual of the regression model.
+If these points are closely aligned with the blue line and the residuals are approximately normally distributed, it indicates that the model fits well.
+Deviation from this line, especially at the tail, indicates potential issues with normality or outliers in the data.
+3. Observation results:
+If these points closely follow this line, it can be confirmed that the model assumptions (such as the linearity and normality of residuals) are reasonably satisfied.
 
 
+Go [Home](index.html)
