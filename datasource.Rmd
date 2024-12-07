@@ -70,7 +70,7 @@ view (manhattan_data)
 * `NTA`: Neighborhood Tabulation Area of the establishment.
 * `Location Point1`: Geographic location of the establishment.
 
-
+Go [Home](index.html)
 
 
 

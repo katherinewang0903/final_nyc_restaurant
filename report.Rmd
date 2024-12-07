@@ -139,5 +139,6 @@ Recent news articles have supported these findings, with reports indicating a de
 
 1.  <https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j/about_data>
 
+Go [Home](index.html)
 
 

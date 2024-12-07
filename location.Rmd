@@ -10,15 +10,13 @@ output:
     theme: cosmo
 ---
 
-```{r setup, include=FALSE}
+```{r}
 knitr::opts_chunk$set(collapse = TRUE, 
-                      message = FALSE, 
-                     fig.path = "violation_files/",
-  fig.format = "png")
+                      message = FALSE)
 ```
 
 
-```{r}
+```{r setup, message=FALSE}
 library(tidyverse)
 library(plotly)
 library(ggplot2)
@@ -32,7 +30,7 @@ library(tidyverse)
 library(htmltools)
 ```
 
-In this chapter, we analyze the relationship between locations and grades. Our analysis focuses exclusively on data where the grades are A, B, or C, and excludes records with grades labeled as N (Not Yet Graded), Z (Grade Pending), or P (Grade Pending issued upon reopening after a closure). To ensure accuracy and relevance, we begin by filtering out unnecessary data from the dataset before proceeding with the analysis.
+In this chapter, we analyze the relationship between locations and grades. Our analysis focuses exclusively on data where the grades are `A`, `B`, or `C`, and excludes records with grades labeled as N (Not Yet Graded), Z (Grade Pending), or P (Grade Pending issued upon reopening after a closure). To ensure accuracy and relevance, we begin by filtering out unnecessary data from the dataset before proceeding with the analysis. The location is divided by `Financial District`, `Chinatown`, `West Village`, `Upper East Side`, `Upper West Side`, `Harlem`, `Washington Heights`, `East Village`, `Chelsea`, `Battery Park City`, `Bowery`, `SoHo`, `Gramercy Park`, `Flatiron District`, `Carnegie Hill`, `Tribeca`, `Governors Island`, `Midtown`, `Roosevelt Island`, `Other`.
 ```{r}
 # The same data cleaning process in demographics part, also only consider data with grade A, B, C.
 manhattan_data = read_csv("Manhattan_Restaurant_Inspection_Results.csv", na = c("NA", "", "."))
@@ -47,16 +45,42 @@ zip_grade = manhattan_data %>%
     !is.na(score),                       
     !is.na(zipcode),
     grade %in% c("A", "B", "C")
-  ) %>% mutate(region = case_when(
+  ) %>% 
+  mutate(region_town = case_when(
     zipcode >= 10000 & zipcode <= 10025 ~ "Downtown",
     zipcode >= 10026 & zipcode <= 10040 ~ "Midtown",
     zipcode >= 10041 & zipcode <= 10282 ~ "Uptown",
     TRUE ~ "Other" # For ZIP codes like 11371, 12345, etc.
-  ))
+  )) %>%
+  mutate(
+    region = case_when(
+      zipcode %in% c(10004, 10005, 10006, 10007, 10008, 10038, 10271, 10041) ~ "Financial District",
+      zipcode %in% c(10013, 10002) ~ "Chinatown",
+      zipcode %in% c(10014, 10011) ~ "West Village",
+      zipcode %in% c(10021, 10028, 10065, 10075, 10128, 10029) ~ "Upper East Side",
+      zipcode %in% c(10023, 10024, 10025, 10069, 10115, 10121, 10123) ~ "Upper West Side",
+      zipcode %in% c(10026, 10027, 10030, 10031, 10035, 10037, 10039) ~ "Harlem",
+      zipcode %in% c(10032, 10033, 10034, 10040) ~ "Washington Heights",
+      zipcode %in% c(10003, 10009) ~ "East Village",
+      zipcode %in% c(10001, 10011) ~ "Chelsea",
+      zipcode %in% c(10280, 10281, 10282) ~ "Battery Park City",
+      zipcode %in% c(10002) ~ "Bowery",
+      zipcode %in% c(10012, 10013) ~ "SoHo",
+      zipcode %in% c(10003, 10010) ~ "Gramercy Park",
+      zipcode %in% c(10001, 10003, 10010, 10011, 10016) ~ "Flatiron District",
+      zipcode %in% c(10028, 10128) ~ "Carnegie Hill",
+      zipcode %in% c(10007, 10013) ~ "Tribeca",
+      zipcode %in% c(10004) ~ "Governors Island",
+      zipcode %in% c(10016, 10106, 10103, 10104, 10105, 10106, 10107, 10110, 10111, 10112, 10113, 10017, 10119, 10018, 10019, 10169, 10153, 10020, 10121, 10022, 10036, 10118, 10119, 10120, 10151, 10165, 1076, 10158) ~ "Midtown",
+      zipcode %in% c(10044) ~ "Roosevelt Island",
+      TRUE ~ "Other"
+    )
+  )
 ```
 ### Chi-Square Test
 
-To investigate if where restaurants are located influence their inspection grades, we produce `Chi-Square test`. The result is presented in the `Contingency Table Heatmap` below. The `p-value is less than 0.05`, leading us to reject the null hypothesis that `the region and grade are independent`. This indicates a there a significant difference in the distribution of grades among regions at the 0.05 significance level.
+To investigate if where restaurants are located influence their inspection grades, we produce `Chi-Square test`. The result is presented in the `Contingency Table Heatmap` below. The `Chi-Square statistics` is 584.26, and `p-value is less than 0.05`, leading us to reject the null hypothesis that `the region and grade are independent`. This indicates a there a significant difference in the distribution of grades among regions at the 0.05 significance level. <br>
+The `Midtown` region exhibits the highest concentration of Grade A restaurants, as indicated by the darkest shade of purple. Other regions like `Upper East Side` and `Upper West Side` also show substantial numbers of Grade A restaurants. `Grades B and C` are less frequent across all regions, with the light shading indicating their relatively low counts.
 
 ```{r}
 # Create a contingency table of zip_code vs. grade
@@ -103,84 +127,50 @@ plot_ly(
 ```
 ### Cramér’s V test
 
-To investigate how strong the association is between located and grades, we produce `Cramér’s V test`. The `Cramér’s V Value is  0.123`, which is larger than 0.1 (Weak association) and smaller than 0.3 (Moderate association), so that we conclude they have `weak association`. <br>
-This conclusion is visualized in theree pie charts below of different regions that we can't tell large difference among them.
+To investigate how strong the association is between locations and grades, we produce `Cramér’s V test`. The `Cramér’s V Value is  0.085`, which is less than 0.1, so that we conclude locations and grades have `weak association`. This conclusion is visualized in the stacked bar charts below of different regions that we can't tell large difference among them. 
 ```{r}
-# Calculate Cramér’s V
+# Cramér’s V
 cramer_v <- assocstats(contingency_table)$cramer
-
-# Print Cramér’s V
 print(paste("Cramér's V:", round(cramer_v, 3)))
-
 ```
 
 
 ```{r}
 
-# uptown visualization
-uptown <- zip_grade %>%
-  filter(region == "Uptown") %>%
+filtered_location <- zip_grade %>%
+  mutate(grade = factor(grade, levels = c("C", "B", "A"))) 
+
+
+filtered_location <- filtered_location %>%
   group_by(region, grade) %>%
-  summarize(count = n(), .groups = "drop")
-uptown_pie = plot_ly(
-  data = uptown,
-  labels = ~grade,  # Grades (A, B, C)
-  values = ~count,  # Counts of each grade
-  type = 'pie',
-  textinfo = 'label+percent',  # Display labels and percentages
-  hoverinfo = 'label+value+percent' , # Show additional info on hover
-    colors = "viridis"
+  summarise(count = n(), .groups = 'drop') %>%
+  group_by(region) %>%
+  mutate(proportion = count / sum(count)) %>%
+  ungroup()
+
+
+plot_ly(
+  data = filtered_location,
+  x = ~region,
+  y = ~proportion,
+  color = ~grade,
+  type = "bar",
+  hoverinfo = "text",
+  text = ~paste(
+    "Regions:", region,
+    "<br>Grade:", grade,
+    "<br>Proportion:", round(proportion * 100, 2), "%"
+  )
 ) %>%
   layout(
-    title = "Uptown" ,
+    barmode = "stack",
+    title = "Grade Distribution Across Regions",
+    xaxis = list(title = "Regions", tickangle = 45),
+    yaxis = list(title = "Proportion of Grades", tickformat = ".0%"),
     legend = list(title = list(text = "Grade"))
   )
 
-# Midtown visualization
-midtown <- zip_grade %>%
-  filter(region == "Midtown") %>%
-  group_by(region, grade) %>%
-  summarize(count = n(), .groups = "drop")
-midtown_pie = plot_ly(
-  data = midtown,
-  labels = ~grade,  # Grades (A, B, C)
-  values = ~count,  # Counts of each grade
-  type = 'pie',
-  textinfo = 'label+percent',  # Display labels and percentages
-  hoverinfo = 'label+value+percent' , # Show additional info on hover
-    colors = "viridis"
-) %>%
-  layout(
-    title = "Midtown" ,
-    legend = list(title = list(text = "Grade"))
-  )
-
-# Downtown visualization
-downtown <- zip_grade %>%
-  filter(region == "Downtown") %>%
-  group_by(region, grade) %>%
-  summarize(count = n(), .groups = "drop")
-downtown_pie = plot_ly(
-  data = downtown,
-  labels = ~grade,  # Grades (A, B, C)
-  values = ~count,  # Counts of each grade
-  type = 'pie',
-  textinfo = 'label+percent',  # Display labels and percentages
-  hoverinfo = 'label+value+percent' , # Show additional info on hover
-    colors = "viridis"
-) %>%
-  layout(
-    title = "Downtown" ,
-    legend = list(title = list(text = "Grade"))
-  )
-
-# Combine the pie charts into one layout
-doc <- htmltools::tagList(
-  div(uptown_pie, style = "float:left;width:33.3%;"),
-  div(midtown_pie, style = "float:left;width:33.3%;"),
-  div(downtown_pie, style = "float:right;width:33.3%;") 
-)
-
-htmltools::browsable(doc)
 ```
+This stacked bar chart illustrates the distribution of hygiene grades across various regions in Manhattan. Grade A, represented in blue, dominates most regions. In contrast, regions such as `Harlem` and `Washington Heights` show a slightly higher proportion of lower grades (B and C), indicating potential areas for improvement. Some regions, like `Roosevelt Island`, almost exclusively maintain grade A ratings, showcasing exceptional cleanliness. However, since only slightly differences among locations are shown, the result fits that the association is weak.
+
 Go [Home](index.html)
