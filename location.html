@@ -414,6 +414,8 @@ div.tocify {
 </div>
 
 
+<pre class="r"><code>knitr::opts_chunk$set(collapse = TRUE, 
+                      message = FALSE)</code></pre>
 <pre class="r"><code>library(tidyverse)
 library(plotly)
 library(ggplot2)
@@ -426,12 +428,22 @@ library(vcd)
 library(tidyverse)
 library(htmltools)</code></pre>
 <p>In this chapter, we analyze the relationship between locations and
-grades. Our analysis focuses exclusively on data where the grades are A,
-B, or C, and excludes records with grades labeled as N (Not Yet Graded),
-Z (Grade Pending), or P (Grade Pending issued upon reopening after a
-closure). To ensure accuracy and relevance, we begin by filtering out
-unnecessary data from the dataset before proceeding with the
-analysis.</p>
+grades. Our analysis focuses exclusively on data where the grades are
+<code>A</code>, <code>B</code>, or <code>C</code>, and excludes records
+with grades labeled as N (Not Yet Graded), Z (Grade Pending), or P
+(Grade Pending issued upon reopening after a closure). To ensure
+accuracy and relevance, we begin by filtering out unnecessary data from
+the dataset before proceeding with the analysis. The location is divided
+by <code>Financial District</code>, <code>Chinatown</code>,
+<code>West Village</code>, <code>Upper East Side</code>,
+<code>Upper West Side</code>, <code>Harlem</code>,
+<code>Washington Heights</code>, <code>East Village</code>,
+<code>Chelsea</code>, <code>Battery Park City</code>,
+<code>Bowery</code>, <code>SoHo</code>, <code>Gramercy Park</code>,
+<code>Flatiron District</code>, <code>Carnegie Hill</code>,
+<code>Tribeca</code>, <code>Governors Island</code>,
+<code>Midtown</code>, <code>Roosevelt Island</code>,
+<code>Other</code>.</p>
 <pre class="r"><code># The same data cleaning process in demographics part, also only consider data with grade A, B, C.
 manhattan_data = read_csv(&quot;Manhattan_Restaurant_Inspection_Results.csv&quot;, na = c(&quot;NA&quot;, &quot;&quot;, &quot;.&quot;))
 str (manhattan_data)
@@ -504,21 +516,54 @@ zip_grade = manhattan_data %&gt;%
     !is.na(score),                       
     !is.na(zipcode),
     grade %in% c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;)
-  ) %&gt;% mutate(region = case_when(
+  ) %&gt;% 
+  mutate(region_town = case_when(
     zipcode &gt;= 10000 &amp; zipcode &lt;= 10025 ~ &quot;Downtown&quot;,
     zipcode &gt;= 10026 &amp; zipcode &lt;= 10040 ~ &quot;Midtown&quot;,
     zipcode &gt;= 10041 &amp; zipcode &lt;= 10282 ~ &quot;Uptown&quot;,
     TRUE ~ &quot;Other&quot; # For ZIP codes like 11371, 12345, etc.
-  ))</code></pre>
+  )) %&gt;%
+  mutate(
+    region = case_when(
+      zipcode %in% c(10004, 10005, 10006, 10007, 10008, 10038, 10271, 10041) ~ &quot;Financial District&quot;,
+      zipcode %in% c(10013, 10002) ~ &quot;Chinatown&quot;,
+      zipcode %in% c(10014, 10011) ~ &quot;West Village&quot;,
+      zipcode %in% c(10021, 10028, 10065, 10075, 10128, 10029) ~ &quot;Upper East Side&quot;,
+      zipcode %in% c(10023, 10024, 10025, 10069, 10115, 10121, 10123) ~ &quot;Upper West Side&quot;,
+      zipcode %in% c(10026, 10027, 10030, 10031, 10035, 10037, 10039) ~ &quot;Harlem&quot;,
+      zipcode %in% c(10032, 10033, 10034, 10040) ~ &quot;Washington Heights&quot;,
+      zipcode %in% c(10003, 10009) ~ &quot;East Village&quot;,
+      zipcode %in% c(10001, 10011) ~ &quot;Chelsea&quot;,
+      zipcode %in% c(10280, 10281, 10282) ~ &quot;Battery Park City&quot;,
+      zipcode %in% c(10002) ~ &quot;Bowery&quot;,
+      zipcode %in% c(10012, 10013) ~ &quot;SoHo&quot;,
+      zipcode %in% c(10003, 10010) ~ &quot;Gramercy Park&quot;,
+      zipcode %in% c(10001, 10003, 10010, 10011, 10016) ~ &quot;Flatiron District&quot;,
+      zipcode %in% c(10028, 10128) ~ &quot;Carnegie Hill&quot;,
+      zipcode %in% c(10007, 10013) ~ &quot;Tribeca&quot;,
+      zipcode %in% c(10004) ~ &quot;Governors Island&quot;,
+      zipcode %in% c(10016, 10106, 10103, 10104, 10105, 10106, 10107, 10110, 10111, 10112, 10113, 10017, 10119, 10018, 10019, 10169, 10153, 10020, 10121, 10022, 10036, 10118, 10119, 10120, 10151, 10165, 1076, 10158) ~ &quot;Midtown&quot;,
+      zipcode %in% c(10044) ~ &quot;Roosevelt Island&quot;,
+      TRUE ~ &quot;Other&quot;
+    )
+  )</code></pre>
 <div id="chi-square-test" class="section level3">
 <h3>Chi-Square Test</h3>
 <p>To investigate if where restaurants are located influence their
 inspection grades, we produce <code>Chi-Square test</code>. The result
 is presented in the <code>Contingency Table Heatmap</code> below. The
+<code>Chi-Square statistics</code> is 584.26, and
 <code>p-value is less than 0.05</code>, leading us to reject the null
 hypothesis that <code>the region and grade are independent</code>. This
 indicates a there a significant difference in the distribution of grades
-among regions at the 0.05 significance level.</p>
+among regions at the 0.05 significance level. <br> The
+<code>Midtown</code> region exhibits the highest concentration of Grade
+A restaurants, as indicated by the darkest shade of purple. Other
+regions like <code>Upper East Side</code> and
+<code>Upper West Side</code> also show substantial numbers of Grade A
+restaurants. <code>Grades B and C</code> are less frequent across all
+regions, with the light shading indicating their relatively low
+counts.</p>
 <pre class="r"><code># Create a contingency table of zip_code vs. grade
 contingency_table &lt;- table(zip_grade$region, zip_grade$grade)
 
@@ -565,102 +610,24 @@ plot_ly(
 ## Warning: &#39;layout&#39; objects don&#39;t have these attributes: &#39;colorbar&#39;
 ## Valid attributes include:
 ## &#39;_deprecated&#39;, &#39;activeshape&#39;, &#39;annotations&#39;, &#39;autosize&#39;, &#39;autotypenumbers&#39;, &#39;calendar&#39;, &#39;clickmode&#39;, &#39;coloraxis&#39;, &#39;colorscale&#39;, &#39;colorway&#39;, &#39;computed&#39;, &#39;datarevision&#39;, &#39;dragmode&#39;, &#39;editrevision&#39;, &#39;editType&#39;, &#39;font&#39;, &#39;geo&#39;, &#39;grid&#39;, &#39;height&#39;, &#39;hidesources&#39;, &#39;hoverdistance&#39;, &#39;hoverlabel&#39;, &#39;hovermode&#39;, &#39;images&#39;, &#39;legend&#39;, &#39;mapbox&#39;, &#39;margin&#39;, &#39;meta&#39;, &#39;metasrc&#39;, &#39;modebar&#39;, &#39;newshape&#39;, &#39;paper_bgcolor&#39;, &#39;plot_bgcolor&#39;, &#39;polar&#39;, &#39;scene&#39;, &#39;selectdirection&#39;, &#39;selectionrevision&#39;, &#39;separators&#39;, &#39;shapes&#39;, &#39;showlegend&#39;, &#39;sliders&#39;, &#39;smith&#39;, &#39;spikedistance&#39;, &#39;template&#39;, &#39;ternary&#39;, &#39;title&#39;, &#39;transition&#39;, &#39;uirevision&#39;, &#39;uniformtext&#39;, &#39;updatemenus&#39;, &#39;width&#39;, &#39;xaxis&#39;, &#39;yaxis&#39;, &#39;barmode&#39;, &#39;bargap&#39;, &#39;mapType&#39;</code></pre>
-<div class="plotly html-widget html-fill-item" id="htmlwidget-17a5f3a7b254c23e4d0f" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-17a5f3a7b254c23e4d0f">{"x":{"visdat":{"81b62aadec6":["function () ","plotlyVisDat"]},"cur_data":"81b62aadec6","attrs":{"81b62aadec6":{"x":["A","B","C"],"y":["Downtown","Midtown","Uptown","Other"],"z":[[23922,3503,2266],[6187,1127,620],[1903,240,230],[10,0,0]],"colors":["function (x) ","roundcolor(cbind(palette[[1L]](x), palette[[2L]](x), palette[[3L]](x), ","    if (alpha) palette[[4L]](x))) * 255"],"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"heatmap"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Contingency Table Heatmap with Chi-Square Result","xaxis":{"domain":[0,1],"automargin":true,"title":"Grade"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Region"},"colorbar":{"title":"Count"},"annotations":[{"x":2.1000000000000001,"y":3,"text":"Chi-Square Statistic: 58.33 <br>P-Value: 9.83e-11","showarrow":false,"font":{"size":14}}],"scene":{"zaxis":{"title":[]}},"hovermode":"closest","showlegend":false,"legend":{"yanchor":"top","y":0.5}},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"colorbar":{"title":"","ticklen":2,"len":0.5,"lenmode":"fraction","y":1,"yanchor":"top"},"colorscale":[["0","rgba(255,255,255,1)"],["0.0416666666666667","rgba(251,246,254,1)"],["0.0833333333333333","rgba(247,236,254,1)"],["0.125","rgba(243,227,253,1)"],["0.166666666666667","rgba(239,218,252,1)"],["0.208333333333333","rgba(235,209,252,1)"],["0.25","rgba(231,199,251,1)"],["0.291666666666667","rgba(227,190,251,1)"],["0.333333333333333","rgba(223,181,250,1)"],["0.375","rgba(219,171,249,1)"],["0.416666666666667","rgba(215,162,249,1)"],["0.458333333333333","rgba(211,153,248,1)"],["0.5","rgba(208,144,248,1)"],["0.541666666666667","rgba(204,134,247,1)"],["0.583333333333333","rgba(200,125,246,1)"],["0.625","rgba(196,116,246,1)"],["0.666666666666667","rgba(192,106,245,1)"],["0.708333333333333","rgba(188,97,244,1)"],["0.75","rgba(184,88,244,1)"],["0.791666666666667","rgba(180,78,243,1)"],["0.833333333333333","rgba(176,69,242,1)"],["0.875","rgba(172,60,242,1)"],["0.916666666666667","rgba(168,51,241,1)"],["0.958333333333333","rgba(164,41,241,1)"],["1","rgba(160,32,240,1)"]],"showscale":true,"x":["A","B","C"],"y":["Downtown","Midtown","Uptown","Other"],"z":[[23922,3503,2266],[6187,1127,620],[1903,240,230],[10,0,0]],"type":"heatmap","xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-082236c8924d3969fd2c" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-082236c8924d3969fd2c">{"x":{"visdat":{"998341f2767f":["function () ","plotlyVisDat"]},"cur_data":"998341f2767f","attrs":{"998341f2767f":{"x":["A","B","C"],"y":["Midtown","Chinatown","East Village","Upper East Side","West Village","Upper West Side","Financial District","Chelsea","Harlem","SoHo","Flatiron District","Washington Heights","Gramercy Park","Battery Park City","Other","Roosevelt Island"],"z":[[8094,860,589],[3279,633,495],[2942,471,263],[2843,477,326],[2576,389,220],[2125,342,239],[1991,264,208],[1955,279,134],[1339,292,159],[1339,231,65],[1268,182,159],[1113,332,195],[798,84,64],[207,24,0],[109,0,0],[44,10,0]],"colors":["function (x) ","roundcolor(cbind(palette[[1L]](x), palette[[2L]](x), palette[[3L]](x), ","    if (alpha) palette[[4L]](x))) * 255"],"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"heatmap"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Contingency Table Heatmap with Chi-Square Result","xaxis":{"domain":[0,1],"automargin":true,"title":"Grade"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Region"},"colorbar":{"title":"Count"},"annotations":[{"x":2.1000000000000001,"y":3,"text":"Chi-Square Statistic: 584.26 <br>P-Value: <2e-16","showarrow":false,"font":{"size":14}}],"scene":{"zaxis":{"title":[]}},"hovermode":"closest","showlegend":false,"legend":{"yanchor":"top","y":0.5}},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"colorbar":{"title":"","ticklen":2,"len":0.5,"lenmode":"fraction","y":1,"yanchor":"top"},"colorscale":[["0","rgba(255,255,255,1)"],["0.0416666666666667","rgba(251,246,254,1)"],["0.0833333333333333","rgba(247,236,254,1)"],["0.125","rgba(243,227,253,1)"],["0.166666666666667","rgba(239,218,252,1)"],["0.208333333333333","rgba(235,209,252,1)"],["0.25","rgba(231,199,251,1)"],["0.291666666666667","rgba(227,190,251,1)"],["0.333333333333333","rgba(223,181,250,1)"],["0.375","rgba(219,171,249,1)"],["0.416666666666667","rgba(215,162,249,1)"],["0.458333333333333","rgba(211,153,248,1)"],["0.5","rgba(208,144,248,1)"],["0.541666666666667","rgba(204,134,247,1)"],["0.583333333333333","rgba(200,125,246,1)"],["0.625","rgba(196,116,246,1)"],["0.666666666666667","rgba(192,106,245,1)"],["0.708333333333333","rgba(188,97,244,1)"],["0.75","rgba(184,88,244,1)"],["0.791666666666667","rgba(180,78,243,1)"],["0.833333333333333","rgba(176,69,242,1)"],["0.875","rgba(172,60,242,1)"],["0.916666666666667","rgba(168,51,241,1)"],["0.958333333333333","rgba(164,41,241,1)"],["1","rgba(160,32,240,1)"]],"showscale":true,"x":["A","B","C"],"y":["Midtown","Chinatown","East Village","Upper East Side","West Village","Upper West Side","Financial District","Chelsea","Harlem","SoHo","Flatiron District","Washington Heights","Gramercy Park","Battery Park City","Other","Roosevelt Island"],"z":[[8094,860,589],[3279,633,495],[2942,471,263],[2843,477,326],[2576,389,220],[2125,342,239],[1991,264,208],[1955,279,134],[1339,292,159],[1339,231,65],[1268,182,159],[1113,332,195],[798,84,64],[207,24,0],[109,0,0],[44,10,0]],"type":"heatmap","xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="cramérs-v-test" class="section level3">
 <h3>Cramér’s V test</h3>
 <p>To investigate how strong the association is between located and
 grades, we produce <code>Cramér’s V test</code>. The
-<code>Cramér’s V Value is  0.123</code>, which is larger than 0.1 (Weak
-association) and smaller than 0.3 (Moderate association), so that we
-conclude they have <code>weak association</code>. <br> This conclusion
-is visualized in theree pie charts below of different regions that we
-can’t tell large difference among them.</p>
+<code>Cramér’s V Value is  0.085</code>, which is less than 0.1 (Weak
+association), so that we conclude they have
+<code>weak association</code>. <br> This conclusion is visualized in
+theree pie charts below of different regions that we can’t tell large
+difference among them.</p>
 <pre class="r"><code># Calculate Cramér’s V
 cramer_v &lt;- assocstats(contingency_table)$cramer
 
 # Print Cramér’s V
 print(paste(&quot;Cramér&#39;s V:&quot;, round(cramer_v, 3)))
-## [1] &quot;Cramér&#39;s V: 0.027&quot;</code></pre>
-<pre class="r"><code>
-# uptown visualization
-uptown &lt;- zip_grade %&gt;%
-  filter(region == &quot;Uptown&quot;) %&gt;%
-  group_by(region, grade) %&gt;%
-  summarize(count = n(), .groups = &quot;drop&quot;)
-uptown_pie = plot_ly(
-  data = uptown,
-  labels = ~grade,  # Grades (A, B, C)
-  values = ~count,  # Counts of each grade
-  type = &#39;pie&#39;,
-  textinfo = &#39;label+percent&#39;,  # Display labels and percentages
-  hoverinfo = &#39;label+value+percent&#39; , # Show additional info on hover
-    colors = &quot;viridis&quot;
-) %&gt;%
-  layout(
-    title = &quot;Uptown&quot; ,
-    legend = list(title = list(text = &quot;Grade&quot;))
-  )
-
-# Midtown visualization
-midtown &lt;- zip_grade %&gt;%
-  filter(region == &quot;Midtown&quot;) %&gt;%
-  group_by(region, grade) %&gt;%
-  summarize(count = n(), .groups = &quot;drop&quot;)
-midtown_pie = plot_ly(
-  data = midtown,
-  labels = ~grade,  # Grades (A, B, C)
-  values = ~count,  # Counts of each grade
-  type = &#39;pie&#39;,
-  textinfo = &#39;label+percent&#39;,  # Display labels and percentages
-  hoverinfo = &#39;label+value+percent&#39; , # Show additional info on hover
-    colors = &quot;viridis&quot;
-) %&gt;%
-  layout(
-    title = &quot;Midtown&quot; ,
-    legend = list(title = list(text = &quot;Grade&quot;))
-  )
-
-# Downtown visualization
-downtown &lt;- zip_grade %&gt;%
-  filter(region == &quot;Downtown&quot;) %&gt;%
-  group_by(region, grade) %&gt;%
-  summarize(count = n(), .groups = &quot;drop&quot;)
-downtown_pie = plot_ly(
-  data = downtown,
-  labels = ~grade,  # Grades (A, B, C)
-  values = ~count,  # Counts of each grade
-  type = &#39;pie&#39;,
-  textinfo = &#39;label+percent&#39;,  # Display labels and percentages
-  hoverinfo = &#39;label+value+percent&#39; , # Show additional info on hover
-    colors = &quot;viridis&quot;
-) %&gt;%
-  layout(
-    title = &quot;Downtown&quot; ,
-    legend = list(title = list(text = &quot;Grade&quot;))
-  )
-
-# Combine the pie charts into one layout
-doc &lt;- htmltools::tagList(
-  div(uptown_pie, style = &quot;float:left;width:33.3%;&quot;),
-  div(midtown_pie, style = &quot;float:left;width:33.3%;&quot;),
-  div(downtown_pie, style = &quot;float:right;width:33.3%;&quot;) 
-)
-
-htmltools::browsable(doc)</code></pre>
-<div style="float:left;width:33.3%;">
-<div class="plotly html-widget html-fill-item" id="htmlwidget-2833fe4672ad8a123254" style="width:100%;height:400px;"></div>
-<script type="application/json" data-for="htmlwidget-2833fe4672ad8a123254">{"x":{"visdat":{"81b63d567a21":["function () ","plotlyVisDat"]},"cur_data":"81b63d567a21","attrs":{"81b63d567a21":{"labels":{},"values":{},"textinfo":"label+percent","hoverinfo":"label+value+percent","colors":"viridis","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"pie"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Uptown","legend":{"title":{"text":"Grade"}},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"labels":["A","B","C"],"values":[1903,240,230],"textinfo":"label+percent","hoverinfo":["label+value+percent","label+value+percent","label+value+percent"],"type":"pie","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(255,255,255,1)"}},"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
-</div>
-<div style="float:left;width:33.3%;">
-<div class="plotly html-widget html-fill-item" id="htmlwidget-ae052377e01c0198b194" style="width:100%;height:400px;"></div>
-<script type="application/json" data-for="htmlwidget-ae052377e01c0198b194">{"x":{"visdat":{"81b6786c2bfc":["function () ","plotlyVisDat"]},"cur_data":"81b6786c2bfc","attrs":{"81b6786c2bfc":{"labels":{},"values":{},"textinfo":"label+percent","hoverinfo":"label+value+percent","colors":"viridis","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"pie"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Midtown","legend":{"title":{"text":"Grade"}},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"labels":["A","B","C"],"values":[6187,1127,620],"textinfo":"label+percent","hoverinfo":["label+value+percent","label+value+percent","label+value+percent"],"type":"pie","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(255,255,255,1)"}},"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
-</div>
-<div style="float:right;width:33.3%;">
-<div class="plotly html-widget html-fill-item" id="htmlwidget-aa21f992ffae49ef09e8" style="width:100%;height:400px;"></div>
-<script type="application/json" data-for="htmlwidget-aa21f992ffae49ef09e8">{"x":{"visdat":{"81b65bbeb28":["function () ","plotlyVisDat"]},"cur_data":"81b65bbeb28","attrs":{"81b65bbeb28":{"labels":{},"values":{},"textinfo":"label+percent","hoverinfo":"label+value+percent","colors":"viridis","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"pie"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Downtown","legend":{"title":{"text":"Grade"}},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"labels":["A","B","C"],"values":[23922,3503,2266],"textinfo":"label+percent","hoverinfo":["label+value+percent","label+value+percent","label+value+percent"],"type":"pie","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(255,255,255,1)"}},"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
-</div>
+## [1] &quot;Cramér&#39;s V: 0.085&quot;</code></pre>
 <p>Go <a href="index.html">Home</a></p>
 </div>
 
