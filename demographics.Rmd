@@ -1,5 +1,5 @@
 ---
-title: "Demographics of Mahattan Restaurants"
+title: "Exploring the Culinary Landscape of Manhattan: A Demographic Analysis of Restaurant Types and Hygiene Grades"
 output: 
   html_document:
     code_folding: hide
@@ -16,7 +16,6 @@ knitr::opts_chunk$set(collapse = TRUE,
   fig.format = "png")
 ```
 
-### Exploring the Culinary Landscape of Manhattan: A Demographic Analysis of Restaurant Types and Hygiene Grades
 ```{r}
 library(tidyverse)
 library(plotly)
@@ -44,10 +43,9 @@ cleaned_data = manhattan_data %>%
     zipcode >= 10000 & zipcode <= 10025 ~ "Downtown",
     zipcode >= 10026 & zipcode <= 10040 ~ "Midtown",
     zipcode >= 10041 & zipcode <= 10282 ~ "Uptown",
-    TRUE ~ "Other" # For ZIP codes like 11371, 12345, etc.
+    TRUE ~ "Other" 
   ))
 
-# we will Filter for the top 10 cuisine types
 top_10_cuisines = cleaned_data %>%
   count(cuisine_description, sort = TRUE) %>%
   slice_max(n, n = 10) %>%
@@ -205,14 +203,13 @@ plot <- plot_ly(
                 "<br>Proportion:", round(proportion, 2))
 ) %>%
   layout(
-    barmode = "stack",  # Display proportions as stacked bars
-    title = "Grade Distribution by Cuisine Type",
+    barmode = "stack",
+    title = "Grade Distribution of Top 10 Cuisine Types",
     xaxis = list(title = "Cuisine Type", tickangle = 45),
     yaxis = list(title = "Proportion"),
     legend = list(title = list(text = "Grade"))
   )
 
-# Display the plot
 plot
 ```
 
