@@ -1,5 +1,4 @@
 ---
-title: "ANALYSIS of Distrubution"
 output: 
   html_document:
     code_folding: hide
@@ -21,7 +20,10 @@ library(viridis)
 library(plotly)
 ```
 
-## Grade Distribution Over Time by Neighborhoods or Cuisine Types
+## Grade Distribution Over Time
+
+This section explores how restaurant grades have changed over time, with a focus on neighborhoods and cuisine types. Using interactive visualizations, we analyze the trends to uncover patterns in hygiene ratings across Manhattan. We also highlight Italian restaurants as a case study for evaluating trends in a specific cuisine.
+
 ```{r, message=FALSE, warning=FALSE}
 data <- read_csv("Manhattan_Restaurant_Inspection_Results.csv") %>%
   clean_names()
@@ -86,27 +88,18 @@ plot_cuisine <- plot_ly(
 plot_borough
 plot_cuisine
 ```
-I use the plotly package to generate two interactive scatter plots to visualize the trend of restaurant levels over time.
-
-These two charts respectively show the trend of the horizontal distribution of administrative regions over time.
-Grade Trends of Italian Restaurants: Pay Attention to the Time Grade Trends of Italian Cuisine. I chose Italian restaurants as a case study to showcase to you because of our personal love for them.
-
-And I have customized interactive drawing with hover details, zooming, and switching functions.
-And it uses a transparent background and Viridis color palette, which is more beautiful.
-
-The generated graphics are distributed in levels over time according to each region:
-
-X-axis: Check the year.
-Y-axis: Obtain the number of restaurants for each level.
-Use case: Identify trends in administrative regions, such as the improvement of grades over time.
-
-Grade distribution of Italian restaurants over time:
-
-X-axis: Check the year.
-Y-axis: Number of Italian restaurants per level.
-Use case: Check if Italian restaurants maintain a higher level.
 
 ## Regression Model
+Regression Model Analysis
+To better understand the factors influencing hygiene grades, we build a regression model. This includes:
+
+Converting grades (A, B, C) to numerical values.
+Categorizing Manhattan into regions (Downtown, Midtown, Uptown, Other) based on zip codes.
+Cleaning violation codes for more reliable analysis.
+<br>
+Key Insights:
+Purpose of QQ Plot: Assess how well residuals align with a normal distribution, validating the model's fit.
+Interpretation: Points closely aligning with the blue line indicate a strong model fit. Deviations highlight areas for improvement.
 ```{r, message=FALSE, warning=FALSE}
 manhattan_data <- read_csv("Manhattan_Restaurant_Inspection_Results.csv", na = c("NA", "", "."))
 
