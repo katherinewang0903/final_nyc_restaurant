@@ -14,7 +14,7 @@ knitr::include_graphics("./pictures/dinning.webp")
 ```
 <center style="font-size: 10px;"> Photo from:  https://www.cntraveler.com/gallery/best-restaurants-in-new-york-city/ </center>
 
-## Welcome!
+## Welcome Foodies!
 
 This platform investigates restaurant hygiene in Manhattan using the NYC Department of Health and Mental Hygiene (DOHMH) Restaurant Inspection Results dataset.
 
@@ -44,7 +44,7 @@ Dining safety is the cornerstone of a positive and enjoyable culinary experience
 
 ---
 
-### Screen cast 
+### Screen Cast 
 <iframe width="560" height="315" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 ### Project contributors:
@@ -59,9 +59,5 @@ click [here](aboutus.html) if you want to learn more about us.
 
 --- 
 
-### Contanct and reference
+### Contanct
 If you are interested in our project and want to collaborate please [email me](mailto:rd3096@cumc.columbia.edu).
-
-For more informartion about New York's restaurants hygiene ratings, check out these references:
-
-1. https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j/about_data
