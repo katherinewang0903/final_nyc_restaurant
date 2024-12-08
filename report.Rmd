@@ -140,7 +140,7 @@ Inspection Score Distribution for Top 35 Cuisine Types
 The boxplot illustrates the variability in inspection scores among the top 35 cuisines. Data was filtered to include only these cuisines, and boxplots were generated to display ranges, interquartile ranges (IQR), and outliers. Cuisines like Bangladeshi and African show wide score ranges and higher medians, suggesting inconsistent hygiene performance. In contrast, Japanese and Mediterranean cuisines exhibit narrow distributions with lower medians, indicating more consistent hygiene standards. This complements the bar chart by providing deeper insight into score variability.
 --- 
 
-### [Distribution Analysis](https://katherinewang0903.github.io/final_nyc_restaurant.github.io/distribution.html)
+### [Distribution Analysis](https://katherinewang0903.github.io/final_nyc_restaurant.github.io/distributionpage.html)
 
 We analyzed how restaurant grades have evolved over time, focusing on neighborhoods and cuisine types, with Italian restaurants as a case study to evaluate trends within a specific cuisine.
 
