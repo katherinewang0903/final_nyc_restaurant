@@ -21,7 +21,7 @@ library(viridis)
 library(plotly)
 ```
 
-## Grade Distribution Over Time
+## **Grade Distribution Over Time**
 
 This section explores how restaurant grades have changed over time, with a focus on neighborhoods and cuisine types. Using interactive visualizations, we analyze the trends to uncover patterns in hygiene ratings across Manhattan. We also highlight Italian restaurants as a case study for evaluating trends in a specific cuisine.
 
@@ -61,7 +61,11 @@ plot_borough <- plot_ly(
     plot_bgcolor = 'rgba(0, 0, 0, 0)',
     paper_bgcolor = 'rgba(0, 0, 0, 0)'
   )
+```
 
+<br>
+
+```{r, message=FALSE, warning=FALSE}
 grade_trends_cuisine <- time_data %>%
   filter(cuisine_description == "Italian") %>%
   group_by(year, cuisine_description, grade) %>%
@@ -90,20 +94,28 @@ plot_borough
 plot_cuisine
 ```
 
-## Regression Model
-Regression Model Analysis
-To better understand the factors influencing hygiene grades, we build a regression model. This includes:
-
-Converting grades (A, B, C) to numerical values.
-Categorizing Manhattan into regions (Downtown, Midtown, Uptown, Other) based on zip codes.
-Cleaning violation codes for more reliable analysis.
 <br>
-Key Insights:
-Purpose of QQ Plot: Assess how well residuals align with a normal distribution, validating the model's fit.
-Interpretation: Points closely aligning with the blue line indicate a strong model fit. Deviations highlight areas for improvement.
+
+The above line chart shows trends in Manhattan restaurant hygiene grades over time, with the x-axis representing years and the y-axis showing the number of restaurants per grade. Grade "A" dominates, showing a sharp increase around 2022, reflecting improved hygiene practices or changes in inspection standards. Grades "B" and "C" also rise slightly post-2020 but remain much lower. Other grades ("N," "P," "Z") are minimally represented. Overall, the data highlights a strong focus on achieving high hygiene standards, with the majority of restaurants attaining grade "A."
+
+
+The bottom line chart shows the grade distribution over time for Italian restaurants in Manhattan, which we use as an example to illustrate hygiene trends within a specific cuisine. The x-axis represents years, while the y-axis displays the number of restaurants. Grade "A" experienced a notable rise around 2022, reflecting either improved hygiene practices or changes in inspection standards. Grades "B" and "C" show minor increases but remain less prevalent, while other grades ("N," "P," "Z") are rarely observed. This trend underscores the focus on maintaining high cleanliness standards among Italian restaurants, with most achieving grade "A" in recent years.
+
+<br>
+
+
+## **Regression Model**
+
+### *Univariable Ordinal Regression*
+To better understand the factors influencing hygiene grades, we build a regression model, includes:
+ - Converting grades (A, B, C) to numerical values.
+ - Categorizing Manhattan into regions (Downtown, Midtown, Uptown, Other) based on zip codes.
+ - Cleaning violation codes for more reliable analysis.
+
+In this analysis, we conducted a univariable ordinal regression to explore the relationship between the restaurant grade (A, B, C) and various predictors, including cuisine type, inspection type, violation code, and location. The grades were converted to numeric values (1 for A, 2 for B, 3 for C) to facilitate ordinal regression modeling. Each predictor was analyzed independently to determine its effect on restaurant grade, using the quasipoisson family to handle the ordinal nature of the dependent variable.
+
 ```{r, message=FALSE, warning=FALSE}
 manhattan_data <- read_csv("Manhattan_Restaurant_Inspection_Results.csv", na = c("NA", "", "."))
-
 cleaned_data <- manhattan_data %>%
   janitor::clean_names() %>%  
   filter(
@@ -130,69 +142,50 @@ cleaned_data <- manhattan_data %>%
     )
   ) %>%
   mutate(location = factor(location)) 
-
-
 cleaned_data <- cleaned_data %>%
   filter(grepl("^[A-Za-z0-9]+$", violation_code)) 
-
-
 predictors <- c("cuisine_description", "inspection_type", "violation_code", "location")
-
-
 univariable_results <- lapply(predictors, function(predictor) {
-  
   formula <- as.formula(paste("grade_numeric ~", predictor))
-  
-  
   model <- glm(formula, data = cleaned_data, family = quasipoisson) 
-  
-  
   tidy(model) %>%
     mutate(predictor = predictor) %>%
     select(predictor, term, estimate, std.error, p.value)
 })
-
-
 results_table <- bind_rows(univariable_results) %>%
   filter(term != "(Intercept)")
-
 kable(
   head(results_table, 10), 
   format = "markdown",
   col.names = c("Predictor", "Term", "Estimate", "Std. Error", "p-value"),
   caption = "Top 10 Univariable Ordinal Regression Results"
 )
+```
+The results were summarized for each predictor, showing the estimate, standard error, and p-value. Estimates represent the direction and strength of the association between the predictor and grade, with positive estimates indicating a tendency toward poorer grades (B, C) and negative estimates indicating a tendency toward better grades (A). P-values assess the statistical significance of these associations.
 
+To improve the visualization and interpretation, we showcased only the top 10 results. These results allow users to identify which cuisine types or predictors have the strongest association with restaurant hygiene grades. For example, cuisines such as African and Asian/Asian Fusion showed statistically significant positive associations with grade trends, indicating a noteworthy relationship worth further exploration. This focused approach highlights key insights while maintaining a clean and reader-friendly interface on the website.
+
+<br>
+
+
+### *Q-Q Plot*
+```{r, warning=FALSE}
 model_example <- glm(grade_numeric ~ cuisine_description, data = cleaned_data, family = quasipoisson)
 residuals_data <- augment(model_example)
-```
 
-
-```{r, warning=FALSE}
 ggplot(residuals_data, aes(sample = .resid)) +
   stat_qq() +
-  stat_qq_line(color = "blue") +
+  stat_qq_line(color = "purple") +
   labs(
-    title = "QQ Plot of Residuals",
+    title = "Q-Q Plot of Residuals",
     x = "Theoretical Quantiles",
     y = "Sample Quantiles"
   ) +
   theme_minimal()
 ```
-In order to obtain this model, we first load the dataset "Manhathathattan_Tetaurant_Inspection-Results.csv" and filter out irrelevant or missing data.
-And perform conversion:
-Grade_ numeric: Convert grades (A, B, C) into numerical values (1, 2, 3) for regression analysis.
-Location: The postal code is divided into four areas: city center, central city, upper city, and others.
-Violation-code: Cleaned up to ensure it only contains alphanumeric values, removing unexpected entries such as dates or special characters. And in order to make the visualization more visually appealing, I chose to only display the first ten lines of content.
 
-1. Purpose of QQplot:
-QQplot is a diagnostic tool used to compare the residual distribution of a regression model with the theoretical normal distribution. This helps evaluate the goodness of fit of the model.
-2. Plot interpretation:
-Blue line: represents the expected distribution under complete normality.
-Point: represents the actual residual of the regression model.
-If these points are closely aligned with the blue line and the residuals are approximately normally distributed, it indicates that the model fits well.
-Deviation from this line, especially at the tail, indicates potential issues with normality or outliers in the data.
-3. Observation results:
-If these points closely follow this line, it can be confirmed that the model assumptions (such as the linearity and normality of residuals) are reasonably satisfied.
+We conducted a residual diagnostic analysis on a generalized linear model (GLM) using the `glm()` function with a quasipoisson family to account for overdispersion in the data. The model predicts numeric hygiene grades (`grade_numeric`, where A=1, B=2, C=3) using `cuisine_description` as the predictor. Residuals from the model were extracted with the `augment()` function for further analysis. A Q-Q plot was then created to assess the normality of the residuals. 
+
+In the plot, most data points align closely with the purple reference line, indicating that the residuals generally follow a normal distribution. However, deviations at the tails suggest potential issues, such as outliers or non-normality for extreme values. These results highlight that while the model performs well for the majority of the data, further adjustments may be needed to address discrepancies at the extremes and improve overall fit.
 
 Go [Home](index.html)
