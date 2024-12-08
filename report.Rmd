@@ -14,6 +14,8 @@ knitr::opts_chunk$set(collapse = TRUE, message = FALSE)
 ```
 <br>
 
+**Meet the Manhattan Foodie Group!**
+<br>
 *Katherine Wang (dw3093), Ruicong Du (rd3096), Yining He(yh3683), Qianxuan Huang (qh2285) Wentao Zhou (wz2722)*
 
 <br>
@@ -24,13 +26,13 @@ The motivation for this research is to evaluate food safety practices in Manhatt
 
 <br>
 
-## **Related work**
+## **Related Work**
 
 We were inspired to undertake this analysis after examining the [DOHMH Restaurant Inspection Results dataset](https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j/about_data) available on [NYC OpenData](https://opendata.cityofnewyork.us/). This dataset offers comprehensive details on restaurant inspections, including grades, scores, violation descriptions, and locations, making it an excellent resource for studying food safety practices and trends in Manhattan. Its depth and variety present a valuable opportunity to apply data visualization and interactivity techniques while addressing practical public health issues covered in our coursework.
 
 <br>
 
-## **Initial questions**
+## **Initial Auestions**
 
 Our initial questions focused on restaurant hygiene issues in Manhattan, aiming to help people identify restaurants that are both suitable for their taste preferences and meet high hygiene standards. We were interested in the following:
 
@@ -94,9 +96,9 @@ The final data used for analysis, saved [here](https://github.com/katherinewang0
 
 <br>
 
-## **Exploratory analysis**
+## **Exploratory Analysis**
 
-### [Demographics analysis](https://katherinewang0903.github.io/final_nyc_restaurant.github.io/demographics.html) <br>
+### [Demographics Analysis](https://katherinewang0903.github.io/final_nyc_restaurant.github.io/demographics.html) <br>
 
 For Demographics analysis, we focuses on the Manhattan’s restaurants across three dimensions: physical location, popular types of cuisine, and health inspection grades. The dataset was cleaned to include complete records, categorizing restaurants into three regions—Downtown, Midtown, and Uptown—based on ZIP codes. Restaurants graded as Z (Grade Pending), P (Pending Reopening), and N (Not Yet Graded) were excluded to ensure clarity and relevance in evaluating distribution patterns. <br>
 
@@ -116,7 +118,8 @@ Next, we conducted a Chi-Square Test to examine the relationship between the cri
 
 Among all restaurants with critical violations, we aimed to identify the most common types of violations. To achieve this, we calculated the percentage of each violation type and grouped all categories with less than 3% into an "Other" category for clarity. The results are summarized in a pie chart, providing a clear visualization of the distribution of critical violations. The analysis reveals that the most frequent critical violation is related to washing and temperature problem. These are more than a quarter in total percentage. This finding underscores the importance of proper temperature management and remain cleaning in ensuring food safety and reducing the risk of foodborne illnesses. Also, restaurants owner who want to avoid bad grade in inspection need to perticullar pay attention to them. <br>
 
-<br>
+### [Violations analysis](https://katherinewang0903.github.io/final_nyc_restaurant.github.io/violations.html) <br>
+
 
 ## **Shiny app**
 
@@ -134,11 +137,9 @@ Recent news articles have supported these findings, with reports indicating a de
 
 <br>
 
-
 ## **References**
 
 1.  <https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j/about_data>
+2. <https://www.cbsnews.com/newyork/news/nyc-restaurant-health-inspections-2023-2024/>
 
 Go [Home](index.html)
-
-
