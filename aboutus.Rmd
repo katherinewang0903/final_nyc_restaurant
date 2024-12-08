@@ -1,5 +1,5 @@
 ---
-title: "MEET OUR TEAM"
+title: "Meet the Manhattan Foodie Group!"
 output: 
   html_document:
     theme: cosmo
@@ -14,6 +14,7 @@ output:
 
 <img src="ourphoto/yining.jpg" style="width:30%;">
 
+<br>
 
 ## **Ruicong Du**
 
@@ -23,6 +24,7 @@ output:
 
 <img src="ourphoto/tim.jpg" style="width:30%;">
 
+<br>
 
 ## **Katherine Wang**
 
@@ -32,6 +34,7 @@ output:
 
 <img src="ourphoto/katherine.jpg" style="width:30%;">
 
+<br>
 
 ## **Qianxuan Huang**
 
@@ -41,6 +44,7 @@ output:
 
 <img src="ourphoto/qianxuan.jpg" style="width:30%;">
 
+<br>
 
 ## **Wentao Zhou**
 
