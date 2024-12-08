@@ -21,7 +21,7 @@ navbar:
     - text: "Cuisines"
       href: cuisine.html
     - text: "Distribution"
-      href: distributionpage.html
+      href: ditributionpage.html
     - text: "Shiny App"
       href:  https://katherinewang0903.shinyapps.io/shinyapp/
     - icon: fa-envelope fa-lg
