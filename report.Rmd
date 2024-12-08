@@ -12,7 +12,7 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(collapse = TRUE, message = FALSE)
 ```
-*Katherine Wang (dw3093), Ruicong Du (rd3096), Yining He(yh3683), Qianxuan Huang (qh2285) Wentao Zhou (wz2722)*
+*Katherine Wang(dw3093), Ruicong Du(rd3096), Yining He(yh3683), Qianxuan Huang(qh2285), Wentao Zhou(wz2722)*
 
 ## **Motivation**
 
