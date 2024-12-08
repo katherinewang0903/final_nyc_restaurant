@@ -412,7 +412,6 @@ Manhattan Restaurant Hygiene Ratings</h1>
 
 <p><em>Katherine Wang (dw3093), Ruicong Du (rd3096), Yining He(yh3683),
 Qianxuan Huang (qh2285) Wentao Zhou (wz2722)</em></p>
-<p><br></p>
 <div id="motivation" class="section level2">
 <h2><strong>Motivation</strong></h2>
 <p>The motivation for this research is to evaluate food safety practices
@@ -427,7 +426,6 @@ so, we aim to provide valuable insights for diners seeking safe and
 high-quality dining experiences and contribute to the ongoing efforts to
 maintain and improve public health standards in Manhattan’s diverse
 dining landscape.</p>
-<p><br></p>
 </div>
 <div id="related-work" class="section level2">
 <h2><strong>Related Work</strong></h2>
@@ -441,7 +439,6 @@ excellent resource for studying food safety practices and trends in
 Manhattan. Its depth and variety present a valuable opportunity to apply
 data visualization and interactivity techniques while addressing
 practical public health issues covered in our coursework.</p>
-<p><br></p>
 </div>
 <div id="initial-questions" class="section level2">
 <h2><strong>Initial Questions</strong></h2>
@@ -461,7 +458,6 @@ part of Manhattan?</p></li>
 <li><p>How does the cuisine type, inspection type, violation type,
 location impact our overall hygiene grading?</p></li>
 </ol>
-<p><br></p>
 </div>
 <div id="data" class="section level2">
 <h2><strong>Data</strong></h2>
@@ -538,7 +534,6 @@ establishment.</li>
 <li><code>Location Point1</code>: Geographic location of the
 establishment.</li>
 </ul>
-<p><br></p>
 </div>
 <div id="exploratory-analysis" class="section level2">
 <h2><strong>Exploratory Analysis</strong></h2>
@@ -582,6 +577,7 @@ with higher proportions of lower grades (B and C) and pending grades (Z
 and P), suggesting specific challenges in meeting food safety standards.
 These results underscore the need for targeted interventions to support
 improved hygiene practices across all cuisine types.</p>
+<hr />
 </div>
 <div id="violations-analysis" class="section level3">
 <h3><a
@@ -622,7 +618,8 @@ are more than a quarter in total percentage. This finding underscores
 the importance of proper temperature management and remain cleaning in
 ensuring food safety and reducing the risk of foodborne illnesses. Also,
 restaurants owner who want to avoid bad grade in inspection need to
-perticullar pay attention to them. <br></p>
+perticullar pay attention to them.</p>
+<hr />
 </div>
 <div id="location-vs.-grade-analysis" class="section level3">
 <h3><a
@@ -675,16 +672,57 @@ regions, like <code>Roosevelt Island</code>, almost exclusively maintain
 grade A ratings, showcasing exceptional cleanliness. However, since only
 slightly differences among locations are shown, the result fits that the
 association is weak.</p>
+<hr />
 </div>
 <div id="cuisine-types-analysis" class="section level3">
 <h3><a
 href="https://katherinewang0903.github.io/final_nyc_restaurant.github.io/cuisine.html">Cuisine
 Types Analysis</a></h3>
+<hr />
 </div>
 <div id="distribution-analysis" class="section level3">
 <h3><a
-href="https://katherinewang0903.github.io/final_nyc_restaurant.github.io/distribution.html">distribution
+href="https://katherinewang0903.github.io/final_nyc_restaurant.github.io/distribution.html">Distribution
 Analysis</a></h3>
+<p>We analyzed how restaurant grades have evolved over time, focusing on
+neighborhoods and cuisine types, with Italian restaurants as a case
+study to evaluate trends within a specific cuisine.</p>
+<p>The first line chart shows hygiene grade trends across Manhattan
+restaurants. Grade <code>A</code> dominates, with a sharp rise around
+2022, likely due to improved hygiene practices or policy changes. Grades
+<code>B</code> and <code>C</code> increased slightly post-2020 but
+remain much lower, while other grades (<code>N</code>, <code>P</code>,
+<code>Z</code>) are minimally represented, emphasizing the focus on
+achieving grade <code>A</code>.</p>
+<p>The second line chart shows grade trends for Italian restaurants,
+highlighting a similar sharp rise in grade <code>A</code> around 2022.
+Grades <code>B</code> and <code>C</code> showed slight increases but
+remained infrequent, while other grades were rarely observed. This trend
+reflects a strong emphasis on maintaining high cleanliness standards
+among Italian restaurants.</p>
+<p>Univariable Ordinal Regression We conducted a univariable ordinal
+regression to examine the relationship between restaurant grades
+(<code>A</code>, <code>B</code>, <code>C</code>) and predictors like
+<code>cuisine type</code>, <code>inspection type</code>,
+<code>violation code</code>, and <code>location</code>. Grades were
+converted to numeric values (<code>1</code> for <code>A</code>,
+<code>2</code> for <code>B</code>, <code>3</code> for <code>C</code>)
+for ordinal modeling. Positive estimates indicated a tendency toward
+poorer grades, while negative estimates reflected better grades.
+<code>P-values</code> assessed the significance of these associations.
+To enhance interpretation, we showcased the top 10 results, highlighting
+the strongest associations. For instance, <code>African</code> and
+<code>Asian/Asian Fusion</code> cuisines had statistically significant
+positive associations with poorer grades, offering insights for further
+exploration.</p>
+<p>Residual Diagnostics We performed residual diagnostics on a
+generalized linear model (<code>GLM</code>) with a
+<code>quasipoisson</code> family to handle overdispersion. The
+<code>Q-Q plot</code> of residuals showed most data points aligning with
+the purple reference line, indicating normality. However, deviations at
+the tails suggest potential outliers or non-normality in extreme values.
+While the model fits well overall, further adjustments may address these
+discrepancies to improve fit. —</p>
 </div>
 </div>
 <div id="shiny-app" class="section level2">
@@ -708,7 +746,6 @@ restaurant distribution, hygiene trends, and specific options available
 in their selected area. The map interface, combined with the filtering
 functionality, offers an engaging and user-friendly way to understand
 the restaurant hygiene landscape in Manhattan.</p>
-<p><br></p>
 </div>
 <div id="discussion" class="section level2">
 <h2><strong>Discussion</strong></h2>
@@ -740,7 +777,6 @@ with our observations of varying compliance levels, reinforcing the
 critical need for consistent oversight. By addressing these issues and
 promoting better compliance across all establishments, Manhattan’s
 dining scene can remain both vibrant and safe for all patrons.</p>
-<p><br></p>
 </div>
 <div id="references" class="section level2">
 <h2><strong>References</strong></h2>

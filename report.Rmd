@@ -14,19 +14,13 @@ knitr::opts_chunk$set(collapse = TRUE, message = FALSE)
 ```
 *Katherine Wang (dw3093), Ruicong Du (rd3096), Yining He(yh3683), Qianxuan Huang (qh2285) Wentao Zhou (wz2722)*
 
-<br>
-
 ## **Motivation**
 
 The motivation for this research is to evaluate food safety practices in Manhattan through the New York City Department of Health and Mental Hygiene (DOHMH) Restaurant Inspection Results dataset. This dataset includes critical variables such as inspection scores, grades, and violation descriptions, providing a foundation for analyzing trends and identifying common issues in restaurant hygiene. Our focus is to uncover patterns in food safety practices, highlight areas needing improvement, and identify restaurants that consistently meet high standards. By doing so, we aim to provide valuable insights for diners seeking safe and high-quality dining experiences and contribute to the ongoing efforts to maintain and improve public health standards in Manhattan's diverse dining landscape.
 
-<br>
-
 ## **Related Work**
 
 We were inspired to undertake this analysis after examining the [DOHMH Restaurant Inspection Results dataset](https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j/about_data) available on [NYC OpenData](https://opendata.cityofnewyork.us/). This dataset offers comprehensive details on restaurant inspections, including grades, scores, violation descriptions, and locations, making it an excellent resource for studying food safety practices and trends in Manhattan. Its depth and variety present a valuable opportunity to apply data visualization and interactivity techniques while addressing practical public health issues covered in our coursework.
-
-<br>
 
 ## **Initial Questions**
 
@@ -41,8 +35,6 @@ Our initial questions focused on restaurant hygiene issues in Manhattan, aiming 
 4. How are inspection grades (A, B, C) distributed across different part of Manhattan? 
 
 5. How does the cuisine type, inspection type, violation type, location impact our overall hygiene grading?
-
-<br>
 
 ## **Data**
 
@@ -90,8 +82,6 @@ The final data used for analysis, saved [here](https://github.com/katherinewang0
 * `NTA`: Neighborhood Tabulation Area of the establishment.
 * `Location Point1`: Geographic location of the establishment.
 
-<br>
-
 ## **Exploratory Analysis**
 
 ### [Demographics Analysis](https://katherinewang0903.github.io/final_nyc_restaurant.github.io/demographics.html)
@@ -104,6 +94,8 @@ Cuisine Type analysis reveals that American cuisine dominates with 2,456 establi
 
 The Health Inspection Grade Distribution shows that most Manhattan restaurants maintain high hygiene standards, with Grade A being the most common, ranging from 50% to 80%. Coffee/Tea (80%) and French (70%) cuisines lead in hygiene compliance, while Bakery Products/Desserts (50%) have the lowest proportion of Grade A, highlighting room for improvement. Chinese and Japanese cuisines show greater variability, with higher proportions of lower grades (B and C) and pending grades (Z and P), suggesting specific challenges in meeting food safety standards. These results underscore the need for targeted interventions to support improved hygiene practices across all cuisine types.
 
+---
+
 ### [Violations Analysis](https://katherinewang0903.github.io/final_nyc_restaurant.github.io/violations.html)
 
 As for analysis related to violation, we  focuses exclusively on data where the grades are A, B, or C, and excludes records with grades labeled as N (Not Yet Graded), Z (Grade Pending), or P (Grade Pending issued upon reopening after a closure). We also exclude “Not Applicable” entries for critical violation indicators. Inspection violations are categorized into two groups: Critical and Not Critical. Critical violations represent the most significant risks for foodborne illnesses. To ensure accuracy and relevance, we begin by filtering out unnecessary data from the dataset before proceeding with the analysis.
@@ -112,7 +104,9 @@ First, we analyze the frequency distribution of grades. For both Critical and No
 
 Next, we conducted a Chi-Square Test to examine the relationship between the critical flag and grade. The results are visualized using a Contingency Table Heatmap. The analysis shows a p-value smaller than 0.05, leading us to reject the null hypothesis that the critical flag and grade are independent. This indicates a significant relationship between the critical flag and grade at the 0.05 significance level.
 
-Among all restaurants with critical violations, we aimed to identify the most common types of violations. To achieve this, we calculated the percentage of each violation type and grouped all categories with less than 3% into an "Other" category for clarity. The results are summarized in a pie chart, providing a clear visualization of the distribution of critical violations. The analysis reveals that the most frequent critical violation is related to washing and temperature problem. These are more than a quarter in total percentage. This finding underscores the importance of proper temperature management and remain cleaning in ensuring food safety and reducing the risk of foodborne illnesses. Also, restaurants owner who want to avoid bad grade in inspection need to perticullar pay attention to them. <br>
+Among all restaurants with critical violations, we aimed to identify the most common types of violations. To achieve this, we calculated the percentage of each violation type and grouped all categories with less than 3% into an "Other" category for clarity. The results are summarized in a pie chart, providing a clear visualization of the distribution of critical violations. The analysis reveals that the most frequent critical violation is related to washing and temperature problem. These are more than a quarter in total percentage. This finding underscores the importance of proper temperature management and remain cleaning in ensuring food safety and reducing the risk of foodborne illnesses. Also, restaurants owner who want to avoid bad grade in inspection need to perticullar pay attention to them.
+
+--- 
 
 ### [Location vs. Grade Analysis](https://katherinewang0903.github.io/final_nyc_restaurant.github.io/location.html)
 
@@ -125,17 +119,32 @@ To investigate how strong the association is between locations and grades, we pr
 
 This stacked bar chart illustrates the distribution of hygiene grades across various regions in Manhattan. Grade A, represented in blue, dominates most regions. In contrast, regions such as `Harlem` and `Washington Heights` show a slightly higher proportion of lower grades (B and C), indicating potential areas for improvement. Some regions, like `Roosevelt Island`, almost exclusively maintain grade A ratings, showcasing exceptional cleanliness. However, since only slightly differences among locations are shown, the result fits that the association is weak.
 
+--- 
+
 ### [Cuisine Types Analysis](https://katherinewang0903.github.io/final_nyc_restaurant.github.io/cuisine.html)
 
-### [distribution Analysis](https://katherinewang0903.github.io/final_nyc_restaurant.github.io/distribution.html)
+--- 
+
+### [Distribution Analysis](https://katherinewang0903.github.io/final_nyc_restaurant.github.io/distribution.html)
+
+We analyzed how restaurant grades have evolved over time, focusing on neighborhoods and cuisine types, with Italian restaurants as a case study to evaluate trends within a specific cuisine.
+
+The first line chart shows hygiene grade trends across Manhattan restaurants. Grade `A` dominates, with a sharp rise around 2022, likely due to improved hygiene practices or policy changes. Grades `B` and `C` increased slightly post-2020 but remain much lower, while other grades (`N`, `P`, `Z`) are minimally represented, emphasizing the focus on achieving grade `A`. 
+
+The second line chart shows grade trends for Italian restaurants, highlighting a similar sharp rise in grade `A` around 2022. Grades `B` and `C` showed slight increases but remained infrequent, while other grades were rarely observed. This trend reflects a strong emphasis on maintaining high cleanliness standards among Italian restaurants.
+
+Univariable Ordinal Regression
+We conducted a univariable ordinal regression to examine the relationship between restaurant grades (`A`, `B`, `C`) and predictors like `cuisine type`, `inspection type`, `violation code`, and `location`. Grades were converted to numeric values (`1` for `A`, `2` for `B`, `3` for `C`) for ordinal modeling. Positive estimates indicated a tendency toward poorer grades, while negative estimates reflected better grades. `P-values` assessed the significance of these associations. To enhance interpretation, we showcased the top 10 results, highlighting the strongest associations. For instance, `African` and `Asian/Asian Fusion` cuisines had statistically significant positive associations with poorer grades, offering insights for further exploration.
+
+Residual Diagnostics
+We performed residual diagnostics on a generalized linear model (`GLM`) with a `quasipoisson` family to handle overdispersion. The `Q-Q plot` of residuals showed most data points aligning with the purple reference line, indicating normality. However, deviations at the tails suggest potential outliers or non-normality in extreme values. While the model fits well overall, further adjustments may address these discrepancies to improve fit.
+--- 
 
 ## **Shiny app**
 
 The Shiny app [HERE](https://katherinewang0903.shinyapps.io/shinyapp/) provides an interactive platform for exploring Manhattan's restaurant inspection data by allowing users to filter by region, cuisine type, and hygiene grade. The provided neighborhoods include the Financial District, Chinatown, West Village, Upper East Side, Upper West Side, Harlem, Washington Heights, East Village, Chelsea, Battery Park City, Bowery, SoHo, Gramercy Park, Flatiron District, Carnegie Hill, Tribeca, Governors Island, Midtown, and Roosevelt Island. Once filters are applied, all matching restaurants are displayed as clickable points on an interactive map.
 
 When users click on a specific point, a popup box appears, providing detailed information about the restaurant, including its name, cuisine type, inspection grade, hygiene score, and neighborhood region. This interactive feature makes it convenient for users to visually analyze restaurant distribution, hygiene trends, and specific options available in their selected area. The map interface, combined with the filtering functionality, offers an engaging and user-friendly way to understand the restaurant hygiene landscape in Manhattan.
-
-<br>
 
 ## **Discussion**
 
@@ -144,8 +153,6 @@ Our analysis of the NYC Department of Health and Mental Hygiene’s Restaurant I
 Another significant trend was the impact of critical violations on restaurant grades. Restaurants with repeated critical violations often received lower grades, emphasizing the importance of promptly addressing such issues to maintain customer trust and public health standards. Interestingly, we also observed fluctuations in overall hygiene compliance over time, potentially reflecting changes in enforcement practices or restaurant management priorities.
 
 Recent news articles have supported these findings, with reports indicating a decline in the frequency of health inspections due to staffing shortages. According to [CBS News](https://www.cbsnews.com/newyork/news/nyc-restaurant-health-inspections-2023-2024/) about NYC Manhattan restaurant health inspections. Health inspections in Mahanttan have decreased by 17% in the past year, raising concerns about consistent enforcement of safety standards. This aligns with our observations of varying compliance levels, reinforcing the critical need for consistent oversight. By addressing these issues and promoting better compliance across all establishments, Manhattan’s dining scene can remain both vibrant and safe for all patrons.
-
-<br>
 
 ## **References**
 

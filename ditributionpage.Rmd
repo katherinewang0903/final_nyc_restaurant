@@ -168,7 +168,7 @@ To improve the visualization and interpretation, we showcased only the top 10 re
 <br>
 
 
-### *Q-Q Plot*
+### *Residual Diagnostics*
 ```{r, warning=FALSE}
 model_example <- glm(grade_numeric ~ cuisine_description, data = cleaned_data, family = quasipoisson)
 residuals_data <- augment(model_example)
