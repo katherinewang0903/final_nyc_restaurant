@@ -131,14 +131,13 @@ NYC restaurant inspections categorize hygiene performance into:
 `Grade C`: Scores of 28 or higher, suggesting poor hygiene.
 
 Density Map of Inspection Scores
-The interactive density map, created with plot_ly, visualizes average restaurant inspection scores across Manhattan. Data was filtered to include valid latitude, longitude, and inspection scores. A Viridis color scale highlights score variations from 0 (best) to 40 (worst). Users can click on points to view specific scores by location, enhancing interactivity and offering a geographic perspective on hygiene trends.
+<br> The interactive density map, created with plot_ly, visualizes average restaurant inspection scores across Manhattan. Data was filtered to include valid latitude, longitude, and inspection scores. A Viridis color scale highlights score variations from 0 (best) to 40 (worst). Users can click on points to view specific scores by location, enhancing interactivity and offering a geographic perspective on hygiene trends.
 
 Top 35 Cuisine Types by Average Inspection Scores
-This bar chart ranks the top 35 cuisine types by their average inspection scores. Using data grouped by `CUISINE DESCRIPTION`, we calculated mean scores and visually represented them with orange bars and purple borders. Cuisines like Bangladeshi, African, and Filipino have the highest average scores, indicating hygiene challenges, while cuisines such as Japanese and Mediterranean rank lower, reflecting better hygiene. This highlights cuisines that may benefit from targeted interventions.
+<br> This bar chart ranks the top 35 cuisine types by their average inspection scores. Using data grouped by `CUISINE DESCRIPTION`, we calculated mean scores and visually represented them with orange bars and purple borders. Cuisines like Bangladeshi, African, and Filipino have the highest average scores, indicating hygiene challenges, while cuisines such as Japanese and Mediterranean rank lower, reflecting better hygiene. This highlights cuisines that may benefit from targeted interventions.
 
 Inspection Score Distribution for Top 35 Cuisine Types
-The boxplot illustrates the variability in inspection scores among the top 35 cuisines. Data was filtered to include only these cuisines, and boxplots were generated to display ranges, interquartile ranges (IQR), and outliers. Cuisines like Bangladeshi and African show wide score ranges and higher medians, suggesting inconsistent hygiene performance. In contrast, Japanese and Mediterranean cuisines exhibit narrow distributions with lower medians, indicating more consistent hygiene standards. This complements the bar chart by providing deeper insight into score variability.
---- 
+<br> The boxplot illustrates the variability in inspection scores among the top 35 cuisines. Data was filtered to include only these cuisines, and boxplots were generated to display ranges, interquartile ranges (IQR), and outliers. Cuisines like Bangladeshi and African show wide score ranges and higher medians, suggesting inconsistent hygiene performance. In contrast, Japanese and Mediterranean cuisines exhibit narrow distributions with lower medians, indicating more consistent hygiene standards. This complements the bar chart by providing deeper insight into score variability.
 
 ### [Distribution Analysis](https://katherinewang0903.github.io/final_nyc_restaurant.github.io/distributionpage.html)
 
@@ -149,11 +148,10 @@ The first line chart shows hygiene grade trends across Manhattan restaurants. Gr
 The second line chart shows grade trends for Italian restaurants, highlighting a similar sharp rise in grade `A` around 2022. Grades `B` and `C` showed slight increases but remained infrequent, while other grades were rarely observed. This trend reflects a strong emphasis on maintaining high cleanliness standards among Italian restaurants.
 
 Univariable Ordinal Regression
-We conducted a univariable ordinal regression to examine the relationship between restaurant grades (`A`, `B`, `C`) and predictors like `cuisine type`, `inspection type`, `violation code`, and `location`. Grades were converted to numeric values (`1` for `A`, `2` for `B`, `3` for `C`) for ordinal modeling. Positive estimates indicated a tendency toward poorer grades, while negative estimates reflected better grades. `P-values` assessed the significance of these associations. To enhance interpretation, we showcased the top 10 results, highlighting the strongest associations. For instance, `African` and `Asian/Asian Fusion` cuisines had statistically significant positive associations with poorer grades, offering insights for further exploration.
+<br> We conducted a univariable ordinal regression to examine the relationship between restaurant grades (`A`, `B`, `C`) and predictors like `cuisine type`, `inspection type`, `violation code`, and `location`. Grades were converted to numeric values (`1` for `A`, `2` for `B`, `3` for `C`) for ordinal modeling. Positive estimates indicated a tendency toward poorer grades, while negative estimates reflected better grades. `P-values` assessed the significance of these associations. To enhance interpretation, we showcased the top 10 results, highlighting the strongest associations. For instance, `African` and `Asian/Asian Fusion` cuisines had statistically significant positive associations with poorer grades, offering insights for further exploration.
 
 Residual Diagnostics
-We performed residual diagnostics on a generalized linear model (`GLM`) with a `quasipoisson` family to handle overdispersion. The `Q-Q plot` of residuals showed most data points aligning with the purple reference line, indicating normality. However, deviations at the tails suggest potential outliers or non-normality in extreme values. While the model fits well overall, further adjustments may address these discrepancies to improve fit.
---- 
+<br> We performed residual diagnostics on a generalized linear model (`GLM`) with a `quasipoisson` family to handle overdispersion. The `Q-Q plot` of residuals showed most data points aligning with the purple reference line, indicating normality. However, deviations at the tails suggest potential outliers or non-normality in extreme values. While the model fits well overall, further adjustments may address these discrepancies to improve fit.
 
 ## **Shiny app**
 
