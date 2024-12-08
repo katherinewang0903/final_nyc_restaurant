@@ -94,7 +94,7 @@ top_cuisine_data <- top_cuisine_data %>%
                                         levels = top_cuisines$`CUISINE DESCRIPTION`))
 
 ggplot(top_cuisines, aes(x = reorder(`CUISINE DESCRIPTION`, -avg_score), y = avg_score)) +
-  geom_bar(stat = "identity", fill = "orange", color = "red") +
+  geom_bar(stat = "identity", fill = "orange", color = "purple") +
   labs(title = "Top 35 Cuisines Types by Average Inspection Scores",
        x = "Cuisine Description",
        y = "Average Score") +
@@ -109,7 +109,7 @@ ggplot(top_cuisines, aes(x = reorder(`CUISINE DESCRIPTION`, -avg_score), y = avg
 
 ```{r}
 ggplot(top_cuisine_data, aes(x = `CUISINE DESCRIPTION`, y = SCORE)) +
-  geom_boxplot(fill = "orange", color = "red") +
+  geom_boxplot(fill = "orange", color = "purple") +
   labs(title = "Inspection Score Distribution for Top 35 Cuisine Types",
        x = "Cuisine Description",
        y = "Inspection Score") +
