@@ -10,8 +10,6 @@ output:
 
 *MPH-Epidemiology*
 
-[email Yining](yh3683@cumc.columbia.edu)
-
 <img src="ourphoto/yining.jpg" style="width:30%;">
 
 <br>
@@ -19,8 +17,6 @@ output:
 ## **Ruicong Du**
 
 *MPH-Epidemiology*
-
-[email Ruicong](mailto:rd3096@cumc.columbia.edu)
 
 <img src="ourphoto/tim.jpg" style="width:30%;">
 
@@ -30,8 +26,6 @@ output:
 
 *MPH-Epidemiology*
 
-[email Katherine](mailto:dw3093@cumc.columbia.edu)
-
 <img src="ourphoto/katherine.jpg" style="width:30%;">
 
 <br>
@@ -40,8 +34,6 @@ output:
 
 *MPH-Biostatistics*
 
-[email Qianxuan](mailto:qh2285@cumc.columbia.edu)
-
 <img src="ourphoto/qianxuan.jpg" style="width:30%;">
 
 <br>
@@ -49,8 +41,6 @@ output:
 ## **Wentao Zhou**
 
 *MS-Environmental Health Science*
-
-[email Wentao](mailto:wz2722@cumc.columbia.edu)
 
 <img src="ourphoto/wentao.jpg" style="width:30%;">
 
